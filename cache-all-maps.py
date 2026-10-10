@@ -133,6 +133,8 @@ def batch_parts(tasks, on_result):
     os.close(slave)
     output = os.fdopen(master, 'r', errors='replace')
     seen = set()
+    successful = set()
+    failures = {}
     def output_lines():
         try:
             yield from output
@@ -149,9 +151,14 @@ def batch_parts(tasks, on_result):
         if index >= len(network):
             continue
         seen.add(index)
+        if index in successful:
+            continue
         job, start, end, file, headers = network[index]
+        if fields[1] not in ('200', '206'):
+            # curl can emit write-out for failed attempts before retrying.
+            failures[index] = f'HTTP {fields[1]}'
+            continue
         try:
-            assert fields[1] in ('200', '206'), f'HTTP {fields[1]}'
             ranges = re.findall(r'content-range:\s*bytes (\d+)-(\d+)/(\d+)', headers.read_text(), re.I)
             if ranges:
                 a, b, total = map(int, ranges[-1])
@@ -160,13 +167,20 @@ def batch_parts(tasks, on_result):
                 assert start == 0 and file.stat().st_size > 0
                 total = file.stat().st_size
             on_result(job, start, file, total)
+            successful.add(index)
+            failures.pop(index, None)
         except Exception as error:
+            failures[index] = str(error)
+    code = process.wait()
+    for index, (job, start, end, file, headers) in enumerate(network):
+        if index not in successful:
+            # Wait until curl has stopped using these files before removing them.
             file.unlink(missing_ok=True)
             headers.unlink(missing_ok=True)
-            progress['errors'].append({'path': job['path'], 'offset': start, 'error': str(error)})
+            error = failures.get(index, f'Incomplete transfer (curl exit {code})')
+            progress['errors'].append({'path': job['path'], 'offset': start, 'error': error})
             save_progress()
             print(f'ERROR {job["path"]} at {start}: {error}', flush=True)
-    code = process.wait()
     if len(seen) != len(network):
         raise RuntimeError(f'Incomplete curl batch: {len(seen)}/{len(network)} transfers, exit {code}')
     if progress['errors']:

@@ -38,7 +38,8 @@ report = {
     'percent': round(stored / total * 100, 1) if total else 0,
     'mapsReady': ready, 'filesVerified': progress['completedFiles'],
     'fileTotal': progress['totalFiles'], 'unknownSizes': unknown,
-    'errors': progress['errors'], 'complete': progress['complete'],
+    'errorCount': len(progress['errors']), 'errorSample': progress['errors'][:3],
+    'complete': progress['complete'],
     'fatalError': progress.get('fatalError'),
 }
 (WEB / 'download-status.json').write_text(json.dumps(report, indent=2) + '\n')
