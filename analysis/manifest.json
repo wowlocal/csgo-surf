@@ -1,0 +1,41 @@
+{
+  "fetched_at": "2026-10-10T18:19:08.588917+00:00",
+  "files": [
+    {
+      "url": "https://surfd.net/assets/game-BVcIp-Ck.js",
+      "file": "game-BVcIp-Ck.js",
+      "bytes": 913640,
+      "sha256": "43e762bc1eede9531778ef05499c34bfb60642e3c13b13cca4ad07f718b0e73f"
+    },
+    {
+      "url": "https://surfd.net/assets/email-auth-9VgsY3Lt.js",
+      "file": "email-auth-9VgsY3Lt.js",
+      "bytes": 2888,
+      "sha256": "cba7dd8cfacd401e65a3b1e729808cc22ee015e62110a7e4f46046f7af6d3f2b"
+    },
+    {
+      "url": "https://surfd.net/assets/index-DaueY-7D.js",
+      "file": "index-DaueY-7D.js",
+      "bytes": 224501,
+      "sha256": "dd97449a247fe8127f1fdcfc24cf86c9d9b0a9ce1061be7da132d2e63ea718f6"
+    },
+    {
+      "url": "https://surfd.net/packed/405341fbe52c7c93037cb981eac1377f3a9082470684b8189e7f8e9b6e6b7cea.json.gz",
+      "file": "boreas-collision.json.gz",
+      "bytes": 2407256,
+      "sha256": "7a99fccd04c9ee8145830fb157c8d29bd07892dddca9705a83c15df8471e0550"
+    },
+    {
+      "url": "https://surfd.net/packed/922c449ae68412f081f7044c4494fe7e3512d8f85d0f4d273ee3fe3a9b474744.visual-manifest.gz",
+      "file": "boreas-visual-manifest.gz",
+      "bytes": 59746,
+      "sha256": "922c449ae68412f081f7044c4494fe7e3512d8f85d0f4d273ee3fe3a9b474744"
+    },
+    {
+      "url": "https://surfd.net/replays/boreas-complete.json",
+      "file": "boreas-complete.json",
+      "bytes": 283148,
+      "sha256": "d573c8e30b2052f2b43feab0a69f4f00e9f00100d65cffc8a45eaaf98880a3d6"
+    }
+  ]
+}

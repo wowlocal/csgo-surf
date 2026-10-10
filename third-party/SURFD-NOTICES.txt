@@ -1,0 +1,49 @@
+# Third-party notices
+
+This project is an independent browser implementation. No Valve or KSF affiliation or endorsement is claimed.
+
+## Multiplayer character
+
+The player mesh and hair/eye texture inputs are adapted from **PS2 Styled Characters** by **Wobble Blocks**, offered under **CC0 1.0** on the [author's asset page](https://opengameart.org/content/ps2-styled-characters). Source checked 7 October 2026. [CC0 dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+
+Surfd bakes the masculine base into a 45-degree A-pose, rescales it, adds soft vertex shading and packs a low-resolution diffuse atlas. Clothing/body/face diffuse artwork was repainted using OpenAI image generation. Source provenance, artwork prompt, hashes and the reproducible build are in `assets/avatars/README.md`. This is an adapted character asset, not a Valve/Counter-Strike model.
+
+## Actual surf_boreas map
+
+The user requested local play of the full CSS map. Converted geometry, collision models, terrain, textures, studio models, baked lighting and cubemaps under `public/maps/` come from the publicly downloadable CSS `surf_boreas.bsp`, SHA-1 `9bd9daa0a23288c7e6f439fb7a899beade34a80b`. Map credit: Syncronyze and granis; included materials/models retain their respective contributors' rights.
+
+Source and import procedure: `docs/BOREAS-IMPORT-RESEARCH.md`. Public availability does not establish a general redistribution licence. No such licence was found. These imported assets are included for the requested local playable version; the project does not relicense them or claim authorship. Resolve applicable rights before publicly redistributing the map asset bundle.
+
+## Independent reference data
+
+**surf_tendies** is the original CSS map by **granis**, with bonuses by Xbmann and Dream and assets credited to fingerprince, DomiTibingen, Karatekaefer, SkyppySDK and TopHATTwaffle. The [author upload](https://gamebanana.com/mods/123116) lists CC BY-NC-ND 4.0 and a permission checklist. All original rights remain with their contributors; no additional redistribution permission is asserted. Complete captured credits, hashes, conversion scope and native reference attribution are in `fixtures/tendies-gamebanana-source.json` and `docs/TENDIES.md`.
+
+**surf_derpis_ksf** is by **felix**; **surf_prelude_fix** is by **nappa**, as credited by their captured [Derpis](https://ksf.surf/maps/surf_derpis_ksf) and [Prelude](https://ksf.surf/maps/surf_prelude_fix) CSS listings. Original map, texture and model rights remain with their contributors, including Valve assets where present. These are browser conversions of pinned CSS BSPs; no additional redistribution permission is asserted. Source hashes, native reference attribution and conversion limitations are in `docs/DERPIS-PRELUDE.md` and `fixtures/easy-three-source-metadata.json`.
+
+**surf_summer_ksf** is the CSS Summer map by **Hardex & Tioga060 / JSurf Studios**, with contributions credited to Juxtapo, Guadalupe, Mark C. and not_a_zombie. The [original author upload](https://gamebanana.com/mods/137916) credits Fnatic sponsorship and Ferry Gouw artwork and lists CC BY-NC-ND 4.0. This local conversion uses the lighter KSF BSP revision; it does not include the original soundtrack or establish a new redistribution licence. **surf_forbidden_ways_ksf** is credited to **Krusty** by the [KSF map record](https://ksf.surf/maps/surf_forbidden_ways_ksf). No general redistribution licence has been established for that map. All map and included asset rights remain with their respective contributors. Source revisions, native reference attribution, local adaptation details and validation limits are recorded in `docs/SUMMER-FORBIDDEN.md` and `fixtures/summer-forbidden-source-metadata.json`.
+
+The original CSS maps **surf_beginner** (Kiiru), **surf_year3000** (ArchAngel), **surf_ace** (Juxtapo), **surf_legends** (SintaxError), and **surf_eclipse** (Paper-Cut) are converted from independently pinned CSS BSPs. Their original artwork, compiled geometry, props and materials retain all author and contributor rights. Each captured GameBanana upload lists CC BY-NC-ND 4.0 and a permission checklist; this local conversion does not establish permission for public or commercial redistribution. Year3000's upload is a third-party repost, not proof of the uploader's authorship. Ace additionally credits Syncronyze, komaokc and Silkroad; Eclipse credits Turkey Eater for jail scripting. Complete source links, hashes, licence evidence and original credit metadata are in `docs/CLASSIC-FIVE-REFERENCE.md` and `fixtures/{slug}-gamebanana-source.json`. Independently captured KSF CSS main-course recordings are attributed there and used as reference data; their reader implementation is not bundled in the game. No new licence or author permission is claimed.
+
+`surf_fornax` is the original CSS map by **iNooVa**, SHA-1 `2194b0e9d8153d75837dfb8e421d040c8072c700`. The [author's upload](https://gamebanana.com/mods/137780) lists CC BY-NC-ND 4.0 and asks permission for redistribution or distribution of modified parts. This local conversion does not establish permission for public or commercial distribution. The full BSP includes bonus artwork credited to Mariowned, Biji, FPS God, vay, hesuka and 8X, as well as iNooVa; only the main course is playable here. Source metadata, complete credits, the pinned public CSS/KSF recording, visual limits and validation are preserved in `docs/FORNAX.md`, `docs/FORNAX-REFERENCE.md`, `docs/FORNAX-VISUALS.md` and `docs/FORNAX-PLAYABILITY.md`. These are converted original assets, not Surfd-authored artwork. No source licence is replaced or expanded.
+
+`surf_nyx` (Syncronyze, with Shadow Sheep credited for optimization, fixes and sounds) and `surf_reprise` (TeMP) are additional original CSS imports. Source SHA-1 pins and byte lengths are in `scripts/fixtures/new-maps-sources.json`; conversion and reference evidence are in `docs/NYX-REPRISE.md`, `docs/NYX-REPRISE-REFERENCE.md`, and `docs/NYX-REPRISE-VISUALS.md`. Nyx's [original author submission](https://gamebanana.com/mods/122639) lists CC BY-NC-ND 4.0; this project does not assert permission to publicly distribute an adapted map or use it commercially. These local conversion assets retain all author and contributor rights. No general redistribution licence was established for Reprise. Public KSF recording data is attributed and hashed in the reference fixtures; reference decoder implementations are not bundled in the game.
+
+The additional original CSS maps `surf_demise` (elly), `surf_kitsune` (Arblarg), `surf_aircontrol_ksf` (SnoopSh), and `surf_lux` (SSStormy) retain their authors' and asset contributors' rights. Pinned hashes, public download sources, conversion steps and limitations are recorded in `scripts/fixtures/new-maps-sources.json`, `docs/NEW-MAPS.md`, and `docs/MAP-IMPORT.md`. Public availability is not a general redistribution licence. Their assets are not relicensed as original Surfd artwork. Public CSS/KSF telemetry used for comparisons is attributed and hashed in `docs/NEW-MAP-TELEMETRY.md`; no KSF replay viewer code is included.
+
+The added CSS maps `surf_utopia_njv` (Panzer) and `surf_mesa_fixed` (Arblarg) likewise retain their authors' and contributors' rights. Their decompressed BSP SHA-1 values are `50b99557a4b754696ce16e9e920cb1b6072dd4bd` and `f4897c2472b32b33bc22b072ffafef5caa0de8fb`. The converters also read a few missing stock assets from the local CSS installation without modifying it. No general map/Valve asset redistribution licence is asserted. See `docs/CLASSIC-MAPS.md` for pinned provenance, resource paths, and reproduction.
+
+`fixtures/{utopia,mesa}*-ksf-telemetry.json` decodes additional public CSS KSF recordings. Each fixture records its public URL, byte count and cryptographic hash. Factual positions/buttons are used for independent comparisons and offline reconstruction of normal-command routes.
+
+`fixtures/boreas-ksf-telemetry.json` is decoded factual telemetry from .x's publicly accessible KSF CSS forward-style Boreas record of 23 November 2025. Its source URL, original byte count, cryptographic hash and format provenance are recorded in the fixture and `docs/REVISION-VALIDATION.md`. It is used for movement comparison and command reconstruction. No replay-viewer implementation is bundled.
+
+Movement and importer code were written independently using published mechanics and file layouts. Valve Source SDK, RNGFix and MomSurfFix code is not copied or distributed. Their licences and reference links are documented in `docs/REFERENCE.md`. The previous Northline map and scenery remain original authored regression assets.
+
+## Runtime dependency
+
+Three.js, copyright its authors, MIT licence. See `public/licenses/three.txt`.
+
+The interface uses system fonts. Legacy development dependencies DM Sans and Barlow Condensed retain their SIL Open Font Licence notices in `public/licenses/`; the new interface does not load them.
+
+The movement practice facility, painted signs, timer boundary labels and procedural wind ambience are newly authored for this project. Audio uses generated filtered noise, not commercial recordings, sampled music, or streamed tracks.
+
+Development tools (Vite, TypeScript, tsx, Playwright and type declarations) retain their notices in `node_modules`. Consult `package-lock.json` for exact installed versions.

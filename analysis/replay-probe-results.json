@@ -1,0 +1,235 @@
+{
+  "description": "Local headless replay of shipped browser physics; this does not establish native CSS parity or server verification.",
+  "map": {
+    "id": "surf_boreas",
+    "brushes": 326,
+    "displacementTriangles": 129728,
+    "zones": 26
+  },
+  "replayConfig": {
+    "version": "css-surf-bhop-3",
+    "dt": 0.014999999664723873,
+    "gravity": 800,
+    "airAccelerate": 150,
+    "accelerate": 5,
+    "friction": 4,
+    "stopSpeed": 75,
+    "maxSpeed": 260,
+    "airCap": 30,
+    "maxVelocity": 5000,
+    "jumpImpulse": 301.9933776855469,
+    "stepSize": 18,
+    "groundNormal": 0.7,
+    "autoBhop": true,
+    "standHeight": 62,
+    "duckHeight": 45,
+    "standEye": 64,
+    "duckEye": 47,
+    "duckTime": 0.4,
+    "unduckTime": 0.2,
+    "float32": true,
+    "unrestrictedStart": true,
+    "startPolicy": "boreas",
+    "inclineFix": true
+  },
+  "identicalEveryTickAcrossFps": true,
+  "allFinishedWithoutInvalidation": true,
+  "results": [
+    {
+      "fps": 30,
+      "frames": 1242,
+      "commands": 2758,
+      "stateHash": "7564a0d215edeca16eecffbeb1351b4cac9f4b50f031e5ad8b01d9ce84eca085",
+      "timer": {
+        "phase": "finished",
+        "startTick": 124.07370004297378,
+        "endTick": 2757.0977304313046,
+        "splits": [
+          16.594048414823483,
+          32.681057493534176
+        ],
+        "invalidReason": null,
+        "elapsed": 39.49535957303486
+      },
+      "finalPosition": {
+        "x": 10412.7265625,
+        "y": 8223.9794921875,
+        "z": 281.6522216796875
+      },
+      "events": [
+        {
+          "command": 125,
+          "events": [
+            "start"
+          ]
+        },
+        {
+          "command": 1231,
+          "events": [
+            "zone_cp1"
+          ]
+        },
+        {
+          "command": 2303,
+          "events": [
+            "zone_cp2"
+          ]
+        },
+        {
+          "command": 2758,
+          "events": [
+            "finish"
+          ]
+        }
+      ],
+      "probeDurationMs": 161.53437499999995
+    },
+    {
+      "fps": 60,
+      "frames": 2483,
+      "commands": 2758,
+      "stateHash": "7564a0d215edeca16eecffbeb1351b4cac9f4b50f031e5ad8b01d9ce84eca085",
+      "timer": {
+        "phase": "finished",
+        "startTick": 124.07370004297378,
+        "endTick": 2757.0977304313046,
+        "splits": [
+          16.594048414823483,
+          32.681057493534176
+        ],
+        "invalidReason": null,
+        "elapsed": 39.49535957303486
+      },
+      "finalPosition": {
+        "x": 10412.7265625,
+        "y": 8223.9794921875,
+        "z": 281.6522216796875
+      },
+      "events": [
+        {
+          "command": 125,
+          "events": [
+            "start"
+          ]
+        },
+        {
+          "command": 1231,
+          "events": [
+            "zone_cp1"
+          ]
+        },
+        {
+          "command": 2303,
+          "events": [
+            "zone_cp2"
+          ]
+        },
+        {
+          "command": 2758,
+          "events": [
+            "finish"
+          ]
+        }
+      ],
+      "probeDurationMs": 150.92845899999998
+    },
+    {
+      "fps": 144,
+      "frames": 5958,
+      "commands": 2758,
+      "stateHash": "7564a0d215edeca16eecffbeb1351b4cac9f4b50f031e5ad8b01d9ce84eca085",
+      "timer": {
+        "phase": "finished",
+        "startTick": 124.07370004297378,
+        "endTick": 2757.0977304313046,
+        "splits": [
+          16.594048414823483,
+          32.681057493534176
+        ],
+        "invalidReason": null,
+        "elapsed": 39.49535957303486
+      },
+      "finalPosition": {
+        "x": 10412.7265625,
+        "y": 8223.9794921875,
+        "z": 281.6522216796875
+      },
+      "events": [
+        {
+          "command": 125,
+          "events": [
+            "start"
+          ]
+        },
+        {
+          "command": 1231,
+          "events": [
+            "zone_cp1"
+          ]
+        },
+        {
+          "command": 2303,
+          "events": [
+            "zone_cp2"
+          ]
+        },
+        {
+          "command": 2758,
+          "events": [
+            "finish"
+          ]
+        }
+      ],
+      "probeDurationMs": 146.22066600000005
+    },
+    {
+      "fps": 240,
+      "frames": 9929,
+      "commands": 2758,
+      "stateHash": "7564a0d215edeca16eecffbeb1351b4cac9f4b50f031e5ad8b01d9ce84eca085",
+      "timer": {
+        "phase": "finished",
+        "startTick": 124.07370004297378,
+        "endTick": 2757.0977304313046,
+        "splits": [
+          16.594048414823483,
+          32.681057493534176
+        ],
+        "invalidReason": null,
+        "elapsed": 39.49535957303486
+      },
+      "finalPosition": {
+        "x": 10412.7265625,
+        "y": 8223.9794921875,
+        "z": 281.6522216796875
+      },
+      "events": [
+        {
+          "command": 125,
+          "events": [
+            "start"
+          ]
+        },
+        {
+          "command": 1231,
+          "events": [
+            "zone_cp1"
+          ]
+        },
+        {
+          "command": 2303,
+          "events": [
+            "zone_cp2"
+          ]
+        },
+        {
+          "command": 2758,
+          "events": [
+            "finish"
+          ]
+        }
+      ],
+      "probeDurationMs": 146.87141700000006
+    }
+  ]
+}

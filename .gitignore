@@ -1,0 +1,7 @@
+/local-surf/
+/analysis/raw/*-collision.json.gz
+/analysis/raw/*-visual-manifest.gz
+/surfd-client-js.zip
+__pycache__/
+*.py[cod]
+.DS_Store
