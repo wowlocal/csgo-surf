@@ -259,6 +259,7 @@ if __name__ == '__main__':
                     assert old['size'] == job['size']
                 jobs_by_path[job['path']] = job
         jobs = list(jobs_by_path.values())
+        (WEB / 'download-all-plan.json').write_text(json.dumps(map_files, indent=2) + '\n')
         print(f'20 maps; {sum(job.get("size", 0) for job in jobs)/1e6:.1f} MB unpacked visual packs; {len(jobs)} unique map files.', flush=True)
         cache_jobs(jobs, 'map-assets')
         records = {job['path']: {'bytes': job['bytes'], 'sha256': job['sha256'], 'kind': job['kind']} for job in [*manifest_jobs, *jobs]}
