@@ -1,0 +1,1502 @@
+{
+  "origin": "https://bunnyhop.lol",
+  "capturedAt": 1791730310.485985,
+  "files": [
+    {
+      "url": "https://bunnyhop.lol/",
+      "local": "index.html",
+      "bytes": 13357,
+      "sha256": "3c4c7570279cc3b8df2e60f6873048dee83fbaa56706b635a5c26fb8f58daeb1",
+      "kind": "html",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/index.json",
+      "local": "index.json",
+      "bytes": 462663,
+      "sha256": "0ebfdd10dc8071e8e5b408ce46c78bc61b21d65913f5bce04529783de351a597",
+      "kind": "json",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/about",
+      "local": "about",
+      "bytes": 13323,
+      "sha256": "b4b19d7e5dc35b38a0ec001893df959c53d58a7d2648a92fa0e06bb53312f015",
+      "kind": "html",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/maps",
+      "local": "maps",
+      "bytes": 47461,
+      "sha256": "2cd1c961d45643257b91cc57411dcf332c53a18734853923aa9b3c6a01822c56",
+      "kind": "html",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/servers",
+      "local": "servers",
+      "bytes": 8938,
+      "sha256": "39c79a2548b7247e3c32121a7572903ce292d97b14f6f71adf415601df3431ae",
+      "kind": "html",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/ranks",
+      "local": "ranks",
+      "bytes": 17552,
+      "sha256": "45e7b60b901d5f01e9161596b2df759ddafdcde6869240315ab380069d870347",
+      "kind": "html",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/changelog",
+      "local": "changelog",
+      "bytes": 50983,
+      "sha256": "433c48db336476cb2ba3126a5bfc24911a4ed122d9e99d5c06cd2dc4d8d348e1",
+      "kind": "html",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/account-email-Bsoylshj.js",
+      "local": "assets/account-email-Bsoylshj.js",
+      "bytes": 3907,
+      "sha256": "d87e634d0d6fd53cb02114d9885c87487a5e97c13d38b4177c4642ddba75d658",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/account-email-Rh3xavDF.css",
+      "local": "assets/account-email-Rh3xavDF.css",
+      "bytes": 4798,
+      "sha256": "7c9c364e3722f83264d2ba57c8740b6bf8f53a19e4bb1fd13f9af2b4820ec0ce",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/account-state-BYMidhZ9.js",
+      "local": "assets/account-state-BYMidhZ9.js",
+      "bytes": 656364,
+      "sha256": "eb4513e4a12b8485b59818877f12891c7d81a890893075109db96faef6c3b40f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/account-state-Bl3cc_Rk.css",
+      "local": "assets/account-state-Bl3cc_Rk.css",
+      "bytes": 849,
+      "sha256": "d5c9689c69b9a9bbaae1575a95872e1b8f5983d517891df73c65c0670e17f342",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/api-B2Jj-kgC.js",
+      "local": "assets/api-B2Jj-kgC.js",
+      "bytes": 11458,
+      "sha256": "d39f88b0aeb30ecddf5effcfa24b3db1f4ebfdb58b46a3ed1f6c7cdde16f48d3",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/avatar-kqcwn86P.js",
+      "local": "assets/avatar-kqcwn86P.js",
+      "bytes": 776,
+      "sha256": "55f4869b07f41b943179a8e68122d00069ed24cad673654b4f30d1a03517d959",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/badges-BcPRw2oa.js",
+      "local": "assets/badges-BcPRw2oa.js",
+      "bytes": 3053,
+      "sha256": "28aae3071667e482681dbf2a131d0b958a439c59caa25f95094b0245d928c1e4",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/changelog-Mp2rOklf.css",
+      "local": "assets/changelog-Mp2rOklf.css",
+      "bytes": 1068,
+      "sha256": "de2e665e6e730267f8a718dec45e129289238b22b6e8fc5036e3fba86a7f6521",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/community-D2zu9OMJ.js",
+      "local": "assets/community-D2zu9OMJ.js",
+      "bytes": 3899,
+      "sha256": "7abf6c728cb3523ff17e85bfddb2d247f1d346310528d6910ff69b7a9dc54d6c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/core-GuI4LXND.js",
+      "local": "assets/core-GuI4LXND.js",
+      "bytes": 15027,
+      "sha256": "4e11fdd49b08e35af54730fbaa0b6bb1c0d6bea29a15538335c80a7a76b6b2c1",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/cosmetics-PGh_ZGfu.js",
+      "local": "assets/cosmetics-PGh_ZGfu.js",
+      "bytes": 20303,
+      "sha256": "d9d45cc9c07fed13f7de475a651e66209195cb2c883ff3e47b49d4b3949458df",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/creators-DkuwYE0A.js",
+      "local": "assets/creators-DkuwYE0A.js",
+      "bytes": 6671,
+      "sha256": "cc4e91ef13286d90dfa2b9e928ed188fd8b8e0f5c76f0617255a30364336b4df",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/dom-CUDFsJPS.js",
+      "local": "assets/dom-CUDFsJPS.js",
+      "bytes": 1712,
+      "sha256": "96f3f4ec9163f028d91d9395e6424c3317f1cd474f9a84159217264c97b8cb36",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/events-EnaVAdlF.js",
+      "local": "assets/events-EnaVAdlF.js",
+      "bytes": 471,
+      "sha256": "fb013618b2525e8b275412286b024ff86bdaffb06f10ed8e6fb74721b569d301",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/events-Q3WT0NU4.js",
+      "local": "assets/events-Q3WT0NU4.js",
+      "bytes": 269,
+      "sha256": "92b94d4cf9bf5d2ba7da1e378bd87f8e2e080a58686d28d709d162067473006c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/favicon-C_cI-hiW.svg",
+      "local": "assets/favicon-C_cI-hiW.svg",
+      "bytes": 320,
+      "sha256": "0ce908dc9506eec84c71f489683975c31a5356bad5e7b6b7d14221e47dd89e6e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/ghost-BF02H5nr.js",
+      "local": "assets/ghost-BF02H5nr.js",
+      "bytes": 87485,
+      "sha256": "181b70e4a95588fb6c5d85a6e0ebc1f04f4adb35f18ed54fbd0c3d79d2762387",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/ghost-BTdkhxdS.css",
+      "local": "assets/ghost-BTdkhxdS.css",
+      "bytes": 45531,
+      "sha256": "6b94cbcabb6c4b9af324f74c331860f49bfd6c3b088e83a9e2ce9a91d221ffc2",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/hud-5C6lff-r.js",
+      "local": "assets/hud-5C6lff-r.js",
+      "bytes": 7030,
+      "sha256": "87e2bdc82665c8397c6d5cd7375044c643e2b823b40efa47dc5567898fe381ad",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/hud-D5IE_4pC.css",
+      "local": "assets/hud-D5IE_4pC.css",
+      "bytes": 7790,
+      "sha256": "9c8c91c20f6b2469db0f82b08742907347830a469e28d417c9462dda4e54374d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/index-D9qcpU7O.js",
+      "local": "assets/index-D9qcpU7O.js",
+      "bytes": 164043,
+      "sha256": "4fdb4c55e4fbb25bbc27db1b699b46c122e6d3f724d42461ad6a5faa3af7592c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/index-a7mOhp4_.css",
+      "local": "assets/index-a7mOhp4_.css",
+      "bytes": 68438,
+      "sha256": "b4083b8620f542247e4127bc9616d229ab2a92ce53be20c3a0527aaf4446625c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/item-preview-m8tHLXeP.js",
+      "local": "assets/item-preview-m8tHLXeP.js",
+      "bytes": 1848,
+      "sha256": "8a4ad780c05fd85d78c3d17867a2066cd7875c4630be7d63434da04ed0b1ff7f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/leaderboard-Dyzw_0Hk.css",
+      "local": "assets/leaderboard-Dyzw_0Hk.css",
+      "bytes": 10271,
+      "sha256": "a3bbbc37b3a2065e456a6073dff9ad4bfc74a0c106979034192b41b13d07275b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/leaderboard-tX18nlp1.js",
+      "local": "assets/leaderboard-tX18nlp1.js",
+      "bytes": 21058,
+      "sha256": "5ebbfb51c2fe521e6cf010ac32053f13d7e5124e6691947cc87b59c58e37e32d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/lessons-CcKVOcxG.js",
+      "local": "assets/lessons-CcKVOcxG.js",
+      "bytes": 4446,
+      "sha256": "57795ab391c4049b4130f8852116c0a6d0c498d8f43282e3428ebebe58ce0501",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/loadout-DopA3xcw.js",
+      "local": "assets/loadout-DopA3xcw.js",
+      "bytes": 29181,
+      "sha256": "a03f18b16dc0ceec46dc23dc0a8bd83d1b64edcff523085717b146ea641c5d7d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/maps-85c90M0p.css",
+      "local": "assets/maps-85c90M0p.css",
+      "bytes": 13833,
+      "sha256": "a77c05f0ec872cc41c5ddc71e37261b08ead8dcf31b627019825960ab4c3cd0e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/maps-DK5lovd-.js",
+      "local": "assets/maps-DK5lovd-.js",
+      "bytes": 28837,
+      "sha256": "b74e5266eeda56d8a4e7f77cda47452ab9d7c8b2f7123da2aee639d11bfd6717",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/marks-Brbs1gDc.js",
+      "local": "assets/marks-Brbs1gDc.js",
+      "bytes": 1993,
+      "sha256": "30e310ef25fa3bc2eb1c99cc81492a4d6576cf943490de02b780e10f6c0a6f4d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/marks-D-D2P7Vg.css",
+      "local": "assets/marks-D-D2P7Vg.css",
+      "bytes": 2451,
+      "sha256": "b9dbb660eae60b909b1800a99140280b5cde032802536d8d43f81ab3b49b5e6e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/mesh-C0szPPnc.js",
+      "local": "assets/mesh-C0szPPnc.js",
+      "bytes": 346,
+      "sha256": "f26dfd4172f8550d0a87773fcb65b0b2c54d827d8dcdd08c085959eb9b485af8",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/model-CJn1vZL3.js",
+      "local": "assets/model-CJn1vZL3.js",
+      "bytes": 578649,
+      "sha256": "19dafea6907a05be69d0325add6d68d55b89c79a222377df389b095f8273c724",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "local": "assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "bytes": 670,
+      "sha256": "418c206484b89b68ef5f067277831e583fc9193a62aadf4de269acaaeb12a85f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/nav-IlBYMvil.js",
+      "local": "assets/nav-IlBYMvil.js",
+      "bytes": 1275,
+      "sha256": "0aa6e6aa1d3193e4b76351b8bc17cd6866d7fae676b4f59cb0ee84d05e823aef",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/notify-B1xuBBxO.css",
+      "local": "assets/notify-B1xuBBxO.css",
+      "bytes": 16001,
+      "sha256": "0112e8a2c3c909ee76a6622f6af97908cb5faa57683ad62d095da3702d3635db",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/notify-CvHg_wVW.js",
+      "local": "assets/notify-CvHg_wVW.js",
+      "bytes": 27951,
+      "sha256": "8b8f6647e3928aaa2ba7f18e6e1b0dd63a115a09c24c7d664ae98885f3b181e4",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/palettes-YJRmTQgw.js",
+      "local": "assets/palettes-YJRmTQgw.js",
+      "bytes": 3208,
+      "sha256": "d0004ead8beb38c20b6fae351382a5fdaa2a61ad22e4d302b384f20578d0f4cc",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/pb-CeYyg6BU.js",
+      "local": "assets/pb-CeYyg6BU.js",
+      "bytes": 2011,
+      "sha256": "a06a413c55edd21542372a187a1619eaded0fdd3d6955a89d0ca54f8adcad18f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/play-lock-Bgt_A3mV.css",
+      "local": "assets/play-lock-Bgt_A3mV.css",
+      "bytes": 32580,
+      "sha256": "14cef978e8afc798e43f4e987b6657afaf89a613a71b94e9b6c3ecde9a490a83",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/play-lock-D2QCla03.js",
+      "local": "assets/play-lock-D2QCla03.js",
+      "bytes": 242012,
+      "sha256": "d11a229d26105e6c01b3fc87bd66ae0cd8fdce13a22b1b0bee6a0703d38c75c8",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/preload-helper-DjzSQ1t3.js",
+      "local": "assets/preload-helper-DjzSQ1t3.js",
+      "bytes": 1383,
+      "sha256": "66c990b6727d220a346b45d00ee48d433c8d59ef03fbf8b91c6cdadeeadfdf3f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/presence-B4W1kThY.js",
+      "local": "assets/presence-B4W1kThY.js",
+      "bytes": 1530,
+      "sha256": "375eba8e3429092c083b26836ee69d00bbd8710e8852ee57bb5a275c23a0847e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/presenter-IuwAtgYT.js",
+      "local": "assets/presenter-IuwAtgYT.js",
+      "bytes": 78031,
+      "sha256": "07a9b6736b9440a464176ad78b93faf189bdf9748cfd05f3b2a3263e3bf52c62",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/replay-B40kiN_v.js",
+      "local": "assets/replay-B40kiN_v.js",
+      "bytes": 13267,
+      "sha256": "9d75cf382c3f5dac4521d4757f5390149bddd6c2a44f7b56c7ef8b9fe9ca434d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/site-community-BBLLGKLo.js",
+      "local": "assets/site-community-BBLLGKLo.js",
+      "bytes": 698,
+      "sha256": "9a49fe856f2865a6f59f5d01c8cebcd580b0e3a1b8fe74ddc8f498b3e75ff6c8",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/site-community-DNdLsvi0.css",
+      "local": "assets/site-community-DNdLsvi0.css",
+      "bytes": 3193,
+      "sha256": "b6a987805e359b841614f05e3ed3477f29d1c1b635bd24fa78de4c6782c84e1c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/state-B3iqGkeD.js",
+      "local": "assets/state-B3iqGkeD.js",
+      "bytes": 2308,
+      "sha256": "6d17fa941c2dc1fa7f249749ec42dc8104d02445a2e3b1c7c93d5c5c607eead6",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/state-CuVm8GRj.css",
+      "local": "assets/state-CuVm8GRj.css",
+      "bytes": 4807,
+      "sha256": "99eb8e40aa862675d6a2adc21e05425fa9f471d508f2ba7417d2dfbcf193d0a7",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/styles-DzitlxVO.js",
+      "local": "assets/styles-DzitlxVO.js",
+      "bytes": 11487,
+      "sha256": "a800d9ab66e51166d1a9fbd544030a10f5ae8cda8accc8b6788ab69d9f506a7f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/three.module-CTHJQ_H0.js",
+      "local": "assets/three.module-CTHJQ_H0.js",
+      "bytes": 352399,
+      "sha256": "2f691a2a1c803a8f0132d18345dfe9a963e981555a8f03ca3a16c63dc88fb31a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/trail-Ci5rx2WO.js",
+      "local": "assets/trail-Ci5rx2WO.js",
+      "bytes": 1927,
+      "sha256": "66a271aca541d7aa5ae0890d3beb7f3f3159e95f449d36248f967a774c2353a6",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/viewmodel-BDQ_BaCV.js",
+      "local": "assets/viewmodel-BDQ_BaCV.js",
+      "bytes": 12314,
+      "sha256": "aaad2a973647a64ae847b28887c9fd8ab69479795f80a2edaf70a50989e422e1",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/favicon.ico",
+      "local": "favicon.ico",
+      "bytes": 2095,
+      "sha256": "c7c274bc3ca53e732ba520c17aeaea59861531c5973ba64c8f43090a689c76a1",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/icons/apple-touch-icon.png",
+      "local": "icons/apple-touch-icon.png",
+      "bytes": 3088,
+      "sha256": "02330d8707fcb2f4326fb2e916d5a97de3dff10b8cc7ac06a4af8e0307a52b09",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/site.webmanifest",
+      "local": "site.webmanifest",
+      "bytes": 1149,
+      "sha256": "011cd9a74aa0c66f6be50b1a83fedb281557c380c984f290c4d5793827a4cef5",
+      "kind": "json",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/account-panel-CPsaGxem.js",
+      "local": "assets/account-panel-CPsaGxem.js",
+      "bytes": 22227,
+      "sha256": "78253728eb34bfa76bc8b491aff27f96e17b2722ef3cf0d635e0ab5c8a11880e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/account-panel-gsGO4Ikn.js",
+      "local": "assets/account-panel-gsGO4Ikn.js",
+      "bytes": 78,
+      "sha256": "08be7daa9e52abcf6d19d2962afac5db72098b36ce196453565469350ab506ce",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/achievement-1-B77onqHL.webm",
+      "local": "assets/achievement-1-B77onqHL.webm",
+      "bytes": 8552,
+      "sha256": "8298e3a60887b540db95d2d30f55d9e808f88b3d83fb46cbcee6c05fab5b81cc",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/achievement-1-Bs7SZyBv.m4a",
+      "local": "assets/achievement-1-Bs7SZyBv.m4a",
+      "bytes": 8916,
+      "sha256": "519c2fd69ae7c92521f183ff977753b1e031dce19e969cd0b3c2e10613984060",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/boost-1-Cmqhscpj.m4a",
+      "local": "assets/boost-1-Cmqhscpj.m4a",
+      "bytes": 5772,
+      "sha256": "098347930b8a2fb5ad40d65ae9f668b7341c79ecccda886c9cf90fe0b671158b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/boost-2-75U-aWVc.m4a",
+      "local": "assets/boost-2-75U-aWVc.m4a",
+      "bytes": 5772,
+      "sha256": "15312623f41e3f723c20886ee7781032e116b563350269a3d3e83672ed6ae7bd",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/bunny_boing-1-Pada9goL.m4a",
+      "local": "assets/bunny_boing-1-Pada9goL.m4a",
+      "bytes": 4899,
+      "sha256": "e6dfb9a33cb51492c9b55fb3d5a2260c2ac7a79f720babfe0b60f428e8cd850b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/bunnyhop_core-CRpj0v-F.wasm",
+      "local": "assets/bunnyhop_core-CRpj0v-F.wasm",
+      "bytes": 1380227,
+      "sha256": "4e91559983292ea0beff8afcc3a5bb1d1f4655766040f9bb44cacb4e877c1d06",
+      "kind": "wasm",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/carrot_draw-1-3OCWzkCf.m4a",
+      "local": "assets/carrot_draw-1-3OCWzkCf.m4a",
+      "bytes": 5772,
+      "sha256": "7d3f6ee6737b644da08c2f87177b451d7efe28f5ec680584fc7d29ce8c04ba46",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/carrot_draw-1-P799wfVw.webm",
+      "local": "assets/carrot_draw-1-P799wfVw.webm",
+      "bytes": 4143,
+      "sha256": "f0433201e2c4f7c929915ee5608933c3cee2176eecb00a737a16db3dc94c9894",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/carrot_stab-1-C5X63kmZ.m4a",
+      "local": "assets/carrot_stab-1-C5X63kmZ.m4a",
+      "bytes": 4375,
+      "sha256": "47eea5fc03620904af030a2630c82203226b814ee9f833e3a12e744d46e2ed6a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/countdown_go-1-C4AOIf7C.m4a",
+      "local": "assets/countdown_go-1-C4AOIf7C.m4a",
+      "bytes": 5772,
+      "sha256": "3f446c9d135603b7139d0e009285d61dbb1ccdb871de46bf8844b2bf53c6987a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/countdown_go-1-Oyv-WtN5.webm",
+      "local": "assets/countdown_go-1-Oyv-WtN5.webm",
+      "bytes": 4568,
+      "sha256": "f60296c8599110412e143361618a23be1ee30f30741185f64acd4348ec3e677c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/feedback-B4S53b19.css",
+      "local": "assets/feedback-B4S53b19.css",
+      "bytes": 3754,
+      "sha256": "f045e8be842e86870052feb5de316ea4717948ac4df81b909872589a42ae3790",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/finish-1-CGqJnvHc.webm",
+      "local": "assets/finish-1-CGqJnvHc.webm",
+      "bytes": 5112,
+      "sha256": "88a3d6d3e05951ebc0a56d6ac7957d558700dee9bcc55662dd9ab6daa148fa2b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/finish-1-D3AdULFY.m4a",
+      "local": "assets/finish-1-D3AdULFY.m4a",
+      "bytes": 7344,
+      "sha256": "46ee83bf1e90b9641a9a02addba3221eb16b1e46af68d8e1083c55bc26a2322f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/finish_pb-1-C7bBJOY2.webm",
+      "local": "assets/finish_pb-1-C7bBJOY2.webm",
+      "bytes": 12933,
+      "sha256": "39ee67e3ddf361a8b719a619bfcb120b3db59ecb82a3dcd8fdb8478092d07247",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/finish_pb-1-CQCxrA9Y.m4a",
+      "local": "assets/finish_pb-1-CQCxrA9Y.m4a",
+      "bytes": 14156,
+      "sha256": "3608e6cb4b973d72f83c7c57aec2b5821d1bc7aa9b204487893152bdeb22894c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/finish_wr-1-BCzyLjZb.m4a",
+      "local": "assets/finish_wr-1-BCzyLjZb.m4a",
+      "bytes": 21841,
+      "sha256": "a58e86e02c757bcc1713e03a9da97d45b0dff8ced1a080821aae67ace9230137",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/finish_wr-1-BvBXqm46.webm",
+      "local": "assets/finish_wr-1-BvBXqm46.webm",
+      "bytes": 20866,
+      "sha256": "553fdb8887b83d14ba16b1dfda602a8f25584cbd07875ff57cfe2ac4249a8d4f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-airstrafe-CQD_aW95.m4a",
+      "local": "assets/game-airstrafe-CQD_aW95.m4a",
+      "bytes": 1051774,
+      "sha256": "c92276ff8c2e94ea2c2396008e29dfb3c2a1ce0c461c7321b11b9fd383699e68",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-airstrafe-D0qZTdr6.webm",
+      "local": "assets/game-airstrafe-D0qZTdr6.webm",
+      "bytes": 817903,
+      "sha256": "7472e74ee0bdc386aaaca04753bf11c5309f7275c0b0bfa7c5dba00eaba0bda8",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-gain-C2PEc3eo.webm",
+      "local": "assets/game-gain-C2PEc3eo.webm",
+      "bytes": 811145,
+      "sha256": "26043d0afdd4a6b70c04129cde1936b5814807dad5e61176941c835ed7d8314f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-gain-C7KHYg3n.m4a",
+      "local": "assets/game-gain-C7KHYg3n.m4a",
+      "bytes": 1043914,
+      "sha256": "10fdf8582882884ebbcffaa9ca3abe92fc23f0a18dfbfa095ac848ccced93975",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-hop-DNzJG4El.m4a",
+      "local": "assets/game-hop-DNzJG4El.m4a",
+      "bytes": 1046360,
+      "sha256": "cb689b0db62da79782295fcaa52c4fd49b1ea2c206ad0495b0bb061056fa1436",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-hop-DrXXZ2Qz.webm",
+      "local": "assets/game-hop-DrXXZ2Qz.webm",
+      "bytes": 813453,
+      "sha256": "37029fb86172d122178ea7dd2bb215c7b2d33d9b7fcf2a2fff7474622c38bde5",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-lerp-YUKbZFhU.webm",
+      "local": "assets/game-lerp-YUKbZFhU.webm",
+      "bytes": 800460,
+      "sha256": "c86ff436fc79c1edd5250bb95f187aa571c4ce34fcd866dac39f17f6f836d9aa",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-lerp-h7zs1Km1.m4a",
+      "local": "assets/game-lerp-h7zs1Km1.m4a",
+      "bytes": 1029941,
+      "sha256": "aaba50a4d3519c8f45a78d2873bac5b8f2cd6a5395998d55c503c6f47b99ed2e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-longjump-CgmuV0Qp.m4a",
+      "local": "assets/game-longjump-CgmuV0Qp.m4a",
+      "bytes": 1042692,
+      "sha256": "9d11c44425cf9424cdc040a16160de4f5188bf6d2ac14b41163a35b41a8c8093",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-longjump-qxU6thXG.webm",
+      "local": "assets/game-longjump-qxU6thXG.webm",
+      "bytes": 810022,
+      "sha256": "c325fbf347917f0e9dd9d01519a2f372b4760d386622603bbcfaf89ddbfacd5d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-prestrafe-CG1Cgpvu.m4a",
+      "local": "assets/game-prestrafe-CG1Cgpvu.m4a",
+      "bytes": 1041993,
+      "sha256": "aa2061ead73ee952a7fd5a912c7487fcb130b4706278d45d6df42b60c28e5400",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-prestrafe-DJGFrJVM.webm",
+      "local": "assets/game-prestrafe-DJGFrJVM.webm",
+      "bytes": 809951,
+      "sha256": "a1fb5dff70feb75681ce126a92fd1a20bc9ae98bb2c6ba2070182c61e05e5d83",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-scroll-CdOYtAbC.webm",
+      "local": "assets/game-scroll-CdOYtAbC.webm",
+      "bytes": 820659,
+      "sha256": "b2c2dd0fddd3865c1269fc0033107ae3a7c32aa17f5f164535864da220b2745c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-scroll-Cp3O9M-G.m4a",
+      "local": "assets/game-scroll-Cp3O9M-G.m4a",
+      "bytes": 1056840,
+      "sha256": "ff646d0831597d1142400ba0570f3d5cb03a1d6062efd2abbcdb861012cafa4a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-skybox-79uYsvqG.webm",
+      "local": "assets/game-skybox-79uYsvqG.webm",
+      "bytes": 810921,
+      "sha256": "4f9de633789ca9ba423e4e4d97209cbaa9d7ed2387d76489f1eb3bd3e1fefa53",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-skybox-CDsDZzkD.m4a",
+      "local": "assets/game-skybox-CDsDZzkD.m4a",
+      "bytes": 1043041,
+      "sha256": "8580ccaeee436a150f4037927d3742738d95f489f523a3ae67e3f084ade1593f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-sync-BsJr1lm-.webm",
+      "local": "assets/game-sync-BsJr1lm-.webm",
+      "bytes": 815276,
+      "sha256": "198289f4bb45b16dfc3f8f746d8efaaaa01f4f63f53300a695d6b7618623d9de",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-sync-C9lGYuE8.m4a",
+      "local": "assets/game-sync-C9lGYuE8.m4a",
+      "bytes": 1048456,
+      "sha256": "37845190bcc7c8607af61990e413fa19a454d353505d1bfa6ad7424269d8334a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-wishdir-CAMn5oND.m4a",
+      "local": "assets/game-wishdir-CAMn5oND.m4a",
+      "bytes": 1065398,
+      "sha256": "cf6dc8be9374abb04bd559b59355ebb7ce1d984c5ff4656196086954b63a6c13",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/game-wishdir-CiZb1nrP.webm",
+      "local": "assets/game-wishdir-CiZb1nrP.webm",
+      "bytes": 828191,
+      "sha256": "e257e416a3d828c414a933c1240d6d62d23b9a8f2683bccf6aa8dae84ff6cc5c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_bolt-1-DY80pe4d.m4a",
+      "local": "assets/gun_bolt-1-DY80pe4d.m4a",
+      "bytes": 4724,
+      "sha256": "fec47f66cfda32fb3d9a2b0e6a42515a9080de12b81cb7cb021f00b64dcc672b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_broadfork_fire-1-cliiPtEe.m4a",
+      "local": "assets/gun_broadfork_fire-1-cliiPtEe.m4a",
+      "bytes": 4549,
+      "sha256": "af9ceaa5e528f2b69652d5194f71dd437ea04e3be9d9dd4ef28797e6934e7bea",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_broadfork_fire-2-C123dhnH.m4a",
+      "local": "assets/gun_broadfork_fire-2-C123dhnH.m4a",
+      "bytes": 4899,
+      "sha256": "a8aaa28a639f6d9cc81c5da845731762003c1b737e2e3f8ca95aacb21ac8fadc",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_cottontail_fire-1-BVB6K4Xx.m4a",
+      "local": "assets/gun_cottontail_fire-1-BVB6K4Xx.m4a",
+      "bytes": 5423,
+      "sha256": "aea8adf930f2141c8525baac20fb05f27358b043210378e1d69b26afe2e11953",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_cottontail_fire-2-tUI_iX58.m4a",
+      "local": "assets/gun_cottontail_fire-2-tUI_iX58.m4a",
+      "bytes": 5423,
+      "sha256": "5685a44b649e1546ddf8db6bb77edec2cf519448b9527875176f95932c851545",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_cottontail_silenced-1-CGLPxuyC.m4a",
+      "local": "assets/gun_cottontail_silenced-1-CGLPxuyC.m4a",
+      "bytes": 5073,
+      "sha256": "301972e6747d016aace7296918bdc2416e454640779bfefabec1a80635a7f5c3",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_cottontail_silenced-2-DOoJKmPw.m4a",
+      "local": "assets/gun_cottontail_silenced-2-DOoJKmPw.m4a",
+      "bytes": 5073,
+      "sha256": "b124d61eee3999197ffcd8688ea8b49bf312e57acbdf0d797358a8f3a4e79e70",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_draw-1-BK2ZBA4p.m4a",
+      "local": "assets/gun_draw-1-BK2ZBA4p.m4a",
+      "bytes": 4375,
+      "sha256": "6d84b39622ce1055b712e2d731bade2bac542ebf86d6aa5f9954c672e6fa0daa",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_hedgerow_fire-1-Da10KkmY.m4a",
+      "local": "assets/gun_hedgerow_fire-1-Da10KkmY.m4a",
+      "bytes": 5772,
+      "sha256": "260667c706e196e860c9c58fda0802f351f8807dcf6197a49cee27bc731a45ea",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_hedgerow_fire-2-BYO9oQ5g.m4a",
+      "local": "assets/gun_hedgerow_fire-2-BYO9oQ5g.m4a",
+      "bytes": 4899,
+      "sha256": "6ab6f9bef8142bf9883c6e6228cefc0f2335fbe78c2659f4b747a5fa2850da91",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_jackrabbit_fire-1-xsXcRQrp.m4a",
+      "local": "assets/gun_jackrabbit_fire-1-xsXcRQrp.m4a",
+      "bytes": 6121,
+      "sha256": "67c04f9ca869e62bc4d20df8dbe717bab1fe1cca7471a72b00885d866b51f5be",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_jackrabbit_fire-2-DnRrVzOs.m4a",
+      "local": "assets/gun_jackrabbit_fire-2-DnRrVzOs.m4a",
+      "bytes": 5947,
+      "sha256": "44fb6ef52b55f4589aa931d1cc6c0c95f03efae7cc47cbc822290e439d2ddccf",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_pickup-1-B9G59asK.m4a",
+      "local": "assets/gun_pickup-1-B9G59asK.m4a",
+      "bytes": 4375,
+      "sha256": "c3ee43f4cd687732035f5a9bda69c93fb7ad640f0ae8021d34be76cea067978e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_pod_out-1-DTE0K2pN.m4a",
+      "local": "assets/gun_pod_out-1-DTE0K2pN.m4a",
+      "bytes": 4375,
+      "sha256": "a3577276d6780b532f7686eb8d809cbb064ec7fed10b60d4d9726737e8434309",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_pump-1-WwF7moHZ.m4a",
+      "local": "assets/gun_pump-1-WwF7moHZ.m4a",
+      "bytes": 4200,
+      "sha256": "1a0b2ee07d62436ed87cda549519af9cfbc7bb1f622d72b0a0451128a769fb1a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_silencer_seat-1-CPoh9x8L.m4a",
+      "local": "assets/gun_silencer_seat-1-CPoh9x8L.m4a",
+      "bytes": 4310,
+      "sha256": "dd8e0fad8f2692feacc091978453f22fab987ba4c3a10019d26a56275403e065",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_thumper_fire-1-BmEA2czI.m4a",
+      "local": "assets/gun_thumper_fire-1-BmEA2czI.m4a",
+      "bytes": 5423,
+      "sha256": "95f34551504fa318d2df4d228d9483aab39cb33d424f08105e1c445cec35abcc",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/gun_thumper_fire-2-BpWTvh3C.m4a",
+      "local": "assets/gun_thumper_fire-2-BpWTvh3C.m4a",
+      "bytes": 5423,
+      "sha256": "5ba671ce7cacaade44e1b6938c15cb64083f788eb30ef032ef142212e0b7a74a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/hud-BIPVSZ04.js",
+      "local": "assets/hud-BIPVSZ04.js",
+      "bytes": 62,
+      "sha256": "689758e9b031bd4c8b1574448b9048dc22aee6c4a4b32b810da7fbf08c3c211b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/impact_metal-1-5xSsZAJf.m4a",
+      "local": "assets/impact_metal-1-5xSsZAJf.m4a",
+      "bytes": 4200,
+      "sha256": "c3d25aa61e738469e948c5e5ea11d8a5285a7ce8c4a1c9e538bf0d18fd21bbad",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/impact_metal-2-kLfGN2IZ.m4a",
+      "local": "assets/impact_metal-2-kLfGN2IZ.m4a",
+      "bytes": 5073,
+      "sha256": "119222b280dae405e5172bce84e9e4cdb94c38fc6bece412b08dad2718474b06",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/impact_tile-1-yz4aH78F.m4a",
+      "local": "assets/impact_tile-1-yz4aH78F.m4a",
+      "bytes": 5073,
+      "sha256": "909afe2e5043f75c53fde05d9a1386e4e7fcf5a64929d31620386c5e681f759c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/impact_tile-2-DdJ3eb2L.m4a",
+      "local": "assets/impact_tile-2-DdJ3eb2L.m4a",
+      "bytes": 5073,
+      "sha256": "faa40f83af27b8e3e1190379acbd18f66fef91a3343217e191227a1bb67a800c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/item3d-scenes-MQRPUo-S.js",
+      "local": "assets/item3d-scenes-MQRPUo-S.js",
+      "bytes": 10916,
+      "sha256": "6812190eb3bcc804e639d0eade0c014a5839b65a851d91bbb886194675446650",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/leaderboard-C6KfxKCG.js",
+      "local": "assets/leaderboard-C6KfxKCG.js",
+      "bytes": 81,
+      "sha256": "401b1bdd13892b6a785eca6589893e7b1a4aa292f11e36fa15e8946fb69b1ba5",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/level_up-1-CpZKF-pL.webm",
+      "local": "assets/level_up-1-CpZKF-pL.webm",
+      "bytes": 6306,
+      "sha256": "e384667162d18403a2dc0b8b52d760c34d1bd0568e6984ed366f994cd487289f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/level_up-1-q5419SXk.m4a",
+      "local": "assets/level_up-1-q5419SXk.m4a",
+      "bytes": 8916,
+      "sha256": "f4646b4a4079b85930371df4b65bcbe696207e779d33c834c11f49e7dff08f45",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/loadout-stage-2aikYa44.js",
+      "local": "assets/loadout-stage-2aikYa44.js",
+      "bytes": 18635,
+      "sha256": "951120b7bafad5e26eba72126a09a9846587f42b6475e2b52ae7e89114ee3d09",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/map_change-1-Ch3nYCFp.webm",
+      "local": "assets/map_change-1-Ch3nYCFp.webm",
+      "bytes": 4450,
+      "sha256": "27a330cd0699281a78097e6f14a3b1434d1f12033be78edfcf271e425cee9ec7",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/map_change-1-k-RsgySf.m4a",
+      "local": "assets/map_change-1-k-RsgySf.m4a",
+      "bytes": 6645,
+      "sha256": "e73eae5daaf89fec33787ca97d8af1ff86fae6472179a6734c5a4f80eafa5a84",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/menu-D4HggZ6Y.js",
+      "local": "assets/menu-D4HggZ6Y.js",
+      "bytes": 98,
+      "sha256": "8984906b8fbe20ce0ae25f3813d4418ec3a70ceddeec65d6de7cab599a45ba68",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/menu-drift-C2cnh5Im.m4a",
+      "local": "assets/menu-drift-C2cnh5Im.m4a",
+      "bytes": 929682,
+      "sha256": "51b6a92f3d88974045c94be30e636e61eeb026a8b41941cf579c81426f21019d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/menu-drift-DLylI0uP.webm",
+      "local": "assets/menu-drift-DLylI0uP.webm",
+      "bytes": 722431,
+      "sha256": "ec1fe0eadfa436a80c6630f74e49b773fcd6edf8e5ef7d897e385bf703cb3d28",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/modal-sOY9O5dF.js",
+      "local": "assets/modal-sOY9O5dF.js",
+      "bytes": 9819,
+      "sha256": "e5d1b89afe9ff05da29a690524aab99cb6501a69a8005983ce8504ffdfebdf0f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/mode-BddSP5i7.css",
+      "local": "assets/mode-BddSP5i7.css",
+      "bytes": 2846,
+      "sha256": "79cd8e3ba67fa7cce76948e179b470b94b40679f542c3d899924c2e748a1dccb",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/mode-CHb1Eg9e.js",
+      "local": "assets/mode-CHb1Eg9e.js",
+      "bytes": 24609,
+      "sha256": "9192f19545911bf82ae15ea4a149b27212886b16f70cf0be666b30e94eb6eaaa",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/mp-BWqyb6sx.js",
+      "local": "assets/mp-BWqyb6sx.js",
+      "bytes": 29828,
+      "sha256": "b0312a3ea205d9a75494a27224f26551ddc125e79ff1d5b5e28bd9228d830174",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/onboarding-BaRa0v_t.css",
+      "local": "assets/onboarding-BaRa0v_t.css",
+      "bytes": 4958,
+      "sha256": "1520abe5db364b9fecbb0b36d4b9757cb61c2c7cede1b6b1620b48106b3c5c65",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/onboarding-DvK1QxyU.js",
+      "local": "assets/onboarding-DvK1QxyU.js",
+      "bytes": 10240,
+      "sha256": "234ac75e0e97bdfdb17e186c1f5354cf4a9df2102abcf031cbb74a2f06df5a8d",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/panel-DkPis1l6.js",
+      "local": "assets/panel-DkPis1l6.js",
+      "bytes": 7964,
+      "sha256": "9b2bd1b1bbd47b3c3493248feebfe69189a6dab7ceac899efb6db376e29bb33c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/player_join-1-C3GPnBTP.m4a",
+      "local": "assets/player_join-1-C3GPnBTP.m4a",
+      "bytes": 6995,
+      "sha256": "583fd24ce2ae05e808d11fcb4d742edd112aaa7eb788c1f1c2e00c395c56743b",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/player_join-1-CoxcoV6v.webm",
+      "local": "assets/player_join-1-CoxcoV6v.webm",
+      "bytes": 5030,
+      "sha256": "1c751341f38d1d33901327c83074e380e75b1ec394cfa22b0f74ebae95593f6a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/rank_up-1-C9Z6vS1B.m4a",
+      "local": "assets/rank_up-1-C9Z6vS1B.m4a",
+      "bytes": 8217,
+      "sha256": "1e967195065e3d5d99db4fb35ae3dbb8571491beca941eab661a4f4714cd7d9c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/rank_up-1-CBzYhHYJ.webm",
+      "local": "assets/rank_up-1-CBzYhHYJ.webm",
+      "bytes": 6029,
+      "sha256": "5325dc29018059d7e6cd59c4e2cfe4683f5a34a48ebf464bbe557193dbe76680",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/replay-CmIHMHj9.js",
+      "local": "assets/replay-CmIHMHj9.js",
+      "bytes": 67,
+      "sha256": "72f00f832d25b644f06b53f571145cf720bae625bff8f1c0f0248834e4b77245",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/selfcheck-worker-BuqFjCuV.js",
+      "local": "assets/selfcheck-worker-BuqFjCuV.js",
+      "bytes": 57370,
+      "sha256": "7368cd82f1689bd229e28d0f96b9a5bc0d085bdfbec207dc53a3750db1aab6d7",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shine-1-Bv3qgJ_D.m4a",
+      "local": "assets/shine-1-Bv3qgJ_D.m4a",
+      "bytes": 8217,
+      "sha256": "72b690ddf322161154e81962306644cbdb733aee62315e48dcfaf24793a14bd4",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shine-1-CfmfGW-Y.webm",
+      "local": "assets/shine-1-CfmfGW-Y.webm",
+      "bytes": 5934,
+      "sha256": "8e6288a2e20372c9b7a44b4fe00cd0f37fe7d2142f2887c32091a5f494232e06",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shot_pistol-1-_hp2qJ3z.m4a",
+      "local": "assets/shot_pistol-1-_hp2qJ3z.m4a",
+      "bytes": 5947,
+      "sha256": "7ec8d4a672c9a8ff57d83fff14d9b957c8ea3eb8bff98a914d07e22972086e35",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shot_pistol-2-Xcfq1yDJ.m4a",
+      "local": "assets/shot_pistol-2-Xcfq1yDJ.m4a",
+      "bytes": 5423,
+      "sha256": "855a77d891c456aafc263997b39b2de43a5b7efcc9002bdfa8d50a972cceaae1",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shot_sniper-1-CjvUglHN.webm",
+      "local": "assets/shot_sniper-1-CjvUglHN.webm",
+      "bytes": 6429,
+      "sha256": "c4e6b82702244b02c2b235c1f33b628c953a70f8324cb0ed3240becd3f86f0c9",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shot_sniper-1-YGoaDwzH.m4a",
+      "local": "assets/shot_sniper-1-YGoaDwzH.m4a",
+      "bytes": 9440,
+      "sha256": "0e17220003e3d61a8cb99dfbfb1b56579b1221dc000b2322cb1607d709a321fa",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shot_sniper-2-CJrWoZKc.m4a",
+      "local": "assets/shot_sniper-2-CJrWoZKc.m4a",
+      "bytes": 6995,
+      "sha256": "c146aa5698ab4ba9815a8a995f1d27aa1c5966b3c435b80d06f46e47f22c81ad",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/shot_sniper-2-DjSYlhOg.webm",
+      "local": "assets/shot_sniper-2-DjSYlhOg.webm",
+      "bytes": 4767,
+      "sha256": "e89765a8ce47af80ca1f67be112cc52dc8a39f1d78def6f7896c1d06fd86b86c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/showcase-s3hPAh4D.js",
+      "local": "assets/showcase-s3hPAh4D.js",
+      "bytes": 3229,
+      "sha256": "ef5bb9f9cf21a2d34c0e4ff7d8c6c1cf1f2c7b48c34c549ab415831acc861818",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/split-1-DMHK4UNc.webm",
+      "local": "assets/split-1-DMHK4UNc.webm",
+      "bytes": 4808,
+      "sha256": "8931e50f378189e9b5ef397372e305874eff74d95d31cea98f2a97c6714999df",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/split-1-RkiN3YLg.m4a",
+      "local": "assets/split-1-RkiN3YLg.m4a",
+      "bytes": 5597,
+      "sha256": "4a3192f04ab51e7dd1e56c987166973281de25bfe735b3bdc1eefa4f26d09281",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/step_grass-1-BpMvCbVM.m4a",
+      "local": "assets/step_grass-1-BpMvCbVM.m4a",
+      "bytes": 4200,
+      "sha256": "8377c9263e187af1c0aea8ec304b0af2d90681e8bd459fa5bab9addfcf050150",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/step_grass-2-BFqCzWoU.m4a",
+      "local": "assets/step_grass-2-BFqCzWoU.m4a",
+      "bytes": 4200,
+      "sha256": "8112ab8b2e69ce310c73e7e88c7d1e7ac36fecad40c9e73590d7b5f517909837",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/step_water-1-LFWh7ezC.m4a",
+      "local": "assets/step_water-1-LFWh7ezC.m4a",
+      "bytes": 4782,
+      "sha256": "96b0047aedc9dd4d6e4869d1b396d43b4bdb42920c4f5ce1262cb07927946235",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/step_water-3-B0FjIGml.m4a",
+      "local": "assets/step_water-3-B0FjIGml.m4a",
+      "bytes": 4549,
+      "sha256": "5d92383f217de70facf32de6e832b90f12adaceff300fc394622dab9bb2f43b3",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/step_water-4-DYg8y6Ru.m4a",
+      "local": "assets/step_water-4-DYg8y6Ru.m4a",
+      "bytes": 4899,
+      "sha256": "d6fcd39e4e7663f7045fd3ad95d341eb57a93ed4caba0aa3c146979a27082919",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/swim-1-DVKEKucX.m4a",
+      "local": "assets/swim-1-DVKEKucX.m4a",
+      "bytes": 4200,
+      "sha256": "69a57c7a1d5ab4e4d36f466e1b68e858786304f6cdeedc68878f91aae30a4d0e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/swim-2-CRKlCc0_.m4a",
+      "local": "assets/swim-2-CRKlCc0_.m4a",
+      "bytes": 4200,
+      "sha256": "e2445fb062de5b1823e887d30f19278cf99d316fa564d16613f82d1851394612",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/teleport-1-D3f_-SVD.m4a",
+      "local": "assets/teleport-1-D3f_-SVD.m4a",
+      "bytes": 5772,
+      "sha256": "c43303e09b6efb6966ea8c2c087ce63124a99d72d95ec0f669dd9c010d0971a8",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/teleport-2-Bvi6t_k1.m4a",
+      "local": "assets/teleport-2-Bvi6t_k1.m4a",
+      "bytes": 5423,
+      "sha256": "ae0cec252d1032260d235bcb1cdb3c04254822f09c9e0be871504fdd61418c4f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/ui_confirm-1-CxITzBB9.m4a",
+      "local": "assets/ui_confirm-1-CxITzBB9.m4a",
+      "bytes": 4549,
+      "sha256": "474ec8205cd265b2aff467796e305325732aa158b40585246c93bf452b9a62f4",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/vote_open-1-BRtvgPn0.webm",
+      "local": "assets/vote_open-1-BRtvgPn0.webm",
+      "bytes": 4790,
+      "sha256": "98a52bbe35029859c543bc8ea8b77b0eb35f7c12aa58a3d3bc330d49d58b612c",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/vote_open-1-Bp1Xo0oG.m4a",
+      "local": "assets/vote_open-1-Bp1Xo0oG.m4a",
+      "bytes": 6471,
+      "sha256": "5a97e131864af45142f597c54c9de77dd78d51d792d6b193ae7203c826ebf652",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/water_enter-1-BkaiCS34.m4a",
+      "local": "assets/water_enter-1-BkaiCS34.m4a",
+      "bytes": 7693,
+      "sha256": "13028d80295e87caba9e27ab239ed1d90cceac0151b61f44a260bf0ac3be70f1",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/water_enter-1-Ciy5A0t4.webm",
+      "local": "assets/water_enter-1-Ciy5A0t4.webm",
+      "bytes": 5245,
+      "sha256": "3a9a840af9293761f5b4432eca66fa31443da4911d30b26b02ae2c841b514ac4",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/water_enter-2-48mve0lq.m4a",
+      "local": "assets/water_enter-2-48mve0lq.m4a",
+      "bytes": 8916,
+      "sha256": "e8019f7d0be0b8812a8b90136f93438bb0798d46dbbdba4ccb8c65c311ad623a",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/water_enter-2-B6MLG_7Y.webm",
+      "local": "assets/water_enter-2-B6MLG_7Y.webm",
+      "bytes": 6144,
+      "sha256": "5e26268d6f51b09321882f3932680cf40bb04245c6556b217a526309a7b9be21",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/water_exit-1-Dht9kNZU.webm",
+      "local": "assets/water_exit-1-Dht9kNZU.webm",
+      "bytes": 6192,
+      "sha256": "ae64a94322d6dacb3810d53526a1c110c04d969753992f9c43d8a9891013a845",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/water_exit-1-OjWHAs_T.m4a",
+      "local": "assets/water_exit-1-OjWHAs_T.m4a",
+      "bytes": 9091,
+      "sha256": "79ba0a7deec072608006a8c39ec28549af6da790d64e61668422db19d9396615",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/wind-1-K3ZF5HcJ.webm",
+      "local": "assets/wind-1-K3ZF5HcJ.webm",
+      "bytes": 59226,
+      "sha256": "7338b6a775d3e32fdfe6fde0084a2a79caf03a1aac3da6ed86e397c3c13bcf57",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/wind-1-MUWkiWW7.m4a",
+      "local": "assets/wind-1-MUWkiWW7.m4a",
+      "bytes": 80994,
+      "sha256": "1fa3cf194c45fa756f034b9ea916f13c6f3dd755ce8e2a59b1faaec7c716a051",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/wind_high-1-DL6Mjahr.webm",
+      "local": "assets/wind_high-1-DL6Mjahr.webm",
+      "bytes": 33387,
+      "sha256": "69df54d975c388a6fe45abe6fee336fd9690fb6b189822eca38760919724ae12",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/wind_high-1-DdlrsG6I.m4a",
+      "local": "assets/wind_high-1-DdlrsG6I.m4a",
+      "bytes": 48041,
+      "sha256": "177fee2ee32db93a3345448c9eca5d9e3da7ccc451a1a990fdad72b42a73870f",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/favicon.svg",
+      "local": "favicon.svg",
+      "bytes": 320,
+      "sha256": "0ce908dc9506eec84c71f489683975c31a5356bad5e7b6b7d14221e47dd89e6e",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/icons/icon-192.png",
+      "local": "icons/icon-192.png",
+      "bytes": 4439,
+      "sha256": "cc0527b19ae8416f3ba947e91feaca5296f5cfad773daf4f3247943cf7d16b84",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/icons/icon-512.png",
+      "local": "icons/icon-512.png",
+      "bytes": 12444,
+      "sha256": "b556536d4834d01e67941ef94b535aba627fcabf0576394e1416d7fcc7df28ad",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/icons/icon-maskable-512.png",
+      "local": "icons/icon-maskable-512.png",
+      "bytes": 6790,
+      "sha256": "efc77ee4580e91a290632b93e622c8fb2693f229711cd8721d5b0c3c2388f4c3",
+      "kind": "file",
+      "client": true
+    },
+    {
+      "url": "https://bunnyhop.lol/assets/core-_1D4RxH5.js",
+      "local": "assets/core-_1D4RxH5.js",
+      "bytes": 57,
+      "sha256": "4daea3118ecb617b3e41860138a08bdcd8c2c19688d8aca97800e037903b397c",
+      "kind": "file",
+      "client": true
+    }
+  ]
+}

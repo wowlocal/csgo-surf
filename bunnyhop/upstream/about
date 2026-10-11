@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About bunnyhop.lol · How to bhop, FAQ</title>
+  <meta name="description" content="bunnyhop.lol is classic Counter-Strike: Source bunnyhop in your browser: 100 tick, 200+ classic bhop maps, PB ghosts, replays to MP4, verified leaderboards and online servers. How to play, styles and FAQ." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#0d0f14" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="canonical" href="https://bunnyhop.lol/about" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32 48x48" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-C_cI-hiW.svg" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="bunnyhop.lol" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://bunnyhop.lol/about" />
+  <meta property="og:title" content="About bunnyhop.lol · How to bhop, FAQ" />
+  <meta property="og:description" content="Classic CS:S bhop in your browser. No install, no Steam. How to play, styles, sensitivity, and everything else you'd ask." />
+  <meta property="og:image" content="https://bunnyhop.lol/og/site/about.jpg?v=1" />
+  <meta property="og:image:secure_url" content="https://bunnyhop.lol/og/site/about.jpg?v=1" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="bunnyhop.lol: classic CS:S bhop, no install" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="About bunnyhop.lol · How to bhop, FAQ" />
+  <meta name="twitter:description" content="Classic CS:S bhop in your browser. No install, no Steam. How to play, styles, sensitivity, and everything else you'd ask." />
+  <meta name="twitter:image" content="https://bunnyhop.lol/og/site/about.jpg?v=1" />
+  <meta name="twitter:image:alt" content="bunnyhop.lol: classic CS:S bhop, no install" />
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "bunnyhop.lol", "item": "https://bunnyhop.lol/" },
+        { "@type": "ListItem", "position": 2, "name": "About & FAQ", "item": "https://bunnyhop.lol/about" }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is bunnyhop.lol free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every map, style, server, replay and leaderboard is free. No account needed either: you start as a guest and can link Discord or an email later to keep your progress on any device." } },
+        { "@type": "Question", "name": "Do I need Counter-Strike: Source or Steam?", "acceptedAnswer": { "@type": "Answer", "text": "No. Nothing to install or download. Open the site in a desktop browser and play." } },
+        { "@type": "Question", "name": "Is it the real CS:S movement?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Source SDK 2013 player movement runs at 100 tick in WebAssembly: air acceleration, strafing, ground friction, boosters, ladders and water behave like a CS:S bhop server. Prespeed out of the start zone is capped at 290 u/s." } },
+        { "@type": "Question", "name": "Do I need a keyboard and mouse?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Bhop is a mouse-and-keyboard game: strafe with A and D while you turn the mouse. The scroll wheel jumps too. Phones and tablets are not supported for play." } },
+        { "@type": "Question", "name": "How do I convert my sensitivity?", "acceptedAnswer": { "@type": "Answer", "text": "Sensitivity uses CS:S units (degrees per count = sensitivity x m_yaw 0.022), so paste the value from your config. Settings also shows your cm/360 and eDPI for your mouse DPI. From another game, match the cm/360." } },
+        { "@type": "Question", "name": "How are leaderboards verified?", "acceptedAnswer": { "@type": "Answer", "text": "Every run uploads a tick-exact replay. The server re-simulates it with the same engine and only ranks the time it reproduces." } },
+        { "@type": "Question", "name": "Can I save my runs as video?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Open any replay, pick a camera and press E to export an MP4 (up to 1440p at 120 fps) with the HUD, keys overlay and sound." } },
+        { "@type": "Question", "name": "Is there multiplayer?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Persistent servers with map rotation, end-of-map votes, RTV, nominations, chat, spectating and live WR announcements. Every run you finish online is verified like a solo run." } },
+        { "@type": "Question", "name": "Which browsers work?", "acceptedAnswer": { "@type": "Answer", "text": "Any current desktop Chrome, Edge, Firefox or Safari with WebGL 2. A dedicated GPU helps on big maps; raise or lower graphics settings in Settings." } }
+      ]
+    }
+  ]
+  </script>
+  <script type="module" crossorigin src="/assets/modulepreload-polyfill-P2Xu9kJm.js"></script>
+  <script type="module" crossorigin src="/assets/creators-DkuwYE0A.js"></script>
+  <script type="module" crossorigin src="/assets/site-community-BBLLGKLo.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/site-community-DNdLsvi0.css">
+</head>
+<body>
+  <header class="top">
+    <a class="wordmark" href="/" aria-label="bunnyhop.lol home"><svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 47 Q14.5 33 21 47 Q29 25 37 47 Q46.5 15 56 47" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="56" cy="47" r="4.5" fill="#fff"/></svg><span><span class="wm-name">bunnyhop</span><span class="wm-tld">.lol</span></span></a>
+    <nav aria-label="Site"><a href="/maps">Maps</a><a href="/servers">Play online</a><a href="/ranks">Ranks</a><a class="btn" href="/">Play now</a></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>Classic CS:S bhop<br />in your browser</h1>
+      <p class="lede">bunnyhop.lol is Counter-Strike: Source bunnyhop with nothing to install. Real Source movement at 100 tick, the maps you grew up on, a ghost of your PB on every attempt, and leaderboards where every time is re-simulated before it counts.</p>
+      <p class="ctas"><a class="btn big" href="/">▶ Play now</a> <a class="btn ghost big" href="/maps">Browse the maps</a></p>
+      <p class="fine">Free, with no Steam and no download. You start as a guest; link Discord or an email to keep your progress.</p>
+    </section>
+
+    <section class="grid" aria-label="Features">
+      <div><h2>The movement you know</h2><p>Source SDK 2013 player movement at 100 tick: air strafing, friction, boosters, ladders, water. Autohop by default, prespeed capped at 290 u/s out of the start zone.</p></div>
+      <div><h2>Classic maps</h2><p>Hundreds of classic bhop maps tiered T1 to T6: bhop_eazy, bhop_badges, bhop_choice, and the Prestige-era rotation, with timer zones and bonus tracks.</p></div>
+      <div><h2>Ghosts</h2><p>Race your PB, the WR or anyone's run from the leaderboard, with a live delta on the HUD and an optional trail.</p></div>
+      <div><h2>Replays to MP4</h2><p>Every finished run keeps a tick-exact replay. Scrub it with a speed graph, switch cameras (in-eye, chase, free, flyby, auto-director) and export an MP4 with HUD, keys and sound.</p></div>
+      <div><h2>Verified leaderboards</h2><p>One per map, style and bonus. The server re-runs your replay with the same engine and only ranks times it reproduces. Runs earn points, rank titles, levels and a player card you can customise.</p></div>
+      <div><h2>Online servers</h2><p>Persistent rooms with map rotation, end-of-map votes, RTV, nominations, chat and spectating. Finish a run online and it's verified like any other.</p></div>
+    </section>
+
+    <section class="how">
+      <h2>How to bhop</h2>
+      <ol>
+        <li><b>Hold jump.</b> Autohop jumps the tick you land. On Legit Scroll, bind jump to the scroll wheel and time it yourself.</li>
+        <li><b>Let go of W in the air.</b> Hold <kbd>A</kbd> while you turn the mouse left, <kbd>D</kbd> while you turn it right.</li>
+        <li><b>Sync your strafes.</b> Smooth, matched mouse and key movement gains speed; the speedometer turns green while you gain.</li>
+        <li><b>Leave the green start zone</b> to start the timer, touch the red end zone to finish. <kbd>R</kbd> restarts.</li>
+      </ol>
+      <p>Pick a style in the map browser or press <kbd>F3</kbd>: <b>Normal</b> (autohop), <b>Legit Scroll</b> (press jump for every hop), <b>W-Only</b>, <b>Sideways</b> and <b>Half-Sideways</b>. Each has its own PBs and leaderboards.</p>
+    </section>
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      <h3>Is it free?</h3>
+      <p>Yes. Every map, style, server, replay and leaderboard. No account needed either: you start as a guest and can link Discord or an email later to keep your progress on any device.</p>
+      <h3>Do I need Counter-Strike: Source or Steam?</h3>
+      <p>No. Nothing to install or download. Open the site in a desktop browser and play.</p>
+      <h3>Is it the real CS:S movement?</h3>
+      <p>Yes. The Source SDK 2013 player movement runs at 100 tick in WebAssembly. Air acceleration, strafing, ground friction, boosters, ladders and water behave like a CS:S bhop server.</p>
+      <h3>Do I need a keyboard and mouse?</h3>
+      <p>Yes. Strafe with <kbd>A</kbd> / <kbd>D</kbd> while you turn the mouse. The scroll wheel jumps too, and every key can be rebound. Phones and tablets aren't supported for play.</p>
+      <h3>How do I convert my sensitivity?</h3>
+      <p>It's in CS:S units (degrees per count = sensitivity × <code>m_yaw</code> 0.022), so paste the value from your config. Settings shows your cm/360 and eDPI for your mouse DPI; coming from another game, match the cm/360. Raw input and FOV are there too.</p>
+      <h3>How are leaderboards verified?</h3>
+      <p>Every run uploads a tick-exact replay. The server re-simulates it with the same engine and only ranks the time it reproduces.</p>
+      <h3>Can I save my runs as video?</h3>
+      <p>Yes. Open any replay, pick a camera and press <kbd>E</kbd> to export an MP4 (up to 1440p, 120 fps) with the HUD, keys overlay and sound.</p>
+      <h3>Is there multiplayer?</h3>
+      <p>Yes: <a href="/servers">persistent servers</a> with map votes, RTV, nominations, chat, spectating and live WR announcements.</p>
+      <h3>Is server chat logged?</h3>
+      <p>Yes. Chat in the online servers is stored for 90 days so moderators can act on reports and abuse. It isn't shown publicly.</p>
+      <h3>What do you store to stop cheating and ban evasion?</h3>
+      <p>Salted hashes of the network you play from (never the IP address itself), a random device id this browser keeps (in a cookie and its local storage), and a hash of what the browser reports about the machine (graphics card, screen, time zone, language, CPU cores). They're linked to the runs and sessions they came with, are only visible to staff, and are used to keep banned players from coming back.</p>
+      <h3>Which browsers work?</h3>
+      <p>Current desktop Chrome, Edge, Firefox or Safari with WebGL 2. A dedicated GPU helps on big maps; Settings has graphics options for slower machines.</p>
+      <div data-discord hidden>
+        <h3>Is there a Discord?</h3>
+        <p>Yes: <a href="https://discord.com" target="_blank" rel="noopener">join the Discord</a> to talk to other players and to us.</p>
+      </div>
+      <h3>Can I become a moderator?</h3>
+      <p>We're looking for moderators. Apply in the game: open <a href="/?apply=moderator">Feedback</a> and pick Moderator application. It's tied to your account, so save your progress or link Discord first.</p>
+      <h3>Can I support the game?</h3>
+      <p>If you'd like to, there's a one-time donation: <a data-support href="/?support">Support bunnyhop.lol</a> shows how and what supporters get as a thank-you. Everything else stays free.</p>
+    </section>
+
+    <section class="thanks" data-supporters hidden>
+      <h2>Thank you</h2>
+      <p class="thanks-names"></p>
+    </section>
+
+    <section class="end">
+      <p class="ctas"><a class="btn big" href="/">▶ Play bunnyhop.lol</a> <a class="btn ghost big" href="/maps">Browse the maps</a> <a class="btn ghost big" href="/ranks">See the ranks</a> <a class="btn ghost big discord-cta" href="https://discord.com" target="_blank" rel="noopener" data-discord hidden>Join the Discord</a></p>
+    </section>
+  </main>
+  <footer class="foot"><a href="/">bunnyhop.lol</a> · <a href="/maps">Maps</a> · <a href="/servers">Play online</a> · <a href="/ranks">Ranks</a> · <a href="/changelog">Changelog</a><span data-discord hidden> · <a href="https://discord.com" target="_blank" rel="noopener">Discord</a></span></footer>
+</body>
+</html>

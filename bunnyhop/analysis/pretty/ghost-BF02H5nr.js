@@ -1,0 +1,4346 @@
+const __vite__mapDeps = (
+  i,
+  m = __vite__mapDeps,
+  d = m.f ||
+    (m.f = [
+      "assets/item3d-scenes-MQRPUo-S.js",
+      "assets/model-CJn1vZL3.js",
+      "assets/core-GuI4LXND.js",
+      "assets/api-B2Jj-kgC.js",
+      "assets/cosmetics-PGh_ZGfu.js",
+      "assets/styles-DzitlxVO.js",
+      "assets/loadout-DopA3xcw.js",
+      "assets/palettes-YJRmTQgw.js",
+      "assets/badges-BcPRw2oa.js",
+      "assets/dom-CUDFsJPS.js",
+      "assets/trail-Ci5rx2WO.js",
+      "assets/mesh-C0szPPnc.js",
+      "assets/showcase-s3hPAh4D.js",
+    ]),
+) => i.map((i) => d[i]);
+import { t as e } from "./preload-helper-DjzSQ1t3.js";
+import { t } from "./community-D2zu9OMJ.js";
+import {
+  Mr as n,
+  V as r,
+  Xr as i,
+  br as a,
+  jr as o,
+  on as s,
+  qr as c,
+  qt as l,
+  t as u,
+  tn as d,
+  wt as f,
+  xt as p,
+  yn as m,
+  zt as h,
+} from "./model-CJn1vZL3.js";
+import { C as g, n as ee, u as te } from "./core-GuI4LXND.js";
+import { i as _ } from "./api-B2Jj-kgC.js";
+import {
+  C as ne,
+  P as re,
+  U as ie,
+  a as ae,
+  p as oe,
+} from "./account-state-BYMidhZ9.js";
+import { a as v } from "./dom-CUDFsJPS.js";
+import {
+  B as se,
+  E as y,
+  F as ce,
+  G as le,
+  H as ue,
+  J as de,
+  K as fe,
+  L as pe,
+  U as me,
+  V as b,
+  W as he,
+  X as ge,
+  Y as _e,
+  Z as ve,
+  a as ye,
+  f as be,
+  n as xe,
+  p as Se,
+  q as Ce,
+  r as we,
+  t as Te,
+  w as Ee,
+} from "./cosmetics-PGh_ZGfu.js";
+import {
+  c as De,
+  i as Oe,
+  l as ke,
+  m as x,
+  p as Ae,
+  s as je,
+  u as Me,
+  x as S,
+} from "./styles-DzitlxVO.js";
+import {
+  A as Ne,
+  B as Pe,
+  C,
+  D as Fe,
+  E as Ie,
+  N as Le,
+  O as Re,
+  P as ze,
+  R as Be,
+  S as w,
+  T as Ve,
+  V as He,
+  _ as Ue,
+  a as We,
+  d as T,
+  f as Ge,
+  g as Ke,
+  h as qe,
+  i as Je,
+  j as Ye,
+  k as Xe,
+  m as Ze,
+  p as Qe,
+  t as $e,
+  u as et,
+  v as tt,
+  y as nt,
+  z as rt,
+} from "./loadout-DopA3xcw.js";
+import {
+  _ as it,
+  g as at,
+  p as ot,
+  s as st,
+  u as ct,
+  v as lt,
+} from "./replay-B40kiN_v.js";
+import {
+  a as ut,
+  c as dt,
+  d as ft,
+  f as pt,
+  g as mt,
+  h as ht,
+  i as gt,
+  l as _t,
+  n as vt,
+  o as yt,
+  p as bt,
+  t as xt,
+  v as St,
+} from "./notify-CvHg_wVW.js";
+import { n as Ct } from "./palettes-YJRmTQgw.js";
+import { n as wt, t as Tt } from "./badges-BcPRw2oa.js";
+import {
+  A as Et,
+  C as E,
+  N as Dt,
+  S as Ot,
+  T as kt,
+  _ as At,
+  b as jt,
+  g as Mt,
+  h as Nt,
+  i as Pt,
+  j as Ft,
+  m as It,
+  n as Lt,
+  o as Rt,
+  p as zt,
+  t as Bt,
+  w as Vt,
+} from "./creators-DkuwYE0A.js";
+import { t as Ht } from "./avatar-kqcwn86P.js";
+import {
+  a as Ut,
+  c as Wt,
+  i as Gt,
+  o as Kt,
+  s as qt,
+  t as Jt,
+} from "./marks-Brbs1gDc.js";
+import { t as Yt } from "./nav-IlBYMvil.js";
+import { n as Xt, r as Zt, t as Qt } from "./item-preview-m8tHLXeP.js";
+import { T as $t } from "./lessons-CcKVOcxG.js";
+import { s as en } from "./pb-CeYyg6BU.js";
+import { t as tn } from "./trail-Ci5rx2WO.js";
+var nn = null,
+  rn = `bunnyhop:hud-editor-closed`,
+  an = () => !!nn;
+function on() {
+  return (nn?.(), !!nn);
+}
+var sn = 8,
+  cn = 8,
+  ln = [
+    `top-left`,
+    `top`,
+    `top-right`,
+    `left`,
+    `centre`,
+    `right`,
+    `bottom-left`,
+    `bottom`,
+    `bottom-right`,
+  ],
+  un = (e) => b.find((t) => t.id === e).label,
+  dn = class {
+    host;
+    active = !1;
+    selected = null;
+    bar = null;
+    grid;
+    guideV;
+    guideH;
+    info = null;
+    chips = new Map();
+    presetBtns = new Map();
+    snap = !0;
+    relock = !1;
+    drag = null;
+    constructor(e) {
+      ((this.host = e),
+        (this.grid = v(`div.hud-grid`, { "aria-hidden": `true` })),
+        (this.guideV = v(`div.hud-guide.v`, { "aria-hidden": `true` })),
+        (this.guideH = v(`div.hud-guide.h`, { "aria-hidden": `true` })),
+        (nn = () => this.toggle()),
+        addEventListener(`keydown`, (e) => this.onKey(e), !0),
+        e.root.addEventListener(`pointerdown`, (e) => this.onDown(e)),
+        e.root.addEventListener(`pointermove`, (e) => this.onMove(e)),
+        e.root.addEventListener(`pointerup`, (e) => this.onUp(e)),
+        e.root.addEventListener(`pointercancel`, (e) => this.onUp(e)),
+        e.root.addEventListener(
+          `wheel`,
+          (e) => {
+            if (!this.active) return;
+            let t = e.target.closest(`.hud-el`);
+            t &&
+              (e.preventDefault(),
+              this.select(t.dataset.el),
+              this.rescale(e.deltaY < 0 ? 0.05 : -0.05));
+          },
+          { passive: !1 },
+        ));
+    }
+    get layout() {
+      return y.get().hud.layout;
+    }
+    commit(e) {
+      (y.update((t) => e(t.hud.layout)), this.paint());
+    }
+    toggle() {
+      this.active ? this.close() : this.open();
+    }
+    open() {
+      this.active ||
+        ((this.active = !0),
+        (this.relock = !!document.pointerLockElement || ie()),
+        document.pointerLockElement && document.exitPointerLock(),
+        document.body.classList.add(`hud-editing`),
+        this.host.root.classList.add(`editing`),
+        this.host.root.prepend(this.grid, this.guideV, this.guideH),
+        (this.bar = this.buildBar()),
+        document.body.append(this.bar),
+        this.host.setEditing(!0),
+        this.select(this.selected ?? `speed`));
+    }
+    close() {
+      if (this.active) {
+        ((this.active = !1),
+          (this.drag = null),
+          document.body.classList.remove(`hud-editing`),
+          this.host.root.classList.remove(`editing`),
+          this.grid.remove(),
+          this.guideV.remove(),
+          this.guideH.remove(),
+          this.bar?.remove(),
+          (this.bar = null));
+        for (let e of Object.values(this.host.els)) e.classList.remove(`sel`);
+        (this.host.setEditing(!1),
+          dispatchEvent(new CustomEvent(rn)),
+          this.relock &&
+            ((this.relock = !1),
+            document
+              .getElementById(`game`)
+              ?.requestPointerLock?.()
+              ?.catch?.(() => {})));
+      }
+    }
+    buildBar() {
+      (this.chips.clear(), this.presetBtns.clear());
+      let e = v(`div.he-chips`, {
+        role: `group`,
+        "aria-label": `HUD elements`,
+      });
+      for (let { id: t, label: n } of b) {
+        let r = v(
+          `button.he-chip`,
+          {
+            type: `button`,
+            title: `Click: select · double-click: show/hide`,
+            "aria-pressed": `false`,
+          },
+          n,
+        );
+        (r.addEventListener(`click`, () => {
+          this.selected === t
+            ? this.setOn(t, !this.layout[t].on)
+            : this.select(t);
+        }),
+          this.chips.set(t, r),
+          e.append(r));
+      }
+      let t = v(`div.he-presets`);
+      for (let e of ue) {
+        let n = v(
+          `button.btn.he-btn`,
+          {
+            type: `button`,
+            onclick: () => this.commit((t) => Object.assign(t, fe(e.layout))),
+          },
+          e.label,
+        );
+        (this.presetBtns.set(e.id, n), t.append(n));
+      }
+      let n = v(`input`, { type: `checkbox`, id: `he-snap` });
+      ((n.checked = this.snap),
+        n.addEventListener(`change`, () => (this.snap = n.checked)));
+      let r = v(`input.he-io`, {
+          type: `text`,
+          placeholder: `Paste a layout code (bhl1.…)`,
+          "aria-label": `Layout code`,
+          spellcheck: `false`,
+        }),
+        i = v(`span.he-msg`, { role: `status` }),
+        a = (e) => {
+          ((i.textContent = e),
+            setTimeout(() => i.textContent === e && (i.textContent = ``), 3e3));
+        },
+        o = v(`button.btn.he-btn`, { type: `button` }, `Export`);
+      o.addEventListener(`click`, () => {
+        let e = y.get().hud;
+        ((r.value = de(e.layout, e.keys)),
+          r.select(),
+          navigator.clipboard?.writeText(r.value).then(
+            () => a(`Copied`),
+            () => a(`Select and copy`),
+          ));
+      });
+      let s = v(`button.btn.he-btn`, { type: `button` }, `Import`);
+      (s.addEventListener(`click`, () => {
+        let e = Ce(r.value);
+        if (!e) return a(`Not a valid layout code`);
+        (y.update((t) => {
+          ((t.hud.layout = e.layout), (t.hud.keys = e.keys));
+        }),
+          this.paint(),
+          a(`Imported`));
+      }),
+        (this.info = v(`div.he-info`, { "aria-live": `polite` })));
+      let c = y.get().binds.hudEditor[0];
+      return v(
+        `div#hud-edit-bar`,
+        { role: `dialog`, "aria-label": `HUD layout editor` },
+        v(
+          `div.he-head`,
+          null,
+          v(`b`, null, `HUD layout`),
+          v(
+            `span.he-hint`,
+            null,
+            `Drag to move · corner to resize · arrows nudge (Shift ×10) · +/− size · H hide · Tab next · hold Alt: no snap`,
+          ),
+          v(
+            `button.btn.he-btn`,
+            {
+              type: `button`,
+              title: `Move this bar to the other edge of the screen`,
+              onclick: (e) =>
+                e.currentTarget
+                  .closest(`#hud-edit-bar`)
+                  .classList.toggle(`bottom`),
+            },
+            `⇅`,
+          ),
+          v(
+            `button.btn.primary.he-done`,
+            { type: `button`, onclick: () => this.close() },
+            `Done${c ? ` (${Ee(c)})` : ``}`,
+          ),
+        ),
+        e,
+        this.info,
+        v(
+          `div.he-row`,
+          null,
+          v(`span.he-label`, null, `Presets`),
+          t,
+          v(`label.he-snap`, { for: `he-snap` }, n, ` Snap`),
+          v(
+            `button.btn.he-btn`,
+            {
+              type: `button`,
+              onclick: () => this.commit((e) => Object.assign(e, fe(se))),
+            },
+            `Reset to default`,
+          ),
+        ),
+        v(`div.he-row`, null, v(`span.he-label`, null, `Share`), r, o, s, i),
+      );
+    }
+    paint() {
+      let e = this.layout;
+      for (let [t, n] of this.chips)
+        (n.classList.toggle(`on`, e[t].on),
+          n.classList.toggle(`sel`, t === this.selected),
+          n.setAttribute(`aria-pressed`, String(e[t].on)));
+      for (let t of ue)
+        this.presetBtns.get(t.id)?.classList.toggle(`on`, ve(e, t.layout));
+      for (let [e, t] of Object.entries(this.host.els))
+        t.classList.toggle(`sel`, e === this.selected);
+      let t = this.selected;
+      if (this.info && t) {
+        let n = e[t];
+        this.info.textContent = `${un(t)}${n.on ? `` : ` (hidden)`} · anchor ${ln[n.a]} · x ${(n.x * 100).toFixed(1)}% · y ${(n.y * 100).toFixed(1)}% · size ${Math.round(n.s * 100)}%`;
+      }
+    }
+    select(e) {
+      ((this.selected = e), this.paint());
+    }
+    setOn(e, t) {
+      this.commit((n) => (n[e].on = t));
+    }
+    rescale(e) {
+      let t = this.selected;
+      t && this.commit((n) => (n[t].s = le(n[t].s + e)));
+    }
+    nudge(e, t) {
+      let n = this.selected;
+      if (!n) return;
+      let r = this.host.els[n].getBoundingClientRect(),
+        i = _e(
+          {
+            left: r.left + e,
+            top: r.top + t,
+            width: r.width,
+            height: r.height,
+          },
+          innerWidth,
+          innerHeight,
+          this.layout[n],
+        );
+      this.commit((e) => (e[n] = i));
+    }
+    onDown(e) {
+      if (!this.active || e.button !== 0) return;
+      let t = e.target,
+        n = t.closest(`.hud-el`);
+      if (!n) return;
+      e.preventDefault();
+      let r = n.dataset.el;
+      (this.select(r), n.setPointerCapture(e.pointerId));
+      let i = { ...this.layout[r] };
+      this.drag = {
+        id: r,
+        mode: t.classList.contains(`hud-handle`) ? `resize` : `move`,
+        x0: e.clientX,
+        y0: e.clientY,
+        r0: n.getBoundingClientRect(),
+        p0: i,
+        pid: e.pointerId,
+        cur: i,
+      };
+    }
+    onMove(e) {
+      let t = this.drag;
+      if (!t || e.pointerId !== t.pid) return;
+      let n = e.clientX - t.x0,
+        r = e.clientY - t.y0,
+        i = innerWidth,
+        a = innerHeight;
+      if (t.mode === `resize`) {
+        let n = t.r0.left + me(t.p0.a) * t.r0.width,
+          r = t.r0.top + he(t.p0.a) * t.r0.height,
+          i = Math.hypot(t.x0 - n, t.y0 - r) || 1,
+          a = le(t.p0.s * (Math.hypot(e.clientX - n, e.clientY - r) / i));
+        ((t.cur = { ...t.p0, s: a }),
+          this.host.preview(t.id, t.cur),
+          this.showInfo(t.cur));
+        return;
+      }
+      let o = t.r0.left + n,
+        s = t.r0.top + r,
+        c = t.r0.width,
+        l = t.r0.height,
+        u = !1,
+        d = !1;
+      if (this.snap && !e.altKey) {
+        let e = o + c / 2,
+          t = s + l / 2;
+        if (Math.abs(e - i / 2) < cn) ((o = i / 2 - c / 2), (u = !0));
+        else {
+          let t = e < i / 3 ? 0 : e < (2 * i) / 3 ? 1 : 2,
+            n = o + (t / 2) * c - (t / 2) * i;
+          o += Math.round(n / sn) * sn - n;
+        }
+        if (Math.abs(t - a / 2) < cn) ((s = a / 2 - l / 2), (d = !0));
+        else {
+          let e = t < a / 3 ? 0 : t < (2 * a) / 3 ? 1 : 2,
+            n = s + (e / 2) * l - (e / 2) * a;
+          s += Math.round(n / sn) * sn - n;
+        }
+      }
+      (this.guideV.classList.toggle(`show`, u),
+        this.guideH.classList.toggle(`show`, d),
+        (t.cur = _e({ left: o, top: s, width: c, height: l }, i, a, t.p0)),
+        this.host.preview(t.id, t.cur),
+        this.showInfo(t.cur));
+    }
+    showInfo(e) {
+      this.info &&
+        this.selected &&
+        (this.info.textContent = `${un(this.selected)} · anchor ${ln[e.a]} · x ${(e.x * 100).toFixed(1)}% · y ${(e.y * 100).toFixed(1)}% · size ${Math.round(e.s * 100)}%`);
+    }
+    onUp(e) {
+      let t = this.drag;
+      if (!t || e.pointerId !== t.pid) return;
+      ((this.drag = null),
+        this.guideV.classList.remove(`show`),
+        this.guideH.classList.remove(`show`));
+      let n = t.cur;
+      this.commit((e) => (e[t.id] = n));
+    }
+    onKey(e) {
+      let t = y.get().binds.hudEditor,
+        n = e.target,
+        r =
+          !!n &&
+          (n.tagName === `INPUT` ||
+            n.tagName === `TEXTAREA` ||
+            n.tagName === `SELECT` ||
+            n.isContentEditable);
+      if (!this.active) {
+        t.includes(e.code) &&
+          !r &&
+          !e.repeat &&
+          document.body.classList.contains(`in-game`) &&
+          !document.querySelector(`dialog[open]`) &&
+          (e.preventDefault(), e.stopImmediatePropagation(), this.open());
+        return;
+      }
+      if (r && e.key !== `Escape`) return;
+      let i = e.shiftKey ? 10 : 1,
+        a = b.map((e) => e.id);
+      switch (e.key) {
+        case `Escape`:
+        case `Enter`:
+          r ? n.blur() : this.close();
+          break;
+        case `ArrowLeft`:
+          this.nudge(-i, 0);
+          break;
+        case `ArrowRight`:
+          this.nudge(i, 0);
+          break;
+        case `ArrowUp`:
+          this.nudge(0, -i);
+          break;
+        case `ArrowDown`:
+          this.nudge(0, i);
+          break;
+        case `+`:
+        case `=`:
+          this.rescale(0.05);
+          break;
+        case `-`:
+        case `_`:
+          this.rescale(-0.05);
+          break;
+        case `h`:
+        case `H`:
+        case `Delete`:
+          this.selected &&
+            this.setOn(this.selected, !this.layout[this.selected].on);
+          break;
+        case `Tab`: {
+          let t = this.selected ? a.indexOf(this.selected) : -1;
+          this.select(a[(t + (e.shiftKey ? a.length - 1 : 1)) % a.length]);
+          break;
+        }
+        default:
+          if (t.includes(e.code)) this.close();
+          else return;
+      }
+      (e.preventDefault(), e.stopImmediatePropagation());
+    }
+  },
+  fn = 2,
+  pn = class {
+    el;
+    canvas;
+    ctx;
+    buf = new Float32Array(200);
+    count = 0;
+    marks = [];
+    dirty = !0;
+    visible = !1;
+    top = 400;
+    bottom = 0;
+    w = 0;
+    h = 0;
+    dpr = 1;
+    constructor() {
+      ((this.canvas = v(`canvas.sg-canvas`)),
+        (this.ctx = this.canvas.getContext(`2d`)),
+        (this.el = v(`div.speedgraph`, { "aria-hidden": `true` }, this.canvas)),
+        new ResizeObserver(([e]) => {
+          let t = e.contentBoxSize?.[0],
+            n = t ? t.inlineSize : e.contentRect.width,
+            r = t ? t.blockSize : e.contentRect.height;
+          ((this.dpr = Math.min(devicePixelRatio || 1, 2)),
+            (this.w = Math.max(1, Math.round(n * this.dpr))),
+            (this.h = Math.max(1, Math.round(r * this.dpr))),
+            (this.canvas.width = this.w),
+            (this.canvas.height = this.h),
+            (this.dirty = !0),
+            this.render());
+        }).observe(this.canvas));
+    }
+    setTickRate(e) {
+      let t = Math.max(30, Math.round(e * fn));
+      t !== this.buf.length && ((this.buf = new Float32Array(t)), this.reset());
+    }
+    reset() {
+      ((this.count = 0), (this.marks.length = 0), (this.dirty = !0));
+    }
+    push(e) {
+      ((this.buf[this.count % this.buf.length] = e),
+        this.count++,
+        (this.dirty = !0));
+      let t = this.count - this.buf.length;
+      for (; this.marks.length && this.marks[0].k < t; ) this.marks.shift();
+    }
+    mark(e, t) {
+      this.count && this.marks.push({ k: this.count - 1, gain: e, first: t });
+    }
+    demo() {
+      this.reset();
+      let e = this.buf.length;
+      for (let t = 0; t < e; t++) {
+        let n = t / e,
+          r = (t % Math.round(e / 4)) / (e / 4);
+        (this.push(300 + n * 140 + Math.sin(r * Math.PI) * 14),
+          t % Math.round(e / 4) === 0 && t && this.mark(14 + (t % 7), !1));
+      }
+    }
+    render() {
+      if (!this.dirty || !this.w || !this.visible) return;
+      this.dirty = !1;
+      let e = this.ctx,
+        { w: t, h: n, buf: r } = this,
+        i = r.length;
+      e.clearRect(0, 0, t, n);
+      let a = Math.min(this.count, i),
+        o = 0,
+        s = 1 / 0;
+      for (let e = this.count - a; e < this.count; e++) {
+        let t = r[e % i];
+        (t > o && (o = t), t < s && (s = t));
+      }
+      a || (s = 0);
+      let c = Math.max(0, Math.floor((s - 30) / 50) * 50),
+        l = Math.max(c + 120, Math.ceil((o + 25) / 50) * 50);
+      l - c < 120 && (c = Math.max(0, l - 120));
+      let u = (e, t) => (Math.abs(t - e) < 1 ? t : e + (t - e) * 0.2);
+      ((this.top = u(this.top, l)),
+        (this.bottom = u(this.bottom, c)),
+        (this.top !== l || this.bottom !== c) && (this.dirty = !0));
+      let d = Math.round(n * 0.3),
+        f = Math.max(1, this.top - this.bottom),
+        p = (e) =>
+          n -
+          2 * this.dpr -
+          ((Math.max(this.bottom, e) - this.bottom) / f) *
+            (n - d - 2 * this.dpr),
+        m = n - this.dpr,
+        h = (e) => ((e - (this.count - i)) / (i - 1)) * t;
+      if (
+        ((e.lineWidth = this.dpr),
+        (e.strokeStyle = `rgba(255,255,255,0.12)`),
+        e.beginPath(),
+        e.moveTo(0, m + 0.5),
+        e.lineTo(t, m + 0.5),
+        e.stroke(),
+        a > 1)
+      ) {
+        let t = this.count - a;
+        e.beginPath();
+        for (let n = t; n < this.count; n++) {
+          let a = h(n),
+            o = p(r[n % i]);
+          n === t ? e.moveTo(a, o) : e.lineTo(a, o);
+        }
+        (e.lineTo(h(this.count - 1), m),
+          e.lineTo(h(t), m),
+          e.closePath(),
+          (e.fillStyle = `rgba(255,255,255,0.08)`),
+          e.fill(),
+          e.beginPath());
+        for (let n = t; n < this.count; n++) {
+          let a = h(n),
+            o = p(r[n % i]);
+          n === t ? e.moveTo(a, o) : e.lineTo(a, o);
+        }
+        ((e.lineWidth = 1.6 * this.dpr),
+          (e.strokeStyle = `rgba(255,255,255,0.92)`),
+          (e.lineJoin = `round`),
+          e.stroke());
+      }
+      let g = Math.max(9 * this.dpr, Math.round(n * 0.2));
+      ((e.font = `700 ${g}px ui-sans-serif, system-ui, sans-serif`),
+        (e.textAlign = `center`),
+        (e.textBaseline = `top`));
+      for (let n of this.marks) {
+        let a = Math.round(h(n.k)) + 0.5,
+          o = p(r[n.k % i]),
+          s = n.first
+            ? `rgba(255,255,255,0.75)`
+            : n.gain >= 0
+              ? `#4dff88`
+              : `#ff5d5d`;
+        if (
+          ((e.strokeStyle = s),
+          (e.lineWidth = this.dpr),
+          e.beginPath(),
+          e.moveTo(a, o - 3 * this.dpr),
+          e.lineTo(a, m),
+          e.stroke(),
+          !n.first)
+        ) {
+          e.fillStyle = s;
+          let r = (n.gain > 0 ? `+` : ``) + Math.round(n.gain);
+          e.fillText(r, Math.min(t - g, Math.max(g, a)), 1);
+        }
+      }
+    }
+  },
+  mn = 10,
+  hn = class {
+    onJump = null;
+    air = !1;
+    chain = 0;
+    groundTicks = 0;
+    lastJumpSpeed = 0;
+    good = 0;
+    total = 0;
+    prevYaw = NaN;
+    lastSync = 0;
+    reset() {
+      ((this.air = !1),
+        (this.chain = this.groundTicks = this.good = this.total = 0),
+        (this.lastJumpSpeed = this.lastSync = 0),
+        (this.prevYaw = NaN));
+    }
+    get sync() {
+      return this.air && this.total
+        ? (100 * this.good) / this.total
+        : this.lastSync;
+    }
+    feed(e, t, n, r, i) {
+      if (this.air && !r && this.prevYaw === this.prevYaw) {
+        let n = t - this.prevYaw;
+        (n > 180 ? (n -= 360) : n < -180 && (n += 360),
+          n !== 0 &&
+            (this.total++,
+            ((n > 0 && e < 0) || (n < 0 && e > 0)) && this.good++));
+      }
+      if (((this.prevYaw = t), i)) {
+        this.air && this.land();
+        let e = this.chain > 0 && this.groundTicks < mn;
+        ((this.chain = e ? this.chain + 1 : 1),
+          this.onJump?.(this.chain, n, e ? n - this.lastJumpSpeed : 0),
+          (this.lastJumpSpeed = n),
+          (this.air = !0),
+          (this.good = this.total = this.groundTicks = 0));
+      } else
+        r &&
+          ((this.air &&= (this.land(), !1)),
+          ++this.groundTicks >= mn && (this.chain = 0));
+    }
+    land() {
+      this.lastSync = this.total ? (100 * this.good) / this.total : 0;
+    }
+  },
+  gn = {
+    jump: 6,
+    speed: 1013,
+    diff: 87,
+    height: 0,
+    gain: 87.52,
+    sync: 92.4,
+    eff: 78.1,
+    strafes: 9,
+    time: 12.34,
+  };
+function _n(e, t) {
+  let n = [];
+  return (
+    e.forEach((e, r) => {
+      r && n.push(ce);
+      for (let r of e)
+        typeof r == `string`
+          ? n.push(r)
+          : r.good
+            ? n.push(v(t ? `b.ssj-good` : `span.ssj-good`, null, r.n))
+            : n.push(t ? v(`b`, null, r.n) : r.n);
+    }),
+    n
+  );
+}
+var vn = class {
+    el = v(`div.ssj`, { "aria-hidden": `true` });
+    head = v(`div.ssj-line`);
+    rest = v(`div.ssj-line`);
+    last = ``;
+    constructor() {
+      this.el.append(this.head, this.rest);
+    }
+    show(e, t) {
+      let n = e ? JSON.stringify([e, t]) : ``;
+      if (n === this.last) return !!e;
+      if (((this.last = n), !e))
+        return (this.head.replaceChildren(), this.rest.replaceChildren(), !1);
+      let r = pe(e, t),
+        i = t.speed || (t.diff && e.diff !== null) ? 2 : 1;
+      return (
+        this.head.replaceChildren(..._n(r.slice(0, i), !0)),
+        this.rest.replaceChildren(..._n(r.slice(i), !0)),
+        (this.rest.hidden = r.length <= i),
+        !0
+      );
+    }
+  },
+  yn = 65536,
+  bn = 1 << 17,
+  xn = 3,
+  D = [
+    [`W`, 8, `k-w`, `wasd`],
+    [`A`, 512, `k-a`, `wasd`],
+    [`S`, 16, `k-s`, `wasd`],
+    [`D`, re, `k-d`, `wasd`],
+    [`DUCK`, 4, `k-duck`, `actions`],
+    [`JUMP`, 2, `k-jump`, `actions`],
+    [`◀`, yn, `k-ml`, `mouse`],
+    [`▶`, bn, `k-mr`, `mouse`],
+  ],
+  Sn = [{ opacity: 1 }, { opacity: 0 }],
+  Cn = { duration: 110, easing: `ease-out` },
+  wn = class {
+    el;
+    keyEls = [];
+    flashEls = [];
+    shown = 0;
+    latest = 0;
+    prevButtons = 0;
+    edges = 0;
+    prevYaw = NaN;
+    tickNo = 0;
+    lastLeft = -1e9;
+    lastRight = -1e9;
+    dirty = !0;
+    constructor(e) {
+      ((this.el = v(`div.keys`, { "aria-hidden": `true` })),
+        e && this.el.append(v(`span.keys-cap`, null, e)));
+      for (let [e, , t] of D) {
+        let n = v(`i.fl`, null, e),
+          r = v(`span.k.${t}`, null, v(`b`, null, e), n);
+        (this.keyEls.push(r), this.flashEls.push(n), this.el.append(r));
+      }
+    }
+    configure(e) {
+      let t = this.el;
+      (t.classList.remove(`ks-classic`, `ks-keycaps`, `ks-minimal`),
+        t.classList.add(`ks-${e.style}`),
+        t.classList.toggle(`no-wasd`, !e.rows.wasd),
+        t.classList.toggle(`no-actions`, !e.rows.actions),
+        t.classList.toggle(`no-mouse`, !e.rows.mouse),
+        t.style.setProperty(`--k-on`, e.pressed),
+        t.style.setProperty(`--k-idle`, e.idle),
+        (t.style.opacity = String(e.opacity)));
+    }
+    feed(e, t) {
+      if ((this.tickNo++, this.prevYaw === this.prevYaw)) {
+        let e = t - this.prevYaw;
+        (e > 180 ? (e -= 360) : e < -180 && (e += 360),
+          e > 0
+            ? (this.lastLeft = this.tickNo)
+            : e < 0 && (this.lastRight = this.tickNo));
+      }
+      this.prevYaw = t;
+      let n = e & 65535;
+      (this.tickNo - this.lastLeft < xn && (n |= yn),
+        this.tickNo - this.lastRight < xn && (n |= bn),
+        (this.edges |= n & ~this.prevButtons),
+        (this.prevButtons = n),
+        (this.latest = n),
+        (this.dirty = !0));
+    }
+    reset(e = 0, t = NaN) {
+      ((this.prevYaw = t),
+        (this.prevButtons = this.latest = e & 65535),
+        (this.edges = 0),
+        (this.lastLeft = this.lastRight = -1e9),
+        (this.dirty = !0));
+    }
+    preview(e) {
+      ((this.latest = e), (this.edges = 0), (this.dirty = !0));
+    }
+    render() {
+      if (!this.dirty) return;
+      this.dirty = !1;
+      let e = this.latest;
+      if (e !== this.shown) {
+        let t = e ^ this.shown;
+        for (let n = 0; n < D.length; n++)
+          t & D[n][1] && this.keyEls[n].classList.toggle(`on`, !!(e & D[n][1]));
+        this.shown = e;
+      }
+      let t = this.edges;
+      if (t) {
+        this.edges = 0;
+        for (let e = 0; e < D.length; e++)
+          t & D[e][1] && this.flashEls[e].animate(Sn, Cn);
+      }
+    }
+  },
+  Tn = re | 10 | bn,
+  En = `baseline`,
+  Dn = `staff:all`;
+new Set(T.map((e) => e.id));
+function On(e, t, n) {
+  let r = [];
+  for (let t of n) !e.has(t) && !r.includes(t) && r.push(t);
+  let i = [...r];
+  if (!e.has(`baseline`)) {
+    i.push(En);
+    for (let n of t) !e.has(n) && !i.includes(n) && i.push(n);
+  }
+  return { announce: r, record: i };
+}
+var kn = { 1: 10, 2: 30, 3: 60, 4: 100, 5: 150, 6: 210 },
+  An = 0.25,
+  jn = [1, 0.75, 0.6, 0.5, 0.45, 0.4, 0.35, 0.3, 0.25, 0.2],
+  Mn = {
+    autohop: 1,
+    legit: 0.8,
+    wonly: 0.6,
+    sideways: 0.6,
+    hsw: 0.6,
+    autostrafe: 0,
+  },
+  Nn = (e) => Object.hasOwn(Mn, e),
+  Pn = [
+    {
+      id: `legend`,
+      name: `Legend`,
+      color: `#ffd45e`,
+      maxRank: 3,
+      minPoints: 2e3,
+    },
+    {
+      id: `grandmaster`,
+      name: `Grandmaster`,
+      color: `#ff5468`,
+      top: 0.01,
+      minPoints: 1500,
+    },
+    {
+      id: `master`,
+      name: `Master`,
+      color: `#c477ff`,
+      top: 0.05,
+      minPoints: 1e3,
+    },
+    { id: `elite`, name: `Elite`, color: `#4fa8ff`, top: 0.1, minPoints: 600 },
+    {
+      id: `expert`,
+      name: `Expert`,
+      color: `#3fd0c9`,
+      top: 0.2,
+      minPoints: 300,
+    },
+    {
+      id: `skilled`,
+      name: `Skilled`,
+      color: `#5ee08a`,
+      top: 0.35,
+      minPoints: 120,
+    },
+    { id: `hopper`, name: `Hopper`, color: `#d6dceb`, top: 0.6, minPoints: 40 },
+    { id: `rookie`, name: `Rookie`, color: `#9aa3b5`, top: 1, minPoints: 1e-4 },
+  ];
+function Fn(e, t) {
+  if (!e || !t) return ``;
+  let n = (e / t) * 100;
+  return `top ${n < 1 ? n.toFixed(1).replace(/\.0$/, ``) : Math.max(1, Math.ceil(n))}%`;
+}
+function In(e) {
+  return Math.round(e).toLocaleString(`en-US`);
+}
+var Ln = `<svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 47 Q14.5 33 21 47 Q29 25 37 47 Q46.5 15 56 47" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="56" cy="47" r="4.5" fill="#fff"/></svg>`;
+function Rn(e = `lg`) {
+  let t = document.createElement(`div`);
+  return (
+    (t.className = `wordmark wordmark-${e}`),
+    t.setAttribute(`role`, `img`),
+    t.setAttribute(`aria-label`, `bunnyhop.lol`),
+    (t.innerHTML = `${Ln}<span class="wm-text"><span class="wm-name">bunnyhop</span><span class="wm-tld">.lol</span></span>`),
+    t
+  );
+}
+function zn() {
+  let e = Jt();
+  return ((e.dataset.part = `badges`), e);
+}
+function Bn() {
+  let e = qt();
+  return ((e.dataset.part = `badges`), e);
+}
+var Vn = `<svg viewBox="0 0 20 14" aria-hidden="true"><path d="M2 12h16l1.4-9-5 3.6L10 1 5.6 6.6.6 3z" fill="currentColor"/><circle cx="10" cy="9" r="1.4" fill="rgba(0,0,0,0.35)"/></svg>`,
+  Hn = {
+    "hat-founder-crown": `<svg viewBox="0 0 20 14" aria-hidden="true"><path d="M2 11.2 2.6 5l1.8 2.4 1.8-4.2 1.9 4.2L10 1l1.9 6.4 1.9-4.2 1.8 4.2L17.4 5l.6 6.2z" fill="#a77cff"/><rect x="1.8" y="8.4" width="16.4" height="3.6" rx="0.8" fill="#ff7a1a"/><rect x="1.8" y="11.6" width="16.4" height="1.6" rx="0.8" fill="#2a1660"/><ellipse cx="10" cy="10.2" rx="1.5" ry="1.3" fill="#3ff0ff"/><circle cx="10" cy="1.4" r="0.9" fill="#3ff0ff"/><circle cx="6.2" cy="3.4" r="0.75" fill="#3ff0ff"/><circle cx="13.8" cy="3.4" r="0.75" fill="#3ff0ff"/></svg>`,
+    "hat-tophat": `<svg viewBox="0 0 20 14" aria-hidden="true"><ellipse cx="10" cy="12" rx="8.6" ry="1.7" fill="#3d3456" stroke="#b3a6e0" stroke-width="0.6"/><path d="M5.6 11.6 6.2 1.4h7.6l.6 10.2z" fill="#3d3456" stroke="#b3a6e0" stroke-width="0.6"/><path d="M5.85 8.4h8.3l.15 2.2H5.7z" fill="#ff7a1a"/></svg>`,
+    "hat-beanie": `<svg viewBox="0 0 20 14" aria-hidden="true"><path d="M3 11.4C3 6.6 6.1 3.6 10 3.6s7 3 7 7.8z" fill="#ff7a1a"/><rect x="2.4" y="9.8" width="15.2" height="3.4" rx="1.2" fill="#d95a0c"/><circle cx="10" cy="2.6" r="2.1" fill="#3fbf5a"/></svg>`,
+    "hat-gem-orbit": `<svg viewBox="0 0 20 14" aria-hidden="true"><ellipse cx="10" cy="8" rx="8.6" ry="3.2" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/><path d="M3 2.6 5.2 6.4H.8z" fill="#c4cad5" stroke="#10202a" stroke-width="0.5" stroke-linejoin="round"/><path d="M8 3.4 9.6 6 8 8.6 6.4 6z" fill="#9b5cf5" stroke="#10202a" stroke-width="0.5" stroke-linejoin="round"/><path d="M14 9.4 16 10.8 15.2 13H12.8L12 10.8z" fill="#22c98e" stroke="#10202a" stroke-width="0.5" stroke-linejoin="round"/><path d="M16.6 3.2 18.6 3.2 19.4 4.4 17.6 6.8 15.8 4.4z" fill="#3f7ef0" stroke="#10202a" stroke-width="0.5" stroke-linejoin="round"/></svg>`,
+    "hat-halo": `<svg viewBox="0 0 20 14" aria-hidden="true"><ellipse cx="10" cy="7" rx="8.4" ry="3.6" fill="none" stroke="#167a8c" stroke-width="2.4"/><ellipse cx="10" cy="6.4" rx="8.4" ry="3.6" fill="none" stroke="#5ff2df" stroke-width="1.8"/><path d="M3.2 4.6 4.6 3.8M15.4 3.8l1.4.8M10 10v0" stroke="#9a7cff" stroke-width="2" stroke-linecap="round"/><path d="M8.6 10h2.8" stroke="#9a7cff" stroke-width="2"/></svg>`,
+    "hat-circlet": `<svg viewBox="0 0 20 14" aria-hidden="true"><path d="M1.6 10.6 1.4 8.2 7.6 7.2 10 2.4 12.4 7.2 18.6 8.2 18.4 10.6 12.6 10.2 10 12.2 7.4 10.2z" fill="#342a78" stroke="#9a7cff" stroke-width="0.7" stroke-linejoin="round"/><path d="M3.4 9.2 7.6 8.8M12.4 8.8l4.2.4" stroke="#5ff2df" stroke-width="1.1" stroke-linecap="round"/></svg>`,
+    "hat-dealer-visor": `<svg viewBox="0 0 20 14" aria-hidden="true"><path d="M2 7.2C2 4.6 5.6 3.2 10 3.2s8 1.4 8 4" fill="none" stroke="#111216" stroke-width="2"/><path d="M2.6 6.4h14.8" stroke="#e0b13a" stroke-width="0.8"/><path d="M3.2 7.4C5 11.6 15 11.6 16.8 7.4 13.6 8.6 6.4 8.6 3.2 7.4z" fill="#1e9a5a" stroke="#5fd896" stroke-width="0.6" stroke-linejoin="round"/></svg>`,
+    "hat-lucky-coins": `<svg viewBox="0 0 20 14" aria-hidden="true"><g stroke="#8a5a0c" stroke-width="0.6" fill="#ffcf4a"><ellipse cx="4" cy="5" rx="2.6" ry="2.6"/><ellipse cx="10" cy="3.4" rx="1.2" ry="2.6"/><ellipse cx="16" cy="5" rx="2.6" ry="2.6"/><ellipse cx="10" cy="10.6" rx="2.2" ry="2.6"/></g></svg>`,
+    "hat-aurora": `<svg viewBox="0 0 20 14" aria-hidden="true"><defs><linearGradient id="hat-aurora-g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#3ff0a0"/><stop offset="1" stop-color="#8a6bff"/></linearGradient></defs><path d="M1.5 8.5C4 5 6 10 10 7s6 1 8.5-2v4c-2.5 3-4.5-1-8.5 2s-6-2-8.5 1.5z" fill="url(#hat-aurora-g)"/></svg>`,
+  };
+function Un(e) {
+  return e < 60
+    ? `${Math.round(e)}s`
+    : e < 3600
+      ? `${Math.round(e / 60)}m`
+      : `${(e / 3600).toFixed(+(e < 36e3))}h`;
+}
+function Wn(e, t = `pc-avatar`) {
+  let n = () =>
+    v(
+      `span.${t}.pc-plate`,
+      { "aria-hidden": `true` },
+      (e.name[0] ?? `?`).toUpperCase(),
+    );
+  return e.avatarUrl
+    ? Ht(e.avatarUrl, { cls: t, px: 84, letter: n, eager: !0, animate: !0 })
+    : n();
+}
+function Gn(e, t = e.cosmetics) {
+  return C(t.title)?.name ?? e.rank.group.name;
+}
+function Kn(e) {
+  let t =
+      e.rank === 1
+        ? v(`span.pc-place.wr`, null, `WR`)
+        : e.rank
+          ? v(`span.pc-place`, null, `#${e.rank}`)
+          : null,
+    n = [
+      e.track ? S(e.track) : null,
+      e.style === `autohop` ? null : Me(e.style),
+    ]
+      .filter(Boolean)
+      .join(` · `);
+  return v(
+    `div.pc-feat-tile.t${e.tier ?? `x`}`,
+    null,
+    v(
+      `div.pc-feat-top`,
+      null,
+      v(`span.pc-tier.t${e.tier ?? `x`}`, null, Pe(e.tier)),
+      t,
+    ),
+    v(`div.pc-feat-map`, null, e.map.replace(/^bhop_/, ``)),
+    v(`div.pc-feat-time`, null, x(e.time)),
+    n ? v(`div.pc-feat-tag`, null, n) : null,
+  );
+}
+function qn(e, t = {}) {
+  let n = { ...Ge, ...e.cosmetics, ...t.cosmetics },
+    r = C(n.hat),
+    i = r?.slot === `hat` && Hn[r.id] ? r : null,
+    a = t.badges ?? e.badges,
+    o = (t.featured ?? e.featured).slice(0, 3),
+    s = e.rank,
+    c = e.stats,
+    l = Gn(e, n),
+    u = Math.max(1, ...Be.map((e) => c.rankedByTier[e] ?? 0)),
+    d = e.player.staff === void 0 ? Dt(e.role) : e.player.staff,
+    f = Gt({
+      nameColor: e.player.nameColor,
+      nameEffect: e.player.nameEffect,
+      nameColor2: e.player.nameColor2,
+      ...t.nameLook,
+    }),
+    p = v(
+      `div.pc.pc-frame-${(n.frame ?? `frame-plain`).replace(/^frame-/, ``)}.pc-bg-${(n.background ?? `bg-night`).replace(/^bg-/, ``)}`,
+      { style: `--rank:${s.group.color}`, "data-part": `frame` },
+      v(
+        `div.pc-inner`,
+        { "data-part": `background` },
+        v(`div.pc-art`, { "aria-hidden": `true` }),
+        v(
+          `header.pc-head`,
+          null,
+          v(`span.pc-mark`, { html: Ln }),
+          v(`span.pc-brand`, null, `bunnyhop`, v(`b`, null, `.lol`)),
+          v(
+            `span.pc-level`,
+            {
+              title: `${e.level.xp.toLocaleString(`en-US`)} XP · ${e.level.into}/${e.level.need} to level ${e.level.level + 1}`,
+            },
+            v(`small`, null, `Level`),
+            v(`b`, null, String(e.level.level)),
+            v(
+              `span.pc-xp`,
+              null,
+              v(`span`, { style: `--f:${e.level.fraction}` }),
+            ),
+          ),
+        ),
+        v(
+          `div.pc-id`,
+          null,
+          Wn(e.player),
+          v(
+            `div.pc-who`,
+            null,
+            v(
+              `div.pc-nameline`,
+              null,
+              v(
+                `div.pc-name`,
+                {
+                  style: [
+                    `--len:${Math.max(6, e.player.name.length + (d ? 2 : 0) + (e.player.verified ? 2 : 0) + (e.player.booster ? 2 : 0) + (e.player.supporter ? 2 : 0))}`,
+                    f.style,
+                  ]
+                    .filter(Boolean)
+                    .join(`;`),
+                  class: f.class,
+                  "data-part": e.supporterSettings ? `name` : void 0,
+                },
+                e.player.name,
+              ),
+              d ? Kt(d) : null,
+              e.player.verified ? Wt() : null,
+              e.player.booster ? zn() : null,
+              e.player.supporter ? Bn() : null,
+            ),
+            v(
+              `div.pc-line`,
+              null,
+              d ? v(`span.pc-staff.${d}`, null, Nt[d]) : null,
+              v(`span.pc-title`, { "data-part": `title` }, l),
+              e.player.creator
+                ? Ut({ creator: e.player.creator }, { label: !0 })
+                : null,
+              e.player.provider === `guest`
+                ? v(`span.pc-prov`, null, `guest`)
+                : null,
+              v(
+                `span.pc-since`,
+                null,
+                `since ${new Date(e.player.since).getFullYear()}`,
+              ),
+            ),
+          ),
+        ),
+        v(
+          `div.pc-stats`,
+          null,
+          v(
+            `div.pc-rank`,
+            null,
+            v(`small`, null, `Rank`),
+            v(
+              `b.pc-group`,
+              null,
+              i
+                ? v(`span.pc-crown.pc-hat`, {
+                    role: `img`,
+                    "aria-label": i.name,
+                    title: i.name,
+                    style: `color:${i.color}`,
+                    html: Hn[i.id],
+                  })
+                : s.rank && s.rank <= 3
+                  ? v(`span.pc-crown.t${s.rank}`, {
+                      role: `img`,
+                      "aria-label": `Holds overall #${s.rank}`,
+                      title: `Holds overall #${s.rank}`,
+                      html: Vn,
+                    })
+                  : null,
+              s.group.name,
+            ),
+            v(
+              `span.pc-rank-line`,
+              null,
+              s.rank ? `#${s.rank} · ${Fn(s.rank, s.ranked)}` : `no points yet`,
+            ),
+            v(`span.pc-points`, null, `${In(s.points)} pts`),
+          ),
+          v(
+            `div.pc-tiers`,
+            { "aria-label": `Maps cleared per tier` },
+            v(`small`, null, `Clears by tier`),
+            v(
+              `div.pc-bars`,
+              null,
+              ...Be.map((e) => {
+                let t = c.clearsByTier[e] ?? 0,
+                  n = c.rankedByTier[e] ?? 0;
+                return v(
+                  `div.pc-bar.t${e}`,
+                  { title: `T${e}: ${t}/${n} maps` },
+                  v(
+                    `span.pc-bar-track`,
+                    null,
+                    v(`span.pc-bar-fill`, {
+                      style: `--f:${n ? t / u : 0};--full:${n ? Math.min(1, t / n) : 0}`,
+                    }),
+                  ),
+                  v(`b`, null, String(t)),
+                  v(`small`, null, `T${e}`),
+                );
+              }),
+            ),
+          ),
+          v(
+            `div.pc-recs`,
+            null,
+            v(
+              `div`,
+              null,
+              v(`b.wr`, null, String(c.wrs)),
+              v(`small`, null, `WRs`),
+            ),
+            v(
+              `div`,
+              null,
+              v(`b`, null, String(c.top10s)),
+              v(`small`, null, `Top 10s`),
+            ),
+            v(
+              `div`,
+              null,
+              v(`b`, null, String(c.maps)),
+              v(`small`, null, `Maps`),
+            ),
+          ),
+        ),
+        v(
+          `div.pc-feat`,
+          null,
+          ...(o.length
+            ? o.map(Kn)
+            : [v(`div.pc-feat-empty`, null, `No ranked runs yet`)]),
+        ),
+        v(`div.pc-badges`, { "data-part": `badges` }, ...a.map(Tt)),
+        v(
+          `footer.pc-band`,
+          null,
+          v(
+            `span`,
+            null,
+            v(`b`, null, c.runs.toLocaleString(`en-US`)),
+            ` runs`,
+          ),
+          v(`span`, null, v(`b`, null, Un(c.playtime ?? 0)), ` played`),
+          v(
+            `span`,
+            null,
+            v(`b`, null, c.jumps.toLocaleString(`en-US`)),
+            ` jumps`,
+          ),
+        ),
+        v(`div.pc-sheen`, { "aria-hidden": `true` }),
+      ),
+    ),
+    m = v(`div.pc-stage`, null, p);
+  return (Jn(m, p), m);
+}
+function Jn(e, t) {
+  matchMedia(`(prefers-reduced-motion: reduce)`).matches ||
+    (e.addEventListener(`pointermove`, (e) => {
+      if (e.pointerType === `touch`) return;
+      let n = t.getBoundingClientRect(),
+        r = (e.clientX - n.left) / n.width,
+        i = (e.clientY - n.top) / n.height;
+      (t.style.setProperty(`--rx`, `${(0.5 - i) * 2 * 6}deg`),
+        t.style.setProperty(`--ry`, `${(r - 0.5) * 2 * 6}deg`),
+        t.style.setProperty(`--mx`, String(r)),
+        t.style.setProperty(`--my`, String(i)),
+        t.classList.add(`is-live`));
+    }),
+    e.addEventListener(`pointerleave`, () => {
+      (t.classList.remove(`is-live`),
+        t.style.setProperty(`--rx`, `0deg`),
+        t.style.setProperty(`--ry`, `0deg`));
+    }));
+}
+function O(e) {
+  return e.slot !== `knife` || !!r(e.id);
+}
+function Yn(e, n) {
+  return O(e)
+    ? e.unlock.kind === `role` ||
+      (e.unlock.kind === `achievement` && !t(w(e.unlock.id)))
+      ? typeof n == `function`
+        ? n(e)
+        : n.has(e.id)
+      : !0
+    : !1;
+}
+var k = (e) => e === `knife` || e === `finish` || e === `glove`;
+function A(e) {
+  return e?.rarity ? tt[e.rarity] : null;
+}
+var j = (e) => `#${e.toString(16).padStart(6, `0`)}`;
+function Xn(e) {
+  switch (Je(e).kind) {
+    case `sunset`:
+      return `radial-gradient(ellipse 40% 18% at 52% 46%, rgba(255, 222, 210, 0.55), transparent), linear-gradient(90deg, #fcd54d 0%, #fb8452 28%, #ef4f80 52%, #9442c8 78%, #3e48b8 100%)`;
+    case `ember`:
+      return `radial-gradient(circle at 30% 45%, #ffb43a 0 12%, transparent 32%), radial-gradient(circle at 70% 55%, #f0561a 0 18%, transparent 40%), radial-gradient(circle at 88% 30%, #ffcf5a 0 8%, transparent 22%), linear-gradient(90deg, #2a0d08, #7a1606 60%, #3a120a)`;
+    case `tigerlily`:
+      return `radial-gradient(circle at 18% 40%, #6e1008 0 5%, transparent 6%), radial-gradient(circle at 34% 62%, #6e1008 0 4%, transparent 5%), radial-gradient(circle at 50% 36%, #6e1008 0 3.5%, transparent 4.5%), radial-gradient(circle at 26% 22%, #6e1008 0 3%, transparent 4%), linear-gradient(90deg, #ffc25e, #fb7a1c 70%, #f2620c)`;
+    case `nebula`:
+      return `radial-gradient(circle at 22% 38%, #fff 0 1.2%, transparent 2%), radial-gradient(circle at 63% 70%, #fff 0 1%, transparent 1.8%), radial-gradient(circle at 82% 30%, #fff 0 1.4%, transparent 2.2%), radial-gradient(circle at 40% 55%, #e0388f 0 10%, transparent 34%), radial-gradient(circle at 70% 45%, #2a46d0 0 12%, transparent 38%), linear-gradient(90deg, #12052a, #3a1270 55%, #0a0420)`;
+    case `dewweb`:
+      return `radial-gradient(circle at 56% 50%, transparent 0 22%, #d8e2f2 23% 25%, transparent 26% 46%, #d8e2f2 47% 48%, transparent 49%), linear-gradient(45deg, transparent 49%, #c8d4ea 49.5% 50.5%, transparent 51%), linear-gradient(-45deg, transparent 49%, #c8d4ea 49.5% 50.5%, transparent 51%), linear-gradient(90deg, #070c26, #26265a)`;
+    case `frost`:
+      return `repeating-linear-gradient(62deg, transparent 0 9px, rgba(255, 255, 255, 0.55) 9px 10px), repeating-linear-gradient(-48deg, transparent 0 13px, rgba(255, 255, 255, 0.4) 13px 14px), linear-gradient(90deg, #6aa6dc, #bfe0fa 55%, #8cc0ea)`;
+    case `heartbeet`:
+      return `repeating-radial-gradient(ellipse at 55% 50%, #4a0414 0 4px, #a8063a 4px 9px, #f26a9e 9px 11px), #a8063a`;
+    case `fourleaf`:
+      return `radial-gradient(circle at 24% 42%, #5ed06a 0 6%, transparent 7%), radial-gradient(circle at 30% 50%, #5ed06a 0 6%, transparent 7%), radial-gradient(circle at 62% 56%, #ffc23d 0 5.5%, transparent 6.5%), radial-gradient(circle at 68% 48%, #ffc23d 0 5.5%, transparent 6.5%), radial-gradient(circle at 84% 38%, #5ed06a 0 4%, transparent 5%), linear-gradient(90deg, #063a16, #0f7a32 60%, #075224)`;
+    case `founder`:
+      return `linear-gradient(100deg, transparent 38%, rgba(255, 246, 210, 0.85) 48%, transparent 58%), radial-gradient(circle at 30% 60%, #a8400a 0 16%, transparent 40%), linear-gradient(90deg, #c8761a, #ffc23d 35%, #fff0b0 55%, #ffb02a 75%, #b85a10)`;
+    case `goldleaf`:
+      return `radial-gradient(ellipse 30% 40% at 30% 50%, #ffd36a 0 60%, transparent 62%), radial-gradient(ellipse 22% 35% at 70% 40%, #e7a92e 0 60%, transparent 62%), radial-gradient(ellipse 14% 25% at 88% 64%, #ffd36a 0 60%, transparent 62%), linear-gradient(90deg, #0d0b0a, #1a1410)`;
+    case `aurora`:
+      return `repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 4px), linear-gradient(0deg, #3ff0a0 0%, rgba(63, 240, 160, 0.55) 30%, rgba(154, 107, 255, 0.45) 60%, transparent 85%), #070d22`;
+    case `geode`:
+      return `linear-gradient(180deg, #141218 0 13%, #d6cff5 13% 16%, transparent 16% 84%, #d6cff5 84% 87%, #141218 87%), repeating-linear-gradient(58deg, rgba(255, 255, 255, 0.2) 0 5px, transparent 5px 11px), repeating-linear-gradient(-62deg, rgba(0, 0, 0, 0.25) 0 6px, transparent 6px 13px), linear-gradient(90deg, #3fe6d2, #3fa6e8 55%, #6a4be0)`;
+    case `rift`:
+      return `linear-gradient(180deg, #4ff0dc 0 7%, transparent 7%), linear-gradient(168deg, transparent 43%, #7a3cff 45%, #e6fffb 47%, #7a3cff 49%, transparent 52%), linear-gradient(16deg, transparent 57%, #8f5cff 59.5%, transparent 62%), linear-gradient(90deg, #07030f, #1d0b3a 60%, #07030f)`;
+    case `spectrum`:
+      return `radial-gradient(circle, transparent 1.3px, #050508 1.9px) 0 0 / 5px 5px, linear-gradient(90deg, #19f2d9, #2a6cff 32%, #7a3cff 62%, #eef6ff 82%, #19f2d9)`;
+    default:
+      return `repeating-linear-gradient(90deg, #ff7a1a 0 9px, #d95a0c 9px 11px)`;
+  }
+}
+function Zn(e, t) {
+  let n = A(e)?.color ?? `#888`;
+  if (t === `finish`)
+    return v(
+      `span.pf-sw.pf-sw-fin`,
+      { "aria-hidden": `true`, style: `--fin:${Xn(e?.id)};--rar:${n}` },
+      v(`span`),
+    );
+  if (t === `glove`) {
+    let t = We(e?.id),
+      n = t.style === `knit`,
+      r = Ct(we()),
+      [i, a, o, s] = n
+        ? [r.glove, r.glove, r.glove, r.accent]
+        : [t.base, t.fingers, t.tips, t.strap];
+    return v(
+      `span.pf-sw.pf-sw-glove`,
+      {
+        "aria-hidden": `true`,
+        style: `--a:${j(i)};--b:${j(a)};--t:${j(o)};--s:${j(s)}`,
+      },
+      v(`i.f1`),
+      v(`i.f2`),
+      v(`i.f3`),
+      v(`i.palm`),
+    );
+  }
+  return v(
+    `span.pf-sw.pf-sw-knife`,
+    {
+      "aria-hidden": `true`,
+      style: `--sw:${e?.color ?? `#ff7a1a`};--rar:${n}`,
+    },
+    v(`span`),
+  );
+}
+function Qn(e) {
+  return {
+    knife: r(e.knife) ? (C(e.knife)?.name ?? `Carrot Blade`) : `Carrot Blade`,
+    finish: C(e.finish)?.name ?? `Garden Fresh`,
+    glove: C(e.glove)?.name ?? `Knit`,
+  };
+}
+function $n(e) {
+  let t = Qn(e);
+  return t.finish === `Garden Fresh` ? t.knife : `${t.knife} · ${t.finish}`;
+}
+var er = [
+    { slot: `knife`, label: `Knife` },
+    { slot: `finish`, label: `Finish` },
+    { slot: `glove`, label: `Gloves` },
+    { slot: `outfit`, label: `Colourway` },
+    { slot: `hat`, label: `Hat` },
+    { slot: `ghost`, label: `Ghost` },
+    { slot: `trail`, label: `Trail` },
+  ],
+  tr = (e) => er.some((t) => t.slot === e);
+function nr(e) {
+  return e === `outfit` || e === `hat`
+    ? `bunny`
+    : e === `ghost` || e === `trail`
+      ? `ghost`
+      : `hands`;
+}
+function rr(e) {
+  return er.map((e) => e.slot).filter((t) => t !== `hat` || e(t) > 0);
+}
+var ir = [
+    { part: `background`, label: `Background` },
+    { part: `frame`, label: `Frame` },
+    { part: `title`, label: `Title` },
+    { part: `name`, label: `Name` },
+    { part: `badges`, label: `Badges` },
+    { part: `links`, label: `Links` },
+  ],
+  ar = (e) => ir.some((t) => t.part === e);
+function or(e, t) {
+  let n = t ?? null;
+  return tr(n) && (e === `loadout` || e === `customise` || e === `card` || !e)
+    ? { tab: `loadout`, slot: n, edit: null }
+    : e === `customise` || e === `card` || (ar(n) && (!e || e === `overview`))
+      ? { tab: `overview`, slot: null, edit: ar(n) ? n : `background` }
+      : e === `collection`
+        ? { tab: `loadout`, slot: tr(n) ? n : null, edit: null }
+        : e === `overview` || e === `loadout` || e === `runs`
+          ? { tab: e, slot: null, edit: null }
+          : { tab: `overview`, slot: null, edit: null };
+}
+var sr = null;
+function cr(e) {
+  sr = e;
+}
+function lr() {
+  if (!sr) return null;
+  try {
+    return sr.getContext().isContextLost() ? null : sr;
+  } catch {
+    return null;
+  }
+}
+var ur = 60,
+  dr = 900,
+  fr = 320,
+  pr = 460,
+  mr = 820,
+  hr = 2,
+  gr = 8,
+  _r = () =>
+    typeof matchMedia == `function` &&
+    matchMedia(`(prefers-reduced-motion: reduce)`).matches,
+  vr = null,
+  M = new Map(),
+  yr = () =>
+    new Promise((e) =>
+      `requestIdleCallback` in window
+        ? requestIdleCallback(() => e(), { timeout: 300 })
+        : setTimeout(e, 16),
+    );
+function br(t, n) {
+  let r = M.get(t.key);
+  if (r) return (M.delete(t.key), M.set(t.key, r), r.scene);
+  let i = (async () => {
+    let r = await (vr ??= e(
+      () => import(`./item3d-scenes-MQRPUo-S.js`),
+      __vite__mapDeps([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+    ));
+    await yr();
+    let i = await r.buildItemScene(t);
+    return (await xr(n, i), i);
+  })();
+  ((r = { scene: i, users: 0 }),
+    M.set(t.key, r),
+    i.catch(() => M.delete(t.key)));
+  for (let [e, n] of M) {
+    if (M.size <= gr) break;
+    n.users > 0 ||
+      e === t.key ||
+      (M.delete(e),
+      n.scene.then(
+        (e) => e.dispose(),
+        () => {},
+      ));
+  }
+  return i;
+}
+async function xr(e, t) {
+  let n = Tr(64),
+    r = e.getRenderTarget(),
+    i;
+  e.setRenderTarget(n);
+  try {
+    i = e.compileAsync(t.scene, N);
+  } finally {
+    e.setRenderTarget(r);
+  }
+  await i;
+}
+var N = new m(24, 1, 0.05, 4e3),
+  Sr = new h(),
+  Cr = new f(),
+  P = new Map(),
+  wr = 0;
+function Tr(e) {
+  let t = P.get(e);
+  return (
+    t ||
+      ((t = new i(e, e, { samples: 4, colorSpace: a, depthBuffer: !0 })),
+      P.set(e, t)),
+    t
+  );
+}
+var Er = new Float32Array(256).map((e, t) => {
+    let n = t / 255;
+    return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+  }),
+  Dr = (e) =>
+    Math.round(
+      255 *
+        (e <= 0.0031308
+          ? e * 12.92
+          : 1.055 * Math.min(1, e) ** (1 / 2.4) - 0.055),
+    ),
+  F = mt(ht.bouncy),
+  Or = (e) => {
+    let t = e / F.dt,
+      n = Math.floor(t);
+    return n >= F.samples.length - 1
+      ? 1
+      : F.samples[n] + (F.samples[n + 1] - F.samples[n]) * (t - n);
+  },
+  I = new Set(),
+  kr = 0,
+  L = { frames: 0, cpuMs: 0, reads: 0, dropped: 0, rested: 0 };
+function Ar() {
+  kr || !I.size || document.hidden || (kr = requestAnimationFrame(Nr));
+}
+var jr = 16.7,
+  R = 0,
+  Mr = 24;
+function Nr(e) {
+  ((kr = 0), R && e - R < 250 && (jr += (e - R - jr) * 0.1), (R = e));
+  for (let t of I) t.step(e) || I.delete(t);
+  I.size
+    ? Ar()
+    : ((R = 0),
+      clearTimeout(wr),
+      (wr = window.setTimeout(() => {
+        if (!I.size) {
+          for (let e of P.values()) e.dispose();
+          P.clear();
+        }
+      }, 3e4)));
+}
+typeof document < `u` && document.addEventListener(`visibilitychange`, Ar);
+var Pr = class {
+  spec;
+  r;
+  el;
+  canvas;
+  ctx;
+  img = null;
+  scene = null;
+  failed = !1;
+  prepping = !1;
+  shownAt = null;
+  revealAt = null;
+  last = 0;
+  reads = 0;
+  seq = 0;
+  drawnSeq = -1;
+  released = !1;
+  still = _r();
+  px = 0;
+  holding = !1;
+  bufs = [];
+  constructor(e, t) {
+    ((this.spec = e),
+      (this.r = t),
+      (this.canvas = document.createElement(`canvas`)),
+      (this.ctx = this.canvas.getContext(`2d`)),
+      (this.el = document.createElement(`span`)),
+      (this.el.className = `nt-model`),
+      (this.el.dataset.state = `wait`),
+      this.el.setAttribute(`aria-hidden`, `true`),
+      this.el.append(this.canvas));
+  }
+  prep() {
+    if (this.prepping) return;
+    this.prepping = !0;
+    let e = br(this.spec, this.r),
+      t = M.get(this.spec.key);
+    (t && t.users++,
+      (this.holding = !!t),
+      window.setTimeout(() => this.shownAt === null && this.unpin(), 6e4),
+      e.then(
+        (e) => {
+          this.released ||
+            ((this.scene = e), this.maybeReveal(performance.now()));
+        },
+        (e) => {
+          (console.warn(`unlock model:`, e), this.fail());
+        },
+      ));
+  }
+  show() {
+    if (this.shownAt !== null || this.failed) return;
+    let e = performance.now();
+    this.shownAt = e;
+    let t = this.el.getBoundingClientRect().width || 112;
+    ((this.px = Math.max(
+      32,
+      Math.min(320, Math.round(t * Math.min(hr, devicePixelRatio || 1))),
+    )),
+      (this.canvas.width = this.canvas.height = this.px),
+      this.prep(),
+      this.maybeReveal(e),
+      window.setTimeout(() => this.revealAt === null && this.fail(), dr));
+  }
+  maybeReveal(e) {
+    if (
+      this.revealAt === null &&
+      this.shownAt !== null &&
+      this.scene &&
+      !this.failed
+    ) {
+      if (!lr()) return this.fail();
+      ((this.revealAt = Math.max(e, this.shownAt + ur)),
+        (this.last = e),
+        I.add(this),
+        Ar());
+    }
+  }
+  fail() {
+    this.failed ||
+      this.revealAt !== null ||
+      ((this.failed = !0), (this.el.dataset.state = `off`));
+  }
+  step(e) {
+    if (!this.el.isConnected || !this.scene) return (this.release(), !1);
+    let t = lr();
+    if (!t) return ((this.el.dataset.state = `off`), this.release(), !1);
+    let n = this.still ? 1 / 0 : e - this.revealAt;
+    if (n < 0) return !0;
+    if (!this.still && n > mr && jr > Mr)
+      return (L.rested++, this.release(), !1);
+    let r = Math.min(0.1, Math.max(0, (e - this.last) / 1e3));
+    if (((this.last = e), this.reads >= 2)) return (L.dropped++, !0);
+    let i = performance.now();
+    return (
+      this.render(t, n, r),
+      (L.cpuMs += performance.now() - i),
+      L.frames++,
+      this.el.dataset.state !== `live` && (this.el.dataset.state = `live`),
+      !this.still
+    );
+  }
+  render(e, t, n) {
+    let r = this.scene,
+      i = Zt(this.spec.kind, t, Or);
+    (r.pivot.quaternion.setFromEuler(Sr.set(i.tilt, i.yaw, 0, `XYZ`)),
+      r.pivot.scale.setScalar(i.scale),
+      r.pivot.position.set(0, i.lift * r.radius * 0.32, 0));
+    let a = s.degToRad(N.fov / 2);
+    (N.position.set(
+      0,
+      0,
+      (r.radius / Math.sin(a)) * (1.04 / Qt[this.spec.kind].fill),
+    ),
+      N.lookAt(0, 0, 0),
+      (N.near = N.position.z * 0.05),
+      (N.far = N.position.z * 3),
+      N.updateProjectionMatrix(),
+      r.frame?.(n, N, Number.isFinite(t) ? Math.min(1, t / 520) : 1));
+    let o = Tr(this.px),
+      c = e.getRenderTarget(),
+      l = e.getClearColor(Cr),
+      u = e.getClearAlpha(),
+      d = e.autoClear,
+      f = e.info.autoReset;
+    ((e.info.autoReset = !1),
+      (e.autoClear = !0),
+      e.setClearColor(0, 0),
+      e.setRenderTarget(o));
+    try {
+      e.render(r.scene, N);
+    } finally {
+      (e.setRenderTarget(c),
+        e.setClearColor(l, u),
+        (e.autoClear = d),
+        (e.info.autoReset = f));
+    }
+    let p = this.px,
+      m = ++this.seq,
+      h = m % 3;
+    this.bufs[h]?.length !== p * p * 4 &&
+      (this.bufs[h] = new Uint8Array(p * p * 4));
+    let g = this.bufs[h];
+    (this.reads++,
+      L.reads++,
+      e.readRenderTargetPixelsAsync(o, 0, 0, p, p, g).then(
+        () => {
+          (this.reads--,
+            !this.released && m > this.drawnSeq && this.blit(g, t, m));
+        },
+        () => {
+          this.reads--;
+        },
+      ));
+  }
+  blit(e, t, n) {
+    this.drawnSeq = n;
+    let r = this.px;
+    (!this.img || this.img.width !== r) &&
+      (this.img = this.ctx.createImageData(r, r));
+    let i = this.img.data,
+      a = r * 4;
+    for (let t = 0; t < r; t++) {
+      let n = (r - 1 - t) * a,
+        o = t * a;
+      for (let t = 0; t < a; t += 4) {
+        let r = n + t,
+          a = o + t,
+          s = e[r + 3];
+        if (((i[a + 3] = s), s === 255 || s === 0))
+          ((i[a] = e[r]), (i[a + 1] = e[r + 1]), (i[a + 2] = e[r + 2]));
+        else {
+          let t = 255 / s;
+          ((i[a] = Dr(Er[e[r]] * t)),
+            (i[a + 1] = Dr(Er[e[r + 1]] * t)),
+            (i[a + 2] = Dr(Er[e[r + 2]] * t)));
+        }
+      }
+    }
+    let o = this.ctx;
+    (o.putImageData(this.img, 0, 0), this.still && this.release());
+    let s = (t - fr) / pr;
+    if (s > 0 && s < 1) {
+      let e = -0.3 * r + s * 1.6 * r,
+        t = o.createLinearGradient(e - r * 0.12, 0, e + r * 0.12, r * 0.3);
+      (t.addColorStop(0, `rgba(255, 255, 255, 0)`),
+        t.addColorStop(
+          0.5,
+          `rgba(255, 252, 240, ${0.62 * Math.sin(s * Math.PI)})`,
+        ),
+        t.addColorStop(1, `rgba(255, 255, 255, 0)`),
+        o.save(),
+        (o.globalCompositeOperation = `source-atop`),
+        (o.fillStyle = t),
+        o.fillRect(0, 0, r, r),
+        o.restore());
+    }
+  }
+  release() {
+    this.released || ((this.released = !0), this.unpin());
+  }
+  unpin() {
+    let e = M.get(this.spec.key);
+    (e && this.holding && (e.users = Math.max(0, e.users - 1)),
+      (this.holding = !1));
+  }
+};
+function Fr(e, t = !1) {
+  let n = lr();
+  if (!n) return null;
+  let r = xe(),
+    i = Xt(e, { knife: r.knife, finish: r.finish, outfit: we() });
+  if (!i) return null;
+  let a = new Pr(i, n);
+  return (t || a.prep(), a);
+}
+var Ir = {
+  legit: `Legit Scroll`,
+  wonly: `W-Only`,
+  sideways: `Sideways`,
+  hsw: `Half-Sideways`,
+};
+function z(e) {
+  if (e.goal) return e.goal;
+  let [t, n] = [
+      e.id.slice(0, e.id.indexOf(`_`)),
+      e.id.slice(e.id.indexOf(`_`) + 1),
+    ],
+    r = Number(n.replace(/k$/, `000`).replace(/h$/, ``));
+  switch (t) {
+    case `tier`:
+      return `Clear a T${n} map`;
+    case `sweep`:
+      return `Clear every ranked T${n} map`;
+    case `maps`:
+      return `Clear ${r} maps`;
+    case `pbs`:
+      return `Hold ${r} PBs`;
+    case `top10`:
+      return r === 1 ? `Get a top-10 place` : `Hold ${r} top-10s at once`;
+    case `wr`:
+      return r === 1 ? `Set a world record` : `Hold ${r} WRs at once`;
+    case `bonus`:
+      return r === 1 ? `Clear a bonus track` : `Clear ${r} bonus tracks`;
+    case `level`:
+      return `Reach level ${r}`;
+    case `jumps`:
+      return `${r.toLocaleString(`en-US`)} jumps in runs`;
+    case `clock`:
+      return `${r}h on the clock`;
+    case `scroll`:
+      return `Clear ${r} maps in Legit Scroll`;
+    case `style`:
+      return n === `all`
+        ? `Clear a map in every style`
+        : n === `t4`
+          ? `Clear a T4+ map off Normal`
+          : `Clear a map in ${Ir[n] ?? n}`;
+    case `sync`:
+      return `90% sync on a T2+ map`;
+    default:
+      return e.desc.replace(/^Finish /, ``);
+  }
+}
+var Lr = {
+    first_finish: `Finished a run`,
+    [Ue]: `Played with Huddled`,
+    [Ze]: `Linked Discord`,
+    [qe]: `Joined the Discord server`,
+    [Qe]: `Boosted the Discord server`,
+    [Ke]: `Played before v0.0.8`,
+    [nt]: `Supported bunnyhop.lol`,
+  },
+  Rr = {
+    Clear: `Cleared`,
+    Hold: `Held`,
+    Get: `Got`,
+    Reach: `Reached`,
+    Link: `Linked`,
+    Join: `Joined`,
+    Boost: `Boosted`,
+  };
+function zr(e) {
+  return Lr[e.id] ?? z(e).replace(/^(\w+)/, (e) => Rr[e] ?? e);
+}
+function Br(e, t = new Date()) {
+  let n = new Date(e);
+  return Number.isNaN(n.getTime())
+    ? ``
+    : n.toLocaleDateString(`en-US`, {
+        month: `short`,
+        day: `numeric`,
+        ...(n.getFullYear() === t.getFullYear() ? {} : { year: `numeric` }),
+      });
+}
+function Vr(e, t, n = {}) {
+  let r = t.achievements.map((e) => e.id),
+    i = [e.unlock, ...(e.legacy ?? [])].find((n) =>
+      Re(
+        { ...e, unlock: n, legacy: void 0 },
+        t.level,
+        r,
+        t.ranks ?? {},
+        t.role ?? null,
+        !1,
+      ),
+    );
+  return i
+    ? Hr(i, t, n)
+    : ze(e, t.role)
+      ? t.role === `owner`
+        ? `Unlocked as owner`
+        : `Unlocked as staff`
+      : ``;
+}
+function Hr(e, t, n) {
+  switch (e.kind) {
+    case `free`:
+      return `Free`;
+    case `level`:
+      return `Reached level ${e.level}`;
+    case `rank`:
+      return Ne(e).replace(/^Hold /, `While holding `);
+    case `role`:
+      return Ye(e.role);
+    case `achievement`: {
+      let r = w(e.id);
+      if (!r) return ``;
+      let i = zr(r),
+        a = t.achievements.find((t) => t.id === e.id);
+      if (n.when === !1 || !a?.unlockedAt || e.id === `early_hopper`) return i;
+      let o = Br(a.unlockedAt, n.now);
+      return o
+        ? `${i} · ${o}${a.map && !i.includes(a.map) ? ` on ${a.map}` : ``}`
+        : i;
+    }
+  }
+}
+var Ur = {
+  background: `Background`,
+  frame: `Frame`,
+  title: `Title`,
+  outfit: `Colourway`,
+  ghost: `Ghost`,
+  trail: `Trail`,
+  knife: `Knife`,
+  finish: `Finish`,
+  glove: `Gloves`,
+  hat: `Hat`,
+};
+function Wr(e, t = !0) {
+  let n = e.achievements.map((e) => e.id),
+    r = Gr(e);
+  return new Set(
+    T.filter((i) => O(i) && Re(i, e.level.level, n, r, e.role ?? null, t)).map(
+      (e) => e.id,
+    ),
+  );
+}
+function Gr(e) {
+  return Ve([...(e.rank ? [e.rank] : []), ...(e.styles ?? [])]);
+}
+function Kr(e) {
+  return [...e.achievements.map((e) => e.id), ...Wr(e, !1)];
+}
+var qr = (e) => `bunnyhop:staff-all-noted:${e}`,
+  Jr = new Set();
+function Yr(e) {
+  let t = e.player.id;
+  if (!Ie(`staff`, e.role) || Jr.has(t)) return;
+  Jr.add(t);
+  let n = !1;
+  try {
+    ((n = !!localStorage.getItem(qr(t))), localStorage.setItem(qr(t), `1`));
+  } catch {}
+  if (n) return void ai(t, [Dn]);
+  if (!si(e, [`staff:all`]).length) return;
+  let r =
+    e.role === `owner`
+      ? `Every finish, glove, colourway and card item is yours`
+      : `Staff own everything earned by playing. Rank-held items are preview only.`;
+  J({
+    kicker: e.role === `owner` ? `Owner` : `Staff`,
+    title: `Everything unlocked`,
+    detail: r,
+    ms: 7e3,
+  });
+}
+var Xr = (e) =>
+  e >= 1e4 ? `${Math.round(e / 1e3)}k` : e.toLocaleString(`en-US`);
+function Zr(e, t) {
+  return !t || t[1] <= 1
+    ? null
+    : e.id.startsWith(`clock_`)
+      ? `${Un(t[0])}/${Un(t[1])}`
+      : `${Xr(t[0])}/${Xr(t[1])}`;
+}
+function Qr(e, t, n, r, i) {
+  switch (e.unlock.kind) {
+    case `free`:
+      return { hint: `Free`, goal: `Free`, fraction: null };
+    case `level`: {
+      let r = e.unlock.level,
+        i = `Reach level ${r}`;
+      return n
+        ? {
+            hint: `${i} · ${t.level}/${r}`,
+            goal: i,
+            fraction: Math.min(1, t.level / r),
+          }
+        : { hint: i, goal: i, fraction: null };
+    }
+    case `achievement`: {
+      let t = w(e.unlock.id);
+      if (!t) return { hint: e.unlock.id, goal: e.unlock.id, fraction: null };
+      if (Fe(t))
+        return { hint: Le(), goal: `Earn your wings.`, fraction: null };
+      let r = n?.[t.id] ?? null,
+        i = Zr(t, r);
+      return t.availability === `support`
+        ? { hint: z(t), goal: `Supporter item`, fraction: null }
+        : {
+            hint: `${z(t)}${i ? ` · ${i}` : ``}`,
+            goal: z(t),
+            fraction: r && r[1] > 1 ? Math.min(1, r[0] / r[1]) : null,
+          };
+    }
+    case `rank`: {
+      if (Ie(`staff`, i))
+        return {
+          hint: `Preview: held by the top players`,
+          goal: `Preview only`,
+          fraction: null,
+        };
+      let t = e.unlock,
+        a = r
+          ? t.scope === `all`
+            ? r.all
+            : Math.min(
+                1 / 0,
+                ...Object.entries(r)
+                  .filter(([e]) => e !== `all`)
+                  .map(([, e]) => e),
+              )
+          : void 0,
+        o =
+          n && r
+            ? a && Number.isFinite(a)
+              ? ` · you're #${a}`
+              : ` · no rank yet`
+            : ``;
+      return { hint: `${Ne(t)}${o}`, goal: Ne(t), fraction: null };
+    }
+    case `role`:
+      return {
+        hint: Ye(e.unlock.role),
+        goal: Ye(e.unlock.role),
+        fraction: null,
+      };
+  }
+}
+function $r(e, t, n = !0) {
+  return Vr(
+    e,
+    {
+      level: t.level.level,
+      achievements: t.achievements,
+      ranks: Gr(t),
+      role: t.role ?? null,
+    },
+    { when: n },
+  );
+}
+function ei(e) {
+  return [...e.achievements]
+    .filter((e) => w(e.id))
+    .sort(
+      (e, t) =>
+        w(t.id).ring - w(e.id).ring ||
+        Date.parse(t.unlockedAt) - Date.parse(e.unlockedAt),
+    )
+    .slice(0, 3)
+    .map((e) => e.id);
+}
+var B = (e) => `bunnyhop:unlocks-seen:${e}`,
+  V = `bunnyhop:unlocks-fresh`;
+function H(e) {
+  try {
+    let t = localStorage.getItem(e);
+    return t === null ? null : new Set(JSON.parse(t));
+  } catch {
+    return null;
+  }
+}
+function U(e, t) {
+  try {
+    localStorage.setItem(e, JSON.stringify([...t]));
+  } catch {}
+}
+function ti(e, t) {
+  let n = H(V) ?? new Set(),
+    r = H(B(e));
+  if ((r || ((r = new Set(t.filter((e) => !n.has(e)))), U(B(e), r)), n.size))
+    try {
+      localStorage.removeItem(V);
+    } catch {}
+  return new Set(t.filter((e) => !r.has(e)));
+}
+function ni(e, t) {
+  let n = H(B(e)) ?? new Set(),
+    r = !1;
+  for (let e of t) n.has(e) || (n.add(e), (r = !0));
+  r && U(B(e), n);
+}
+function ri(e) {
+  if (!e.length) return;
+  let t = H(V) ?? new Set();
+  for (let n of e) t.add(n);
+  U(V, t);
+}
+var W = (e) => `bunnyhop:notices:${e}`,
+  G = (e) => `bunnyhop:notices-unsent:${e}`,
+  ii = new Map();
+function ai(e, t) {
+  if (!t.length) return;
+  let n = H(W(e)) ?? new Set(),
+    r = H(G(e)) ?? new Set();
+  for (let e of t) (n.add(e), r.add(e));
+  (U(W(e), n), U(G(e), r), oi(e));
+}
+var K = null;
+function oi(e) {
+  return _.available()
+    ? K
+      ? K.then(() => oi(e))
+      : ((K = (async () => {
+          try {
+            let t = [...(H(G(e)) ?? [])];
+            if (!t.length) return;
+            await _.addNotices(e, t);
+            let n = H(G(e)) ?? new Set(),
+              r = ii.get(e) ?? new Set();
+            for (let e of t) (n.delete(e), r.add(e));
+            (ii.set(e, r), U(G(e), n));
+          } catch {
+          } finally {
+            K = null;
+          }
+        })()),
+        K)
+    : Promise.resolve();
+}
+function si(e, t) {
+  if (!e.mine) return [];
+  let n = e.player.id,
+    r = H(W(n)) ?? new Set(),
+    i = e.notices ? new Set(e.notices) : null;
+  for (let e of i ?? []) r.add(e);
+  let { announce: a, record: o } = On(r, Kr(e), t),
+    s = ii.get(n);
+  if (i)
+    for (let e of r) !i.has(e) && !s?.has(e) && !o.includes(e) && o.push(e);
+  return (U(W(n), r), ai(n, o), a);
+}
+function ci(e) {
+  e.length && _.available() && ae().then((t) => t && ai(t.id, e));
+}
+function li(e) {
+  e && e.mine && (gi(e), Ti(e), Yr(e));
+}
+var ui = [nt, Qe, qe, Ze, Ke],
+  di = (e) => `bunnyhop:community-celebrated:${e}`,
+  fi = 12096e5,
+  pi = {
+    [Ze]: `For linking Discord`,
+    [qe]: `For joining the bunnyhop.lol Discord`,
+    [Qe]: `For boosting the bunnyhop.lol Discord`,
+    [Ke]: `For playing in the early alpha`,
+    [nt]: `Thank you for supporting bunnyhop.lol`,
+  },
+  mi = {
+    glove: `New gloves`,
+    outfit: `New colourway`,
+    trail: `New trail`,
+    title: `New title`,
+    hat: `New hat`,
+  },
+  hi = [
+    `hat`,
+    `glove`,
+    `finish`,
+    `knife`,
+    `outfit`,
+    `trail`,
+    `ghost`,
+    `frame`,
+    `background`,
+    `title`,
+  ];
+function gi(e) {
+  let t = e.player.id,
+    n = H(di(t)) ?? new Set(),
+    r = Date.now(),
+    i = si(
+      e,
+      e.achievements
+        .filter(
+          (e) =>
+            ui.includes(e.id) &&
+            !n.has(e.id) &&
+            r - Date.parse(e.unlockedAt) < fi,
+        )
+        .map((e) => e.id),
+    );
+  if (i.length) {
+    for (let e of i) n.add(e);
+    (U(di(t), n), _i(i.sort((e, t) => ui.indexOf(e) - ui.indexOf(t))));
+  }
+}
+function _i(e) {
+  for (let t of e) {
+    let e = w(t);
+    if (!e) continue;
+    let n = T.filter(
+        (e) => O(e) && e.unlock.kind === `achievement` && e.unlock.id === t,
+      ).sort((e, t) => hi.indexOf(e.slot) - hi.indexOf(t.slot)),
+      r = n[0],
+      i = pi[t] ?? e.name;
+    if (!r) {
+      J({
+        kicker: `Achievement`,
+        title: e.name,
+        detail: e.desc,
+        tokens: [e],
+        key: `ach-${t}`,
+      });
+      continue;
+    }
+    let a =
+      t === `discord_booster` || t === `early_hopper` || t === `supporter`;
+    J({
+      kicker: mi[r.slot] ?? `New unlock`,
+      title: r.name,
+      detail: `${i}${n.length > 1 ? ` · also ${q(n.slice(1))}` : ``}`,
+      item: r,
+      color: r.rarity ? void 0 : r.color,
+      action: { label: `Equip`, run: () => vi(r.slot) },
+      ms: 7e3,
+      mood: a ? `proud` : void 0,
+      confetti: a ? 90 : 40,
+      key: `unlock-${r.id}`,
+    });
+  }
+}
+function vi(e) {
+  if (tr(e)) return yi(e);
+  ae().then(
+    (t) => t && Yt({ screen: `profile`, id: t.id, tab: `card`, slot: e }),
+  );
+}
+function yi(e) {
+  Yt({ screen: `loadout`, slot: e });
+}
+var bi = (e = `new`) => v(`span.pf-new-dot`, { role: `img`, "aria-label": e });
+function xi(e) {
+  let t = (e.achievements ?? []).map(w).filter((e) => !!e),
+    n = e.level?.level ?? null,
+    r = e.level && e.xp ? Xe(e.level.xp - e.xp).level : n,
+    i = new Set(t.map((e) => e.id)),
+    a = T.filter(
+      (e) =>
+        O(e) &&
+        (e.unlock.kind === `level`
+          ? r !== null &&
+            n !== null &&
+            e.unlock.level > r &&
+            e.unlock.level <= n
+          : e.unlock.kind === `achievement` && i.has(e.unlock.id)),
+    );
+  return (
+    ri([...t.map((e) => e.id), ...a.map((e) => e.id)]),
+    {
+      achievements: t,
+      cosmetics: a,
+      levelUp: r !== null && n !== null && n > r ? [r, n] : null,
+    }
+  );
+}
+function q(e, t = 3) {
+  let n = e.map((e) =>
+    e.slot === `title`
+      ? `“${e.name}” title`
+      : `${e.name} ${Ur[e.slot].toLowerCase()}`,
+  );
+  return n.length > t
+    ? `${n.slice(0, t).join(`, `)} +${n.length - t} more`
+    : n.join(`, `);
+}
+function J(e) {
+  let t = e.item ? A(e.item) : null,
+    n = e.item
+      ? k(e.item.slot)
+        ? Zn(e.item, e.item.slot)
+        : void 0
+      : e.tokens?.length
+        ? wt(e.tokens[0], { size: `md` })
+        : void 0,
+    r = e.item
+      ? Fr({ cosmetic: e.item }, _t())
+      : e.tokens?.length
+        ? Fr({ achievement: e.tokens[0] }, _t())
+        : null;
+  vt({
+    kicker: e.kicker,
+    title: e.title,
+    detail: e.detail,
+    emblem: n,
+    model: r ?? void 0,
+    level: e.level,
+    color: e.color ?? t?.color,
+    shine: !!e.item,
+    mood: e.mood,
+    confetti: e.confetti,
+    feathers: e.feathers,
+    sound: e.sound ?? (e.tokens?.length || e.item ? `achievement` : void 0),
+    action: e.action,
+    ms: e.ms,
+    key: e.key,
+    priority:
+      e.priority ?? (e.item ? St.unlock : e.level ? St.level : St.achievement),
+  });
+}
+var Si = { finish: `New finish`, glove: `New gloves` };
+function Ci(e, t) {
+  if (!e.achievements.length && !e.cosmetics.length && !e.levelUp) return !1;
+  ci([...e.achievements.map((e) => e.id), ...e.cosmetics.map((e) => e.id)]);
+  let n = e.achievements.filter((e) => Fe(e));
+  if (n.length) {
+    wi(n, e.cosmetics, t);
+    let r = new Set(n.map((e) => e.id)),
+      i = {
+        ...e,
+        achievements: e.achievements.filter((e) => !r.has(e.id)),
+        cosmetics: e.cosmetics.filter(
+          (e) => !(e.unlock.kind === `achievement` && r.has(e.unlock.id)),
+        ),
+      };
+    return (
+      (i.achievements.length || i.cosmetics.length || i.levelUp) && Ci(i, t),
+      !0
+    );
+  }
+  let r = e.cosmetics
+      .filter((e) => k(e.slot))
+      .sort((e, t) => (t.rarity ?? 0) - (e.rarity ?? 0)),
+    i = +!!r.length + +!!e.levelUp + +!!e.achievements.length,
+    a = i >= 3 ? 4400 : i === 2 ? 5e3 : 5600,
+    o = e.achievements.length
+      ? e.achievements.map((e) => e.name).join(`, `)
+      : e.levelUp
+        ? `Level ${e.levelUp[1]}`
+        : null;
+  if (r.length) {
+    let e = r[0],
+      n = (e.rarity ?? 0) >= 4,
+      i = r.length > 1 ? ` · also ${q(r.slice(1), 1)}` : ``;
+    J({
+      kicker: Si[e.slot] ?? `New unlock`,
+      title: e.name,
+      detail: `${A(e)?.name ?? ``}${o ? ` · for ${o}` : ``}${i}`,
+      item: e,
+      action: t ? { label: `Equip`, run: () => t(e.slot) } : void 0,
+      ms: a + 1500,
+      mood: n ? `proud` : void 0,
+      confetti: n ? 90 : (e.rarity ?? 0) >= 3 && 40,
+      key: `unlock-${e.id}`,
+    });
+  }
+  let s = e.cosmetics.filter((e) => !k(e.slot)),
+    c = s.filter((e) => e.unlock.kind === `level`),
+    l = s.filter((e) => e.unlock.kind !== `level`);
+  if (
+    (e.levelUp &&
+      J({
+        kicker: `Level up`,
+        title: `Level ${e.levelUp[1]}`,
+        detail: c.length ? `New: ${q(c)}` : void 0,
+        level: e.levelUp,
+        mood: `cheer`,
+        confetti: 60,
+        sound: `level_up`,
+        ms: a,
+        key: `level-${e.levelUp[1]}`,
+      }),
+    e.achievements.length)
+  ) {
+    let t = e.achievements.some((e) => e.id === Ue);
+    J({
+      kicker:
+        e.achievements.length > 1
+          ? `${e.achievements.length} achievements`
+          : `Achievement`,
+      title: e.achievements.map((e) => e.name).join(`, `),
+      detail: l.length
+        ? `New: ${q(l)}`
+        : e.achievements.length === 1
+          ? e.achievements[0].desc
+          : void 0,
+      tokens: e.achievements,
+      mood: t ? `waving` : void 0,
+      ms: a,
+      key: `ach-${e.achievements.map((e) => e.id).join(`,`)}`,
+    });
+  }
+  return !0;
+}
+function wi(e, t = T, n = vi) {
+  for (let r of e) {
+    let e =
+      t.find((e) => e.unlock.kind === `achievement` && e.unlock.id === r.id) ??
+      T.find((e) => e.unlock.kind === `achievement` && e.unlock.id === r.id);
+    J({
+      kicker: `???`,
+      title: e?.name ?? r.name,
+      detail: e ? r.name : r.desc,
+      item: e,
+      tokens: e ? void 0 : [r],
+      color: `#a6e22e`,
+      action: e ? { label: `Equip`, run: () => n(e.slot) } : void 0,
+      ms: 8e3,
+      confetti: 60,
+      feathers: !0,
+      priority: St.record,
+      key: `secret-${r.id}`,
+    });
+  }
+}
+function Ti(e) {
+  let t = e.achievements
+    .filter((e) => Fe(w(e.id)) && Date.now() - Date.parse(e.unlockedAt) < fi)
+    .map((e) => e.id);
+  if (!t.length) return;
+  let n = si(e, t);
+  n.length && wi(n.map((e) => w(e)));
+}
+et.length;
+var Ei = 1500,
+  Di = { game: !1, viewer: !1 },
+  Y = !1,
+  Oi = 0,
+  X = null;
+function ki() {
+  let e = y.get().binds.hideUi?.[0];
+  return e ? Ee(e) : null;
+}
+var Ai = (e) => y.get().binds.hideUi?.includes(e) ?? !1,
+  ji = () => Y;
+function Mi() {
+  (document.body.classList.remove(`ui-idle`),
+    clearTimeout(Oi),
+    Y &&
+      (Oi = window.setTimeout(
+        () => document.body.classList.add(`ui-idle`),
+        Ei,
+      )));
+}
+function Ni(e) {
+  X?.remove();
+  let t = v(`div#ui-hint`, { role: `status` }, e);
+  (t.addEventListener(`animationend`, () => {
+    (t.remove(), X === t && (X = null));
+  }),
+    document.body.append((X = t)));
+}
+function Pi(e) {
+  let t = ki();
+  return t
+    ? `Press ${t} to show the UI`
+    : e === `viewer`
+      ? `Press Esc to show the UI`
+      : `The UI is hidden. Turn it back on in Settings, HUD`;
+}
+function Fi(e, t, n = !0) {
+  if (Di[e] === t) return;
+  Di[e] = t;
+  let r = Di.game || Di.viewer;
+  (t && n && Ni(Pi(e)),
+    r !== Y &&
+      ((Y = r),
+      document.body.classList.toggle(`ui-hidden`, Y),
+      ut(Y),
+      Y
+        ? (addEventListener(`mousemove`, Mi, { passive: !0 }), Mi())
+        : (X?.remove(),
+          (X = null),
+          removeEventListener(`mousemove`, Mi),
+          clearTimeout(Oi),
+          document.body.classList.remove(`ui-idle`))));
+}
+y.watch((e) =>
+  document.body.classList.toggle(`ui-keep`, e.hud.hiddenKeeps === `speedKeys`),
+);
+var Ii = 1 << 20,
+  Li = 2592e6,
+  Ri = `bunnyhop:uploads:since`,
+  zi = (e) => `bunnyhop:uploads:legacy-scan:${e}`;
+function Bi(e) {
+  return e === `network`
+    ? `network`
+    : !e.id && e.code === `too_large`
+      ? `too_large`
+      : !e.id && e.code === `guest_limit`
+        ? `guest_limit`
+        : null;
+}
+function Vi(e, t) {
+  return e.state === `failed`
+    ? (e.failure ?? `network`)
+    : t - e.at > 12e4
+      ? `interrupted`
+      : null;
+}
+function Hi(e, t, n) {
+  return e.retried || !Vi(e, n) ? !1 : e.account === null || e.account === t;
+}
+function Ui(e, t, n, r) {
+  return e > 1048576 && t.endTick > 0 && t.recordedAt < r && t.player === n;
+}
+function Wi(e) {
+  return e === `guest_limit`
+    ? `too many new players have started on your network lately (shared connections like schools reach this; signing in with Discord or email avoids it)`
+    : e === `too_large`
+      ? `the replay is too large for the server`
+      : e === `network`
+        ? `no connection to the leaderboard`
+        : `the upload was interrupted`;
+}
+function Gi(e) {
+  let t = e < 0 ? `-` : `+`,
+    n = Math.round(Math.abs(e) * 1e3),
+    r = Math.floor(n / 6e4),
+    i = Math.floor((n % 6e4) / 1e3),
+    a = String(n % 1e3).padStart(3, `0`);
+  return r > 0
+    ? `${t}${r}:${String(i).padStart(2, `0`)}.${a}`
+    : `${t}${i}.${a}`;
+}
+function Ki(e, t) {
+  (e.replaceChildren(),
+    (e.className =
+      e.className.replace(/\bxh-\S+/g, ``).trim() +
+      ` xh-${t.style}${t.outline ? ` xh-outline` : ``}`),
+    e.style.setProperty(`--xh-color`, t.color),
+    e.style.setProperty(`--xh-size`, `${t.size}px`),
+    e.style.setProperty(`--xh-thick`, `${t.thickness}px`),
+    e.style.setProperty(`--xh-gap`, `${t.gap}px`),
+    (e.style.opacity = String(t.alpha)));
+  let n = [];
+  ((t.style === `cross` || t.style === `cross-dot`) &&
+    n.push(`t`, `r`, `b`, `l`),
+    t.style === `t` && n.push(`r`, `b`, `l`),
+    (t.style === `dot` || t.style === `cross-dot`) && n.push(`dot`),
+    t.style === `circle` && n.push(`ring`, `dot`));
+  for (let t of n) e.append(v(`i.xh-${t}`));
+}
+var qi = {
+    speed: 412,
+    status: `running`,
+    time: 23.456,
+    jumps: 18,
+    strafes: 36,
+    sync: 88.4,
+    pb: 25.012,
+    split: -0.231,
+    inStart: !1,
+    hasZones: !0,
+    track: 1,
+    stage: `Stage 2/4`,
+  },
+  Ji = `#66b3ff`,
+  Z = () => document.createTextNode(``),
+  Yi = (e) => Math.max(1, Math.ceil(e * 0.2));
+function Xi() {
+  let e = `http://www.w3.org/2000/svg`,
+    t = document.createElementNS(e, `svg`);
+  (t.setAttribute(`viewBox`, `0 0 10 26`),
+    t.setAttribute(`class`, `ammo-glyph`),
+    t.setAttribute(`aria-hidden`, `true`));
+  let n = document.createElementNS(e, `path`);
+  return (
+    n.setAttribute(
+      `d`,
+      `M2 11C2 6 3.6 2.4 5 1c1.4 1.4 3 5 3 10v10H2ZM1.2 22.4h7.6V25H1.2Z`,
+    ),
+    n.setAttribute(`fill`, `currentColor`),
+    t.append(n),
+    t
+  );
+}
+var Zi = class e {
+  root;
+  els = {};
+  speedEl;
+  speedNum = Z();
+  timerEl;
+  timeText = Z();
+  practiceTag;
+  splitText = Z();
+  splitEl;
+  trackText = Z();
+  stageText = Z();
+  statJumps = Z();
+  statStrafes = Z();
+  statSync = Z();
+  syncFill;
+  syncText = Z();
+  mapLine;
+  pbText = Z();
+  fpsText = Z();
+  cardEl;
+  subEl;
+  rewardEl;
+  extraEl = v(`div.endcard-extra`, { hidden: !0 });
+  xhair;
+  chatEl;
+  keys = new wn();
+  ghostKeys = new wn(`GHOST`);
+  graph = new pn();
+  jumps = new hn();
+  ssjView = new vn();
+  ssjLast = null;
+  editor;
+  editing = !1;
+  runActive = !1;
+  lastResult = null;
+  lastSpeed = 0;
+  lastT = performance.now();
+  accel = 0;
+  speedClass = ``;
+  frames = 0;
+  fpsT = performance.now();
+  cardShown = !1;
+  p;
+  shown = e.blank();
+  static blank() {
+    return {
+      speed: ``,
+      state: ``,
+      time: ``,
+      split: `?`,
+      stats: `?`,
+      pb: ``,
+      track: `?`,
+      stage: `?`,
+      sync: -1,
+      ghost: null,
+    };
+  }
+  ghostIn = new Map();
+  ghostAt = -1;
+  ghostTrack = -1;
+  constructor() {
+    ((this.root = document.getElementById(`hud`)),
+      this.root.replaceChildren(),
+      (this.xhair = v(`div#crosshair`)),
+      (this.speedEl = v(
+        `div.hud-speed`,
+        null,
+        v(`span.speed-num`, null, this.speedNum),
+        v(`span.unit`, null, `u/s`),
+      )),
+      (this.practiceTag = v(`span.time-tag`, { hidden: !0 })),
+      (this.timerEl = v(
+        `div.hud-timer`,
+        null,
+        v(`span.time-text`, null, this.timeText),
+        this.practiceTag,
+      )),
+      (this.syncFill = v(`i.sync-fill`)),
+      (this.mapLine = v(`div.hud-map`)));
+    let e = {
+        speed: this.speedEl,
+        timer: this.timerEl,
+        split: (this.splitEl = v(`div.hud-split`, null, this.splitText)),
+        track: v(`div.hud-track`, null, this.trackText),
+        stage: v(`div.hud-stage`, null, this.stageText),
+        stats: v(
+          `div.hud-stats`,
+          null,
+          v(`span`, null, v(`b`, null, this.statJumps), ` jumps`),
+          v(`span`, null, v(`b`, null, this.statStrafes), ` strafes`),
+          v(`span`, null, v(`b`, null, this.statSync), ` sync`),
+        ),
+        sync: v(
+          `div.hud-sync`,
+          null,
+          v(`span.sync-label`, null, `SYNC `, v(`b`, null, this.syncText)),
+          v(`span.sync-bar`, null, this.syncFill),
+        ),
+        keys: this.keys.el,
+        ghostKeys: this.ghostKeys.el,
+        graph: this.graph.el,
+        jumpStats: this.ssjView.el,
+        map: this.mapLine,
+        pb: v(
+          `div.hud-pb`,
+          null,
+          v(`small`, null, `PB`),
+          v(`b`, null, this.pbText),
+        ),
+        fps: v(`div.hud-fps`, null, this.fpsText, ` fps`),
+        chat: (this.chatEl = v(
+          `div.hud-chat`,
+          null,
+          v(
+            `div.chat-demo`,
+            { "aria-hidden": `true` },
+            v(
+              `div.chat-line`,
+              null,
+              v(`b`, null, `hopper`),
+              `: gg that last stage`,
+            ),
+            v(`div.chat-line.server`, null, `Next map: bhop_eazy`),
+          ),
+        )),
+        ammo: this.ammoEl,
+      },
+      t = [];
+    for (let { id: n, label: r } of b) {
+      let i = v(
+        `div.hud-el`,
+        { "data-el": n, "data-label": r },
+        e[n],
+        v(`i.hud-handle`, { title: `Drag to resize` }),
+      );
+      ((this.els[n] = i), t.push(i));
+    }
+    ((this.subEl = v(`div.endcard-sub`)),
+      (this.rewardEl = v(`div.endcard-reward`, { hidden: !0 })),
+      (this.cardEl = v(`div#hud-endcard`, {
+        role: `status`,
+        "aria-live": `polite`,
+        hidden: !0,
+      })),
+      this.root.append(this.xhair, ...t, this.cardEl),
+      this.els.chat.classList.add(`empty`),
+      this.els.ammo.classList.add(`empty`),
+      (this.jumps.onJump = (e, t, n) => this.graph.mark(n, e === 1)),
+      (this.editor = new dn({
+        root: this.root,
+        els: this.els,
+        preview: (e, t) => this.place(e, t),
+        setEditing: (e) => this.setEditing(e),
+      })),
+      (this.p = y.get()),
+      y.watch((e) => this.applyPrefs(e)));
+  }
+  place(e, t) {
+    let n = this.els[e],
+      r = ge(t);
+    ((n.style.left = r.left),
+      (n.style.top = r.top),
+      (n.style.translate = r.translate),
+      n.style.setProperty(`--s`, String(t.s)));
+  }
+  applyPrefs(t) {
+    ((this.p = t),
+      this.root.style.setProperty(`--hud-scale`, String(t.hud.scale)));
+    for (let { id: e } of b) {
+      let n = t.hud.layout[e];
+      (this.place(e, n), this.els[e].classList.toggle(`off`, !n.on));
+    }
+    ((this.graph.visible = t.hud.layout.graph.on),
+      this.keys.configure(t.hud.keys),
+      this.ghostKeys.configure({ ...t.hud.keys, pressed: Ji }),
+      Ki(this.xhair, t.crosshair),
+      this.drawSsj(),
+      (this.shown = e.blank()),
+      (this.speedClass = `?`));
+  }
+  setEditing(e) {
+    ((this.editing = e),
+      e
+        ? (this.graph.demo(), this.keys.preview(Tn), this.ghostKeys.preview(Tn))
+        : this.resetTicks(),
+      this.drawAmmo(),
+      this.applyPrefs(this.p));
+  }
+  setJumpStats(e) {
+    ((this.ssjLast = e), this.drawSsj());
+  }
+  drawSsj() {
+    let e = this.ssjView.show(
+      this.editing ? gn : this.ssjLast,
+      this.p.hud.ssj.fields,
+    );
+    this.els.jumpStats.classList.toggle(`empty`, !e);
+  }
+  toggleEditor() {
+    this.editor.toggle();
+  }
+  setInfo(e, t, n) {
+    ((this.info = { map: e, style: t, tickrate: n }),
+      this.drawMapLine(),
+      this.graph.setTickRate(n));
+  }
+  ammoNum = Z();
+  ammoEl = v(
+    `div.hud-ammo`,
+    null,
+    v(`span.ammo-num`, null, this.ammoNum),
+    Xi(),
+  );
+  ammo = null;
+  setAmmo(e) {
+    let t = this.ammo;
+    t === e ||
+      (t &&
+        e &&
+        t.clip === e.clip &&
+        t.size === e.size &&
+        t.reloading === e.reloading) ||
+      ((this.ammo = e ? { ...e } : null), this.drawAmmo());
+  }
+  drawAmmo() {
+    let e =
+      this.ammo ??
+      (this.editing ? { clip: 30, size: 30, reloading: !1 } : null);
+    if ((this.els.ammo.classList.toggle(`empty`, !e), !e)) return;
+    let t = Math.max(0, e.clip);
+    this.ammoNum.data = String(t);
+    let n = this.ammoEl.classList;
+    (n.toggle(`reloading`, e.reloading),
+      n.toggle(`out`, !e.reloading && t === 0),
+      n.toggle(`low`, !e.reloading && t > 0 && t <= Yi(e.size)));
+  }
+  setPractice(e) {
+    ((this.practiceTag.hidden = !e), (this.practiceTag.textContent = e ?? ``));
+  }
+  showDebugBadge() {
+    this.root.querySelector(`#hud-debug`) ||
+      this.root.append(
+        v(
+          `div#hud-debug`,
+          {
+            title: `Debug mode: runs are practice only (not submitted or saved as PBs)`,
+          },
+          `debug`,
+        ),
+      );
+  }
+  info = null;
+  tier = void 0;
+  setTier(e) {
+    ((this.tier = rt(e)), this.drawMapLine());
+  }
+  drawMapLine() {
+    let e = this.info;
+    if (!e) return;
+    let t =
+      this.tier === void 0
+        ? []
+        : [
+            v(`span`, null, ` · `),
+            v(
+              `span.hud-tier${this.tier ? `.t${this.tier}` : ``}`,
+              { title: He(this.tier) },
+              Pe(this.tier),
+            ),
+          ];
+    this.mapLine.replaceChildren(
+      v(`b`, null, e.map),
+      ...t,
+      v(`span`, null, ` · ${e.style} · ${e.tickrate} tick`),
+    );
+  }
+  tick(e, t, n) {
+    if (this.editing) return;
+    let r = t.velocity,
+      i = Math.sqrt(r[0] * r[0] + r[1] * r[1]);
+    (this.keys.feed(e.buttons, e.yaw),
+      this.graph.push(i),
+      this.jumps.feed(e.side, e.yaw, i, t.grounded, !!(n & 2)));
+  }
+  resetTicks() {
+    (this.keys.reset(),
+      this.ghostKeys.reset(),
+      this.graph.reset(),
+      this.jumps.reset(),
+      (this.ghostAt = -1));
+  }
+  setGhostInputs(e, t) {
+    (t ? this.ghostIn.set(e, t) : this.ghostIn.delete(e), (this.ghostAt = -1));
+  }
+  feedGhost(e, t) {
+    let n = t == null ? void 0 : this.ghostIn.get(e);
+    if (!n || t == null) return !1;
+    let r = n.buttons.length;
+    if (
+      e !== this.ghostTrack ||
+      this.ghostAt < 0 ||
+      t < this.ghostAt ||
+      t - this.ghostAt > 64
+    ) {
+      let i = Math.min(r - 1, t - 1);
+      (this.ghostKeys.reset(i >= 0 ? n.buttons[i] : 0, i >= 0 ? n.yaw[i] : NaN),
+        (this.ghostTrack = e),
+        (this.ghostAt = t));
+    }
+    for (let e = this.ghostAt + 1; e <= t; e++)
+      e - 1 < r && this.ghostKeys.feed(n.buttons[e - 1], n.yaw[e - 1]);
+    return ((this.ghostAt = t), !0);
+  }
+  update(e) {
+    let t = this.editing ? qi : e,
+      n = this.shown,
+      r = performance.now(),
+      i = Math.max(1, r - this.lastT) / 1e3;
+    ((this.lastT = r),
+      (this.accel =
+        this.accel * 0.75 + ((t.speed - this.lastSpeed) / i) * 0.25),
+      (this.lastSpeed = t.speed));
+    let a =
+      !this.p.hud.speedColors || this.editing
+        ? ``
+        : this.accel > 15
+          ? `gain`
+          : this.accel < -15
+            ? `loss`
+            : ``;
+    a !== this.speedClass &&
+      ((this.speedClass = a), (this.speedEl.className = `hud-speed ${a}`));
+    let o = String(Math.round(t.speed));
+    (o !== n.speed && (this.speedNum.data = n.speed = o), this.keys.render());
+    let s =
+      this.editing ||
+      (this.p.showGhost && this.feedGhost(e.track ?? 0, e.ghostTick));
+    (s !== n.ghost &&
+      this.els.ghostKeys.classList.toggle(`empty`, !(n.ghost = s)),
+      s && this.ghostKeys.render(),
+      this.graph.render());
+    let c = Math.round(this.editing ? 87 : this.jumps.sync);
+    (c !== n.sync &&
+      ((n.sync = c),
+      (this.syncText.data = `${c}%`),
+      (this.syncFill.style.transform = `scaleX(${c / 100})`),
+      (this.syncFill.className = `sync-fill ${c >= 85 ? `good` : c >= 65 ? `ok` : `bad`}`)),
+      this.frames++,
+      r - this.fpsT > 500 &&
+        ((this.fpsText.data = String(
+          Math.round((this.frames * 1e3) / (r - this.fpsT)),
+        )),
+        (this.frames = 0),
+        (this.fpsT = r)),
+      e.status !== `finished` && this.cardShown && this.hideCard());
+    let l = e.status === `running`;
+    l !== this.runActive && ft((this.runActive = l));
+    let u = t.status;
+    (t.status === `idle` &&
+      (u = t.hasZones === !1 ? `nozones` : t.inStart ? `start` : `idle`),
+      u !== n.state && (this.timerEl.className = `hud-timer ${(n.state = u)}`));
+    let d =
+      u === `nozones`
+        ? `No zones on this map`
+        : u === `start`
+          ? `Start zone`
+          : x(t.status === `idle` ? 0 : t.time);
+    d !== n.time && (this.timeText.data = n.time = d);
+    let f = t.split === null ? `` : Gi(t.split);
+    f !== n.split &&
+      ((this.splitText.data = n.split = f),
+      this.els.split.classList.toggle(`empty`, t.split === null),
+      (this.splitEl.className = `hud-split ${t.split === null ? `` : t.split <= 0 ? `ahead` : `behind`}`));
+    let p = t.track ? S(t.track) : ``;
+    p !== n.track &&
+      ((this.trackText.data = n.track = p),
+      this.els.track.classList.toggle(`empty`, !p));
+    let m = t.stage && t.status !== `idle` ? t.stage : ``;
+    m !== n.stage &&
+      ((this.stageText.data = n.stage = m),
+      this.els.stage.classList.toggle(`empty`, !m));
+    let h =
+      t.status === `idle` ? `` : `${t.jumps}|${t.strafes}|${t.sync.toFixed(1)}`;
+    h !== n.stats &&
+      ((n.stats = h),
+      this.els.stats.classList.toggle(`empty`, !h),
+      h &&
+        ((this.statJumps.data = String(t.jumps)),
+        (this.statStrafes.data = String(t.strafes)),
+        (this.statSync.data = `${t.sync.toFixed(1)}%`)));
+    let g = t.pb === null ? `—` : x(t.pb);
+    g !== n.pb && (this.pbText.data = n.pb = g);
+  }
+  toast(e, t = 3e3, n) {
+    bt(e, { ms: t, key: n });
+  }
+  runFinished(e, t = { status: `local` }) {
+    let n = e.previousPB === null ? null : e.time - e.previousPB;
+    (this.cardEl.replaceChildren(
+      v(
+        `div.endcard-head`,
+        null,
+        v(`span.endcard-label`, null, `Finished`),
+        this.tier === void 0
+          ? null
+          : v(
+              `span.endcard-tier${this.tier ? `.t${this.tier}` : ``}`,
+              { title: He(this.tier) },
+              Pe(this.tier),
+            ),
+        e.track || e.style
+          ? v(
+              `span.endcard-style`,
+              null,
+              [e.track, e.style].filter(Boolean).join(` · `),
+            )
+          : null,
+        e.newPB
+          ? v(
+              `span.badge.newpb`,
+              null,
+              e.previousPB === null ? `First PB` : `New PB`,
+            )
+          : null,
+      ),
+      v(`div.endcard-time`, null, x(e.time)),
+      ...(n === null
+        ? []
+        : [
+            v(
+              `div.endcard-delta.${n <= 0 ? `ahead` : `behind`}`,
+              null,
+              `${Gi(n)} vs PB`,
+            ),
+          ]),
+      v(
+        `div.endcard-stats`,
+        null,
+        v(`span`, null, v(`b`, null, String(e.jumps)), ` jumps`),
+        v(`span`, null, v(`b`, null, String(e.strafes)), ` strafes`),
+        v(`span`, null, v(`b`, null, `${e.sync.toFixed(1)}%`), ` sync`),
+      ),
+      this.subEl,
+      this.rewardEl,
+      this.extraEl,
+      v(
+        `div.endcard-hint`,
+        null,
+        v(`kbd`, null, Qi(`restart`)),
+        ` restart · `,
+        ...(e.noReplay ? [] : [v(`kbd`, null, `V`), ` watch replay · `]),
+        v(`kbd`, null, `Esc`),
+        ` menu`,
+      ),
+    ),
+      this.setSubmission(t),
+      (this.cardEl.hidden = !1),
+      (this.cardShown = !0),
+      (this.lastResult = e),
+      yt(this.cardEl, `translateY(-14px) scale(0.97)`));
+    let r = this.cardEl.querySelector(`.newpb`);
+    r && pt(r, 160);
+    let i = this.cardEl.querySelector(`.endcard-delta.ahead`);
+    i && yt(i, `translateY(-6px)`, 120);
+  }
+  setSubmission(e) {
+    let t = ``,
+      n = ``,
+      r = null;
+    switch (
+      (e.status !== `verifying` && (this.progressSince = null), e.status)
+    ) {
+      case `local`:
+        ((t = `Saved locally · leaderboards offline`), (n = `dim`));
+        break;
+      case `submitting`:
+        ((t = `Submitting run…`), (n = `pending`));
+        break;
+      case `queued`:
+        ((t = `Waiting for verification…`), (n = `pending`));
+        break;
+      case `verifying`:
+        ((t = `Verifying replay…`),
+          (n = `pending`),
+          `progress` in e &&
+            e.progress !== void 0 &&
+            ((this.progressSince ??= performance.now()),
+            (e.progress > 0 || performance.now() - this.progressSince > 1500) &&
+              (r = e.progress)),
+          r !== null && (t = `Verifying replay… ${Math.floor(r * 100)}%`));
+        break;
+      case `verified`:
+        if (
+          ((t =
+            `rank` in e && e.rank ? `Verified · rank #${e.rank}` : `Verified`),
+          (n = `ok`),
+          $t(e.id),
+          `rank` in e &&
+            e.id !== this.lastVerifiedCard &&
+            ((this.lastVerifiedCard = e.id),
+            (this.subEl.className = `endcard-sub ok`),
+            this.showVerified(e),
+            e.rank === 1))
+        ) {
+          let t = this.lastResult;
+          xt({
+            title: `New world record`,
+            sub: [
+              this.info?.map,
+              t ? x(t.time) : null,
+              t?.style && t.style !== `Normal` ? t.style : null,
+            ]
+              .filter(Boolean)
+              .join(` · `),
+            tone: `wr`,
+            confetti: !0,
+            sound: `finish_wr`,
+            ms: 6500,
+            key: `wr-${e.id}`,
+          });
+        }
+        if (`xp` in e && e.xp !== void 0) {
+          let n = [
+            e.points ? `+${Math.round(e.points)} pts` : null,
+            e.xp ? `+${e.xp} XP` : null,
+            e.level ? `Lv ${e.level.level}` : null,
+          ].filter(Boolean);
+          if (
+            (n.length && (t += ` · ${n.join(` · `)}`),
+            e.id !== this.lastRewardRun)
+          ) {
+            this.lastRewardRun = e.id;
+            let t = xi(e);
+            Ci(t, vi);
+            let n = [
+              t.levelUp ? `Level ${t.levelUp[1]}` : null,
+              t.achievements.length
+                ? `${t.achievements.length} achievement${t.achievements.length > 1 ? `s` : ``}`
+                : null,
+            ].filter(Boolean);
+            (t.cosmetics.length || n.length) &&
+              (this.rewardEl.replaceChildren(
+                v(
+                  `b`,
+                  null,
+                  t.cosmetics.length
+                    ? `New unlock${t.cosmetics.length > 1 ? `s` : ``}: `
+                    : ``,
+                  t.cosmetics.length ? q(t.cosmetics, 2) : n.join(` · `),
+                ),
+              ),
+              (this.rewardEl.hidden = !1));
+          }
+        }
+        break;
+      case `rejected`:
+        `code` in e && e.code === `unranked_map`
+          ? ((t = `Unranked map · saved locally`), (n = `dim`))
+          : ((t = `${e.id ? `Rejected` : `Not submitted`}${e.reason ? ` · ${e.reason}` : ``}`),
+            e.id && (t += ` · if that's wrong, tell us in Feedback`),
+            (n = `bad`));
+        break;
+      case `unsent`:
+        (this.subEl.classList.contains(`bad`) || ne(`ui_error`),
+          (t = `Couldn't upload: ${Wi(e.failure)}. It's saved in this browser and we'll ${e.failure === `network` ? `try again in a moment` : `send it again next time you play`}.`),
+          (n = `bad wrap`));
+        break;
+      case `error`:
+        (this.subEl.className !== `endcard-sub bad` && ne(`ui_error`),
+          (t =
+            `id` in e && e.id
+              ? `The server couldn't verify it. The run is saved.`
+              : `Couldn't submit${e.reason ? ` · ${e.reason}` : ``} · saved locally`),
+          (n = `bad`));
+    }
+    e.status !== `verified` && (this.rewardEl.hidden = !0);
+    let i = e.status === `rejected` && !(`id` in e && e.id);
+    if (
+      n.startsWith(`bad`) &&
+      !i &&
+      ji() &&
+      this.subEl.className !== `endcard-sub ${n}`
+    ) {
+      let e = ki();
+      Ni(
+        `Your run wasn't submitted. ${e ? `Press ${e} to see why.` : `Show the UI to see why.`}`,
+      );
+    }
+    if (
+      !(e.status === `verified` && this.subEl.querySelector(`.ec-n`)) &&
+      ((this.subEl.className = `endcard-sub ${n}`),
+      (this.subEl.textContent = t),
+      r !== null)
+    ) {
+      let e = v(
+        `div.endcard-progress`,
+        {
+          role: `progressbar`,
+          "aria-valuemin": `0`,
+          "aria-valuemax": `100`,
+          "aria-valuenow": String(Math.floor(r * 100)),
+        },
+        v(`i`),
+      );
+      ((e.firstChild.style.width = `${(r * 100).toFixed(1)}%`),
+        this.subEl.append(e));
+    }
+  }
+  progressSince = null;
+  lastRewardRun = ``;
+  lastVerifiedCard = ``;
+  showVerified(e) {
+    let t = (e, t = ``) =>
+        v(`b.ec-n`, { "data-to": String(e), "data-pre": t }, `${t}0`),
+      n = e.rank
+        ? v(`span.ec-rank${e.rank <= 10 ? `.top` : ``}`, null, `#${e.rank}`)
+        : null,
+      r = [`Verified`];
+    (n && r.push(` · rank `, n),
+      e.points && r.push(` · `, t(Math.round(e.points), `+`), ` pts`),
+      e.xp && r.push(` · `, t(e.xp, `+`), ` XP`),
+      e.level && r.push(` · Lv `, String(e.level.level)),
+      this.subEl.replaceChildren(...r),
+      n &&
+        (pt(n, 80),
+        e.rank > 1 &&
+          e.rank <= 10 &&
+          window.setTimeout(() => dt(n, `var(--gain)`), 300)),
+      this.subEl.querySelectorAll(`.ec-n`).forEach((e, t) => {
+        let n = Number(e.dataset.to),
+          r = e.dataset.pre ?? ``;
+        window.setTimeout(
+          () => gt(e, 0, n, 700, void 0, (e) => `${r}${e}`),
+          200 + t * 120,
+        );
+      }));
+  }
+  setCardExtra(e) {
+    (this.extraEl.replaceChildren(...(e ? [e] : [])),
+      (this.extraEl.hidden = !e));
+  }
+  hideCard() {
+    (this.setCardExtra(null),
+      (this.cardShown = !1),
+      (this.cardEl.hidden = !0),
+      this.cardEl.classList.remove(`show`));
+  }
+};
+function Qi(e) {
+  let t = y.get().binds[e][0];
+  return t ? Ee(t) : `unbound`;
+}
+var Q = 512,
+  $i = 112,
+  ea = `600 30px Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif`,
+  ta = `600 28px ui-monospace, "SF Mono", Menlo, Consolas, monospace`,
+  na = class {
+    color;
+    sprite;
+    canvas = document.createElement(`canvas`);
+    g;
+    tex;
+    key = ``;
+    constructor(e) {
+      ((this.color = e),
+        (this.canvas.width = Q),
+        (this.canvas.height = $i),
+        (this.g = this.canvas.getContext(`2d`)),
+        (this.tex = new p(this.canvas)),
+        (this.tex.colorSpace = a),
+        (this.tex.minFilter = d),
+        (this.tex.generateMipmaps = !1),
+        (this.sprite = new o(
+          new n({
+            map: this.tex,
+            depthTest: !1,
+            depthWrite: !1,
+            transparent: !0,
+          }),
+        )),
+        this.sprite.center.set(0.5, 0),
+        (this.sprite.renderOrder = 40));
+    }
+    set(e, t, n, r, i) {
+      let a = `${e}|${t}|${n}|${r}|${i?.staff ?? ``}${+!!i?.verified}${i?.creator ?? ``}${+!!i?.booster}${+!!i?.supporter}|${i?.nameColor ?? ``}|${i?.nameEffect ?? ``}|${i?.nameColor2 ?? ``}`;
+      if (a === this.key) return;
+      this.key = a;
+      let o = this.g;
+      (o.clearRect(0, 0, Q, $i), (o.font = ea));
+      let s = Math.min(o.measureText(e).width, 392),
+        c =
+          (i?.staff ? $ + 6 : 0) +
+          (i?.verified ? $ + 6 : 0) +
+          (i?.creator ? $ + 6 : 0) +
+          (i?.booster ? $ + 6 : 0) +
+          (i?.supporter ? $ + 6 : 0);
+      o.font = ta;
+      let l = o.measureText(t).width,
+        u = Math.min(508, 30 + s + c + 18 + l + 22),
+        d = (Q - u) / 2;
+      ((o.fillStyle = `rgba(11, 13, 18, 0.62)`),
+        pa(o, d, 2, u, 50, 25),
+        o.fill(),
+        (o.fillStyle = this.color),
+        o.beginPath(),
+        o.arc(d + 24, 27, 8, 0, Math.PI * 2),
+        o.fill(),
+        (o.textBaseline = `middle`),
+        (o.font = ea));
+      let f = Ft(i?.nameEffect),
+        p = Et(i?.nameColor) ?? `#eef1f6`;
+      if (((o.fillStyle = p), f === `paint`)) {
+        let e = Et(i?.nameColor2) ?? aa(p, `#ffffff`, 0.55),
+          t = o.createLinearGradient(d + 40, 0, d + 40 + s, 0);
+        (t.addColorStop(0, p),
+          t.addColorStop(0.5, e),
+          t.addColorStop(1, p),
+          (o.fillStyle = t));
+      } else f === `glow` && ((o.shadowColor = p), (o.shadowBlur = 14));
+      (o.fillText(e, d + 40, 28, 392),
+        (o.shadowBlur = 0),
+        (o.shadowColor = `transparent`));
+      let m = d + 40 + s + 6;
+      if (
+        (i?.staff && (ia(o, i.staff, m, 27 - $ / 2), (m += $ + 6)),
+        i?.verified && (ra(o, m, 27 - $ / 2), (m += $ + 6)),
+        i?.creator && (ca(o, i.creator, m, 27 - $ / 2), (m += $ + 6)),
+        i?.booster && (sa(o, m, 27 - $ / 2), (m += $ + 6)),
+        i?.supporter && (oa(o, m, 27 - $ / 2), (m += $ + 6)),
+        (o.font = ta),
+        (o.fillStyle = `#a3abba`),
+        o.fillText(t, d + 40 + s + c + 18, 28),
+        n)
+      ) {
+        o.font = ta;
+        let e = o.measureText(n).width + 28;
+        ((o.fillStyle = `rgba(11, 13, 18, 0.62)`),
+          pa(o, (Q - e) / 2, 60, e, 44, 22),
+          o.fill(),
+          (o.fillStyle = r ? `#4dff88` : `#ff5d5d`),
+          (o.textAlign = `center`),
+          o.fillText(n, Q / 2, 83),
+          (o.textAlign = `left`));
+      }
+      this.tex.needsUpdate = !0;
+    }
+    place(e, t, n) {
+      this.sprite.position.copy(e);
+      let r = e.distanceTo(t),
+        i = 0.09 * Math.max(1, r / 260);
+      (this.sprite.scale.set(Q * i, $i * i, 1),
+        (this.sprite.material.opacity = n),
+        (this.sprite.visible = n > 0.01));
+    }
+    dispose() {
+      (this.sprite.removeFromParent(),
+        this.tex.dispose(),
+        this.sprite.material.dispose());
+    }
+  },
+  $ = 26;
+function ra(e, t, n) {
+  (e.save(),
+    e.translate(t, n),
+    e.scale($ / 24, $ / 24),
+    (e.fillStyle = Vt),
+    e.beginPath(),
+    e.arc(12, 12, 11, 0, Math.PI * 2),
+    e.fill(),
+    (e.strokeStyle = `#fff`),
+    (e.lineWidth = 2.6),
+    (e.lineCap = `round`),
+    (e.lineJoin = `round`),
+    e.stroke(new Path2D(kt)),
+    e.restore());
+}
+function ia(e, t, n, r) {
+  (e.save(),
+    e.translate(n, r),
+    e.scale($ / 24, $ / 24),
+    (e.fillStyle = zt[t]),
+    e.fill(new Path2D(Mt)),
+    (e.strokeStyle = It),
+    (e.lineCap = `round`),
+    (e.lineJoin = `round`));
+  for (let n of At[t]) ((e.lineWidth = n.width), e.stroke(new Path2D(n.d)));
+  e.restore();
+}
+function aa(e, t, n) {
+  let r = (e) => [1, 3, 5].map((t) => parseInt(e.slice(t, t + 2), 16)),
+    [i, a] = [r(e), r(t)];
+  return `#${i
+    .map((e, t) =>
+      Math.round(e + (a[t] - e) * n)
+        .toString(16)
+        .padStart(2, `0`),
+    )
+    .join(``)}`;
+}
+function oa(e, t, n) {
+  (e.save(),
+    e.translate(t, n),
+    e.scale($ / 24, $ / 24),
+    (e.lineJoin = `round`),
+    (e.lineCap = `round`));
+  for (let t of jt) {
+    let n = new Path2D(t.d);
+    (t.fill && ((e.fillStyle = t.fill), e.fill(n)),
+      t.stroke &&
+        ((e.strokeStyle = t.stroke),
+        (e.lineWidth = t.width ?? 1),
+        e.stroke(n)));
+  }
+  e.restore();
+}
+function sa(e, t, n) {
+  (e.save(),
+    e.translate(t, n),
+    e.scale($ / 24, $ / 24),
+    (e.fillStyle = Pt),
+    e.beginPath(),
+    e.arc(12, 12, 11, 0, Math.PI * 2),
+    e.fill());
+  let r = new Path2D(Bt);
+  ((e.fillStyle = `#fff`),
+    (e.strokeStyle = `#fff`),
+    (e.lineWidth = 0.6),
+    (e.lineJoin = `round`),
+    e.fill(r),
+    e.stroke(r),
+    (e.strokeStyle = Pt),
+    (e.lineWidth = 1.5),
+    e.stroke(new Path2D(Lt)),
+    e.restore());
+}
+function ca(e, t, n, r) {
+  if (
+    (e.save(),
+    e.translate(n, r),
+    e.scale($ / 24, $ / 24),
+    (e.fillStyle = Rt[t]),
+    t === `tiktok` || t === `x`)
+  ) {
+    let n = Ot[t];
+    (pa(e, E.x, E.y, E.size, E.size, E.r),
+      (e.fillStyle = n.tile),
+      e.fill(),
+      (e.strokeStyle = n.edge),
+      (e.lineWidth = 1),
+      e.stroke(),
+      (e.lineCap = `round`),
+      (e.lineJoin = `round`));
+    for (let t of n.strokes)
+      (e.save(),
+        e.translate(t.dx ?? 0, t.dy ?? 0),
+        (e.strokeStyle = t.color),
+        (e.lineWidth = t.width),
+        e.stroke(new Path2D(t.d)),
+        e.restore());
+  } else
+    t === `youtube`
+      ? (pa(e, 1.5, 4.8, 21, 14.4, 4.4),
+        e.fill(),
+        (e.fillStyle = `#fff`),
+        e.fill(new Path2D(`M10 8.7v6.6l5.6-3.3z`)))
+      : (e.fill(
+          new Path2D(`M5 2.5 3 6.6v13h4.6V22h2.6l2.4-2.4h3.8L21 15V2.5z`),
+        ),
+        (e.fillStyle = `#fff`),
+        e.fill(new Path2D(`M10.6 7h2v5.6h-2zM15.2 7h2v5.6h-2z`)));
+  e.restore();
+}
+var la = 0.1,
+  ua = 8,
+  da = 5,
+  fa = class {
+    near;
+    far;
+    a = -1;
+    seen = !0;
+    wait = Math.random() * la;
+    from = [0, 0, 0];
+    to = [0, 0, 0];
+    constructor(e, t) {
+      ((this.near = e), (this.far = t));
+    }
+    update(e, t, n, r, i) {
+      let a = 1;
+      (r &&
+        !i &&
+        ((this.wait -= e),
+        (this.wait <= 0 || this.a < 0) &&
+          ((this.wait = la),
+          (this.from[0] = t.x),
+          (this.from[1] = -t.z),
+          (this.from[2] = t.y),
+          (this.seen = this.clear(r, n, 14) || this.clear(r, n, 42))),
+        (a = +!!this.seen)),
+        (this.a =
+          this.a < 0
+            ? a
+            : a > this.a
+              ? Math.min(a, this.a + e * ua)
+              : Math.max(a, this.a - e * da)));
+      let o = t.distanceTo(n),
+        s =
+          o <= this.near
+            ? 1
+            : o >= this.far
+              ? 0
+              : 1 - (o - this.near) / (this.far - this.near);
+      return this.a * s;
+    }
+    clear(e, t, n) {
+      let r = this.to;
+      ((r[0] = t.x), (r[1] = -t.z), (r[2] = t.y - n));
+      let i = Math.hypot(
+        r[0] - this.from[0],
+        r[1] - this.from[1],
+        r[2] - this.from[2],
+      );
+      return (1 - e(this.from, r)) * i < 10;
+    }
+    reset() {
+      this.a = -1;
+    }
+  };
+function pa(e, t, n, r, i, a) {
+  (e.beginPath(),
+    e.moveTo(t + a, n),
+    e.arcTo(t + r, n, t + r, n + i, a),
+    e.arcTo(t + r, n + i, t, n + i, a),
+    e.arcTo(t, n + i, t, n, a),
+    e.arcTo(t, n, t + r, n, a),
+    e.closePath());
+}
+function ma(e, t) {
+  let n = e.x;
+  if (!n.set_velocity)
+    throw Error(
+      `wasm build lacks set_velocity export; rebuild with tools/scripts/build-wasm.sh`,
+    );
+  n.set_velocity(t[0], t[1], t[2]);
+}
+function ha(e, t, n, r, i) {
+  let a = (e) => Math.max(-32768, Math.min(32767, Math.round(e)));
+  return {
+    forward: a(e),
+    side: a(t),
+    yaw: Math.fround(n),
+    pitch: Math.fround(r),
+    buttons: i >>> 0,
+  };
+}
+function ga(e, t, n, r = null, i = 2) {
+  return new Ae(e, Math.fround(t.tickInterval), {
+    prespeedCap: n,
+    strafeKeys: je(r),
+    rules: i,
+  });
+}
+function _a(e, t, n, r) {
+  let i = e.state(),
+    a = t.update(n, r, i);
+  return (
+    a.clampVelocity && (ma(e, a.clampVelocity), (i = e.state())),
+    { state: i, update: a }
+  );
+}
+function va(e, t) {
+  return Object.is(Math.fround(e), Math.fround(t));
+}
+function ya(e, t) {
+  return [0, 1, 2].every(
+    (n) => va(e.position[n], t.position[n]) && va(e.velocity[n], t.velocity[n]),
+  );
+}
+function ba(e, t) {
+  return {
+    forward: e.forward[t],
+    side: e.side[t],
+    yaw: e.yaw[t],
+    pitch: e.pitch[t],
+    buttons: e.buttons[t],
+  };
+}
+function xa(e, t, n, r, i, a) {
+  let o = ba(r, i),
+    s = n.apply(o, a),
+    c = e.step(s.forward, s.side, s.yaw, s.pitch, s.buttons),
+    l = _a(e, t, s, c);
+  return { raw: o, cmd: s, events: c, state: l.state, update: l.update };
+}
+var Sa = (e) => +!!e.crouched | (e.grounded ? 2 : 0);
+function Ca(e, t, n, r = {}) {
+  let i = new wa(e, t, n, r);
+  return (i.step(), i.result());
+}
+var wa = class {
+    core;
+    replay;
+    opts;
+    n;
+    i = 0;
+    timer;
+    filter;
+    frames;
+    state;
+    cp = 0;
+    checked = 0;
+    firstMismatch = null;
+    startTick = 0;
+    endTick = 0;
+    track = 0;
+    violations = 0;
+    firstViolationTick = null;
+    firstViolation = null;
+    constructor(e, t, n, r = {}) {
+      ((this.core = e), (this.replay = t), (this.opts = r));
+      let i = t.header;
+      (e.setSettings(i.settings),
+        e.reset(),
+        i.spawn && te(e, i.spawn),
+        (this.timer = ga(n, i.settings, i.prespeedCap, De(it(i)), lt(i))),
+        this.timer.reset());
+      let a = (this.n = Math.min(r.untilTick ?? i.totalTicks, i.totalTicks));
+      ((this.frames = r.frames ? new Float32Array((a + 1) * 6) : void 0),
+        (this.state = e.state()),
+        this.putFrame(
+          0,
+          this.state,
+          a > 0 ? t.yaw[0] : this.state.teleportAngles[1],
+          a > 0 ? t.pitch[0] : this.state.teleportAngles[0],
+        ),
+        (this.filter = new Oe(De(it(i)), at(i))));
+    }
+    get ticksDone() {
+      return this.i;
+    }
+    get done() {
+      return this.i >= this.n;
+    }
+    putFrame(e, t, n, r) {
+      let i = this.frames;
+      if (!i) return;
+      let a = e * 6;
+      ((i[a] = t.position[0]),
+        (i[a + 1] = t.position[1]),
+        (i[a + 2] = t.position[2]),
+        (i[a + 3] = Sa(t)),
+        (i[a + 4] = n),
+        (i[a + 5] = r));
+    }
+    step(e = 1 / 0) {
+      let { core: t, timer: n, filter: r, replay: i, opts: a } = this,
+        o = i.checkpoints,
+        s = Math.min(this.n, this.i + e);
+      for (let e = this.i; e < s; e++) {
+        let s = xa(t, n, r, i, e, this.state),
+          { raw: c, cmd: l, events: u } = s;
+        l !== c &&
+          this.violations++ === 0 &&
+          ((this.firstViolationTick = e + 1), (this.firstViolation = c));
+        let d = (this.state = s.state);
+        (s.update.started &&
+          ((this.startTick = n.startTick), (this.track = n.track)),
+          s.update.restarted && (this.startTick = this.endTick = 0),
+          s.update.finished && (this.endTick = d.tick));
+        let f = e + 1;
+        for (; this.cp < o.length && o[this.cp].tick < f; ) this.cp++;
+        (this.cp < o.length &&
+          o[this.cp].tick === f &&
+          (this.checked++,
+          !ya(o[this.cp], d) &&
+            this.firstMismatch === null &&
+            (this.firstMismatch = f),
+          this.cp++),
+          this.putFrame(f, d, l.yaw, l.pitch),
+          a.onTick?.(f, d, u, {
+            timer: n,
+            filter: r,
+            cmd: l,
+            update: s.update,
+          }));
+      }
+      this.i = s;
+    }
+    result() {
+      return {
+        timer: this.timer,
+        final: this.state,
+        ticks: this.i,
+        checkpointsChecked: this.checked,
+        checkpointsMatch: this.firstMismatch === null,
+        firstMismatchTick: this.firstMismatch,
+        track: this.track,
+        startTick: this.startTick,
+        endTick: this.endTick,
+        frames: this.frames,
+        styleViolations: this.violations,
+        filter: this.filter,
+        firstViolationTick: this.firstViolationTick,
+        firstViolation: this.firstViolation,
+      };
+    }
+  },
+  Ta = 2.5,
+  Ea = 2,
+  Da = class {
+    d;
+    root = new l();
+    model;
+    trail;
+    tag;
+    lastMatch = 0;
+    lastT = -1;
+    pose = {
+      position: [0, 0, 0],
+      velocity: [0, 0, 0],
+      yaw: 0,
+      pitch: 0,
+      crouched: !1,
+      grounded: !0,
+      sidemove: 0,
+      forwardmove: 0,
+    };
+    trailPts = new Float32Array(1200);
+    tagPos = new c();
+    tagAge = 1;
+    tagDelta = NaN;
+    sight = new fa(3e3, 4500);
+    trace = null;
+    delta = null;
+    tick = 0;
+    audible = !1;
+    sound = null;
+    constructor(e) {
+      this.d = e;
+      let t = e.kind === `pb` ? Te() : null,
+        n = t?.ghost ?? be[e.kind];
+      ((this.model = new u({
+        style: `ghost`,
+        color: n,
+        rim: t?.ghost2,
+        loadout: e.loadout ?? (e.kind === `pb` ? void 0 : { ...$e }),
+      })),
+        (this.trail = new tn(t?.trail ?? n, void 0, t?.trail2)),
+        (this.tag = new na(t?.ghost ?? Se[e.kind])),
+        t &&
+          (this.offCosmetics = ye((e) => {
+            (this.model.setStyle(`ghost`, e.ghost, void 0, e.ghost2),
+              this.trail.setColor(e.trail, e.trail2));
+          })),
+        this.root.add(this.model.root, this.trail.mesh, this.tag.sprite),
+        (this.root.name = `ghost:${e.kind}:${e.track}`),
+        this.resetSplit());
+    }
+    get kind() {
+      return this.d.kind;
+    }
+    get track() {
+      return this.d.track;
+    }
+    get frameCount() {
+      return this.d.frames.length / 6;
+    }
+    get ticks() {
+      return this.d.endTick - this.d.startTick;
+    }
+    get time() {
+      return this.ticks * this.d.tickInterval;
+    }
+    setRenderOrder(e) {
+      this.model.setRenderOrder(e);
+    }
+    teleportBetween(e, t) {
+      let n = this.d.frames;
+      return (
+        Math.abs(n[t * 6] - n[e * 6]) +
+          Math.abs(n[t * 6 + 1] - n[e * 6 + 1]) +
+          Math.abs(n[t * 6 + 2] - n[e * 6 + 2]) >
+        200
+      );
+    }
+    positionAt(e, t = [0, 0, 0]) {
+      let n = this.frameCount;
+      e = Math.max(0, Math.min(n - 1, e));
+      let r = Math.floor(e),
+        i = Math.min(n - 1, r + 1),
+        a = this.teleportBetween(r, i) ? 0 : e - r,
+        o = this.d.frames;
+      for (let e = 0; e < 3; e++)
+        t[e] = o[r * 6 + e] + (o[i * 6 + e] - o[r * 6 + e]) * a;
+      return t;
+    }
+    sample(e, t) {
+      let n = this.d,
+        r = n.frames,
+        i = this.frameCount;
+      e = Math.max(0, Math.min(i - 1, e));
+      let a = Math.floor(e),
+        o = Math.min(i - 1, a + 1),
+        s = this.teleportBetween(a, o),
+        c = s ? 0 : e - a,
+        l = this.pose;
+      this.positionAt(e, l.position);
+      let u = r[a * 6 + 4],
+        d = r[o * 6 + 4] - u;
+      ((d = ((((d + 180) % 360) + 360) % 360) - 180),
+        (l.yaw = u + d * c),
+        (l.pitch = r[a * 6 + 5] + (r[o * 6 + 5] - r[a * 6 + 5]) * c));
+      let f = r[a * 6 + 3];
+      l.crouched = !!(f & 1);
+      let p = !!(f & 2);
+      if (!p && t && this.lastT >= 0 && e > this.lastT && e - this.lastT < 30)
+        for (let e = Math.floor(this.lastT) + 1; e <= a && !p; e++)
+          p = !!(r[e * 6 + 3] & 2);
+      if (((l.grounded = p), t && !s && o > a))
+        for (let e = 0; e < 3; e++)
+          l.velocity[e] = (r[o * 6 + e] - r[a * 6 + e]) / n.tickInterval;
+      else l.velocity[0] = l.velocity[1] = l.velocity[2] = 0;
+      return (
+        (l.sidemove =
+          t && n.side && a > 0 ? n.side[Math.min(a, n.side.length - 1)] : 0),
+        (l.forwardmove =
+          t && n.forward && a > 0
+            ? n.forward[Math.min(a, n.forward.length - 1)]
+            : 0),
+        l
+      );
+    }
+    update(e, t, n, r) {
+      let i = this.d,
+        a =
+          e === null
+            ? i.startTick
+            : Math.min(i.startTick + Math.max(0, e), i.endTick);
+      this.showAt(a, e !== null && a < i.endTick, t, n, r, e !== null);
+    }
+    showAt(e, t, n, r, i, a = t) {
+      let o = this.d,
+        s = a ? e - o.startTick : null,
+        c = this.lastT >= 0 && (e < this.lastT - 1 || e - this.lastT > 200);
+      c && (this.model.snap(), this.sight.reset());
+      let l = this.sample(e, t),
+        u = t && this.lastT >= 0 && e > this.lastT && e - this.lastT < 50;
+      l.attack = u ? st(o.cosmetic, Math.floor(this.lastT), Math.floor(e)) : 0;
+      let d = u ? ot(o.inspect, Math.floor(this.lastT), Math.floor(e)) : null;
+      if (
+        ((l.inspect = d?.sig ?? 0),
+        (l.inspectHeld = d?.held ?? !1),
+        this.model.setState(l),
+        this.audible && t && y.get().audio.ghosts
+          ? (this.sound ??= new oe(0.45)).update(
+              n,
+              this.pose.position,
+              this.pose.velocity,
+              l.grounded,
+              l.crouched,
+              !1,
+              c || this.lastT < 0,
+            )
+          : this.sound?.moves.reset(),
+        (this.lastT = e),
+        (this.tick = Math.floor(e)),
+        this.model.setOpacity(i.opacity),
+        this.model.setNearFade(i.nearFade ? 14 : 0, i.nearFade ? 64 : 0),
+        this.model.update(n),
+        i.trail && a)
+      ) {
+        let t = Math.max(o.startTick, e - Ta / o.tickInterval),
+          n = this.trailPts,
+          a = 0,
+          s = [0, 0, 0],
+          c = (e) => {
+            (this.positionAt(e, s),
+              (n[a * 3] = s[0]),
+              (n[a * 3 + 1] = s[2] + 6),
+              (n[a * 3 + 2] = -s[1]),
+              a++);
+          },
+          l = Math.ceil(t / Ea) * Ea;
+        for (let t = l; t < e && a < 398; t += Ea)
+          (a > 0 && this.teleportBetween(Math.max(0, t - Ea), t) && (a = 0),
+            c(t));
+        (c(e), this.trail.set(n, a, r, Math.min(1, i.opacity * 1.2), 2.5));
+      } else this.trail.clear();
+      let f = this.model.root.position;
+      this.tagPos.set(f.x, f.y + (this.pose.crouched ? 62 : 78), f.z);
+      let p = this.tagPos.distanceTo(r);
+      this.tagAge += n;
+      let m = this.delta === null || s === null ? null : this.delta;
+      (this.tagAge >= 0.1 || (m === null) != (this.tagDelta === null)) &&
+        ((this.tagAge = 0),
+        (this.tagDelta = m),
+        this.tag.set(
+          o.track ? `${o.name} · ${S(o.track)}` : o.name,
+          x(this.time),
+          m === null ? null : Gi(m),
+          m !== null && m <= 0,
+        ));
+      let h =
+        i.tag === !1
+          ? 0
+          : this.sight.update(
+              n,
+              r,
+              this.tagPos,
+              this.trace,
+              y.get().tags.throughWalls,
+            );
+      this.tag.place(
+        this.tagPos,
+        r,
+        h * Math.min(1, Math.max(0, (p - 50) / 90)) * (s === null ? 0.85 : 1),
+      );
+    }
+    split(e, t) {
+      let n = this.d.frames,
+        r = Math.max(this.d.startTick, this.lastMatch - 300),
+        i = Math.min(
+          this.d.endTick,
+          Math.max(this.lastMatch, this.d.startTick) + 600,
+        ),
+        a = -1,
+        o = 1 / 0;
+      for (let t = r; t <= i; t++) {
+        let r = t * 6,
+          i = n[r] - e[0],
+          s = n[r + 1] - e[1],
+          c = n[r + 2] - e[2],
+          l = i * i + s * s + c * c;
+        l < o && ((o = l), (a = t));
+      }
+      if (a < 0 || o > 16384) return null;
+      this.lastMatch = a;
+      let s = 0,
+        c = (t, r) => {
+          let i = n[t * 6],
+            a = n[t * 6 + 1],
+            o = n[t * 6 + 2],
+            s = n[r * 6] - i,
+            c = n[r * 6 + 1] - a,
+            l = n[r * 6 + 2] - o,
+            u = s * s + c * c + l * l;
+          return u > 1e-6
+            ? ((e[0] - i) * s + (e[1] - a) * c + (e[2] - o) * l) / u
+            : 0;
+        };
+      if (a + 1 <= this.d.endTick) {
+        let e = c(a, a + 1);
+        e > 0 && (s = Math.min(1, e));
+      }
+      if (s === 0 && a - 1 >= this.d.startTick) {
+        let e = c(a, a - 1);
+        e > 0 && (s = -Math.min(1, e));
+      }
+      return (t - (a + s - this.d.startTick)) * this.d.tickInterval;
+    }
+    resetSplit() {
+      ((this.lastMatch = this.d.startTick), (this.delta = null));
+    }
+    setVisible(e) {
+      this.root.visible = e;
+    }
+    offCosmetics = null;
+    dispose() {
+      (this.sound?.dispose(),
+        this.offCosmetics?.(),
+        this.root.removeFromParent(),
+        this.model.dispose(),
+        this.trail.dispose(),
+        this.tag.dispose());
+    }
+  },
+  Oa = [`pb`, `wr`, `custom`],
+  ka = class {
+    h;
+    ghosts = new Map();
+    aux = null;
+    wr = new Map();
+    pbInputs = new Map();
+    hidden = !1;
+    last = performance.now();
+    lastStatus = `idle`;
+    finishedAt = 0;
+    finishedTicks = 0;
+    lastSplitTick = -1;
+    primaryDelta = null;
+    camPos = new c();
+    unsub;
+    perf = { ms: 0, max: 0 };
+    constructor(e) {
+      ((this.h = e), (this.unsub = en((e) => void this.onRequest(e))));
+    }
+    key = (e, t, n) => `${e}:${t}:${n}`;
+    styleFor(e) {
+      return ke(this.h.style, e);
+    }
+    get(e, t) {
+      return (
+        this.ghosts.get(
+          this.key(e, e === `custom` ? `*` : this.styleFor(t), t),
+        ) ?? null
+      );
+    }
+    hasPB(e, t) {
+      return this.ghosts.has(this.key(`pb`, e, t));
+    }
+    setStyle(e) {
+      this.h.style = e;
+      let t = new Set(
+        [...this.ghosts.values()]
+          .filter((e) => e.kind === `pb`)
+          .map((e) => e.track),
+      );
+      for (let e of t)
+        this.h.onPBInputs?.(
+          e,
+          this.pbInputs.get(this.key(`pb`, this.styleFor(e), e)) ?? null,
+        );
+    }
+    list() {
+      return [...this.ghosts.values()];
+    }
+    put(e, t) {
+      let n = this.key(e.kind, e.d.style, e.track);
+      return (
+        e.kind === `pb` &&
+          (t ? this.pbInputs.set(n, t) : this.pbInputs.delete(n),
+          e.d.style === this.styleFor(e.track) &&
+            this.h.onPBInputs?.(e.track, t ?? null)),
+        this.ghosts.get(n)?.dispose(),
+        (e.audible = !0),
+        (e.trace = (e, t) => g(this.h.core, e, t, 0)),
+        this.ghosts.set(n, e),
+        [...this.ghosts.values()].forEach((e, t) =>
+          e.setRenderOrder(20 + t * 2),
+        ),
+        this.h.scene.add(e.root),
+        e.setVisible(!1),
+        e
+      );
+    }
+    remove(e, t) {
+      for (let [n, r] of this.ghosts)
+        r.kind === e &&
+          (t === void 0 || r.track === t) &&
+          (e === `pb` &&
+            (this.pbInputs.delete(n),
+            r.d.style === this.styleFor(r.track) &&
+              this.h.onPBInputs?.(r.track, null)),
+          r.dispose(),
+          this.ghosts.delete(n));
+    }
+    fromSim(e, t, n, r) {
+      return this.put(
+        new Da({
+          kind: e,
+          track: r.track,
+          style: e === `custom` ? `*` : it(n.header),
+          name: t,
+          frames: r.frames,
+          startTick: r.startTick,
+          endTick: r.endTick,
+          tickInterval: Math.fround(n.header.settings.tickInterval),
+          side: n.side,
+          forward: n.forward,
+          cosmetic: n.cosmetic,
+          inspect: n.inspect,
+          loadout: n.loadout,
+        }),
+        n,
+      );
+    }
+    fromFrames(e, t, n, r, i, a = 0) {
+      return this.put(
+        new Da({
+          kind: `custom`,
+          track: a,
+          style: `*`,
+          name: e,
+          frames: t,
+          startTick: n,
+          endTick: r,
+          tickInterval: Math.fround(i),
+        }),
+      );
+    }
+    async loadPB(e, t) {
+      let n = await ct(e);
+      if (n.header.mapSha256 !== this.h.mapSha256)
+        throw Error(`PB replay is for a different map build`);
+      let r = Ca(this.h.core, n, n.header.zones, { frames: !0 });
+      if (
+        (this.h.core.setSettings(this.h.settings),
+        !r.checkpointsMatch || !r.endTick || r.track !== t)
+      ) {
+        this.h.toast(
+          `Your PB replay desyncs on this build, so the ghost is off`,
+          6e3,
+        );
+        return;
+      }
+      this.fromSim(`pb`, `PB · ${n.header.player}`, n, r);
+    }
+    setPB(e, t, n, r, i) {
+      this.put(
+        new Da({
+          kind: `pb`,
+          track: e,
+          style: it(n.header),
+          name: `PB · ${n.header.player}`,
+          frames: t,
+          startTick: r,
+          endTick: i,
+          tickInterval: Math.fround(this.h.settings.tickInterval),
+          side: n.side,
+          forward: n.forward,
+          cosmetic: n.cosmetic,
+          inspect: n.inspect,
+          loadout: n.loadout,
+        }),
+        n,
+      );
+    }
+    auxCore() {
+      return (
+        (this.aux ??= (async () => {
+          let e = await ee.create(this.h.wasmBytes);
+          return (e.loadMapPhysics(this.h.bsp), e);
+        })()),
+        this.aux
+      );
+    }
+    async addReplay(e, t, n) {
+      let r;
+      try {
+        r = await ct(e);
+      } catch (e) {
+        return (
+          this.h.toast(`Not a replay file: ${e.message ?? e}`, 5e3),
+          null
+        );
+      }
+      let i = r.header;
+      if (i.map !== this.h.map)
+        return (
+          this.h.toast(
+            `That replay is for ${i.map}. Load it on that map to race it.`,
+            5e3,
+          ),
+          null
+        );
+      i.mapSha256 !== this.h.mapSha256 &&
+        this.h.toast(
+          `Ghost replay was recorded on a different build of this map`,
+          5e3,
+        );
+      let a = Ca(await this.auxCore(), r, i.zones, { frames: !0 });
+      if (!a.checkpointsMatch)
+        return (
+          this.h.toast(
+            `Ghost replay desyncs at tick ${a.firstMismatchTick} · not shown`,
+            6e3,
+          ),
+          null
+        );
+      if (!a.endTick)
+        return (
+          this.h.toast(`Ghost replay never finishes · not shown`, 5e3),
+          null
+        );
+      let o = n ?? (t === `wr` ? `WR · ${i.player}` : i.player);
+      return this.fromSim(t, o, r, a);
+    }
+    async ensureWR(e) {
+      let t = this.styleFor(e),
+        n = `${t}:${e}`;
+      if (!this.wr.has(n)) {
+        this.wr.set(n, `loading`);
+        try {
+          let n = (await _.leaderboard(this.h.map, t, { track: e, limit: 1 }))
+            .entries[0];
+          if (!n) return;
+          let r = await _.replay(n.runId);
+          await this.addReplay(r, `wr`, `WR · ${n.player.name}`);
+        } catch (e) {
+          console.warn(`WR ghost:`, e);
+        } finally {
+          this.wr.set(n, `done`);
+        }
+      }
+    }
+    async onRequest(e) {
+      if (e.kind === `clear`) return this.remove(`custom`);
+      let t, n;
+      if (e.kind === `run`) {
+        try {
+          t = await _.replay(e.runId);
+        } catch {
+          this.h.toast(`Couldn't download that run's replay`, 5e3);
+          return;
+        }
+        n = e.name;
+      } else ((t = e.bytes), (n = e.name));
+      this.remove(`custom`);
+      let r = await this.addReplay(t, `custom`, n);
+      r &&
+        (this.h.toast(
+          `Racing ${r.d.name} (${x(r.time)})${r.track ? ` on ` + S(r.track) : ``}`,
+          4e3,
+        ),
+        (!y.get().ghost.custom || !y.get().showGhost) &&
+          y.update((e) => ((e.ghost.custom = !0), (e.showGhost = !0))));
+    }
+    onRunStart() {
+      for (let e of this.ghosts.values()) e.resetSplit();
+      ((this.primaryDelta = null), (this.lastSplitTick = -1));
+    }
+    onReset() {
+      this.onRunStart();
+    }
+    setHidden(e) {
+      if (((this.hidden = e), e))
+        for (let e of this.ghosts.values()) e.setVisible(!1);
+    }
+    frame(e, t, n, r) {
+      let i = performance.now(),
+        a = Math.min(0.1, (i - this.last) / 1e3);
+      this.last = i;
+      let o = y.get(),
+        s = o.ghost,
+        c = e.track,
+        l = this.styleFor(c);
+      (s.wr &&
+        o.showGhost &&
+        _.available() &&
+        !this.wr.has(`${l}:${c}`) &&
+        !this.hidden &&
+        this.ensureWR(c),
+        e.status === `finished` &&
+          this.lastStatus !== `finished` &&
+          ((this.finishedAt = i), (this.finishedTicks = e.ticks())),
+        (this.lastStatus = e.status));
+      let u =
+        e.status === `running`
+          ? e.ticks() + t
+          : e.status === `finished`
+            ? this.finishedTicks + (i - this.finishedAt) / 1e3 / e.tickInterval
+            : null;
+      r && r.getWorldPosition(this.camPos);
+      let d =
+        e.status === `running` &&
+        (this.lastSplitTick < 0 ||
+          Math.abs(e.ticks() - this.lastSplitTick) >= 4);
+      d && (this.lastSplitTick = e.ticks());
+      let f = null,
+        p = ji() ? { ...s, tag: !1 } : s;
+      for (let t of this.ghosts.values()) {
+        let r =
+          !this.hidden &&
+          o.showGhost &&
+          s[t.kind] &&
+          t.track === c &&
+          (t.d.style === `*` || t.d.style === l);
+        if ((t.setVisible(r), r)) {
+          if (d) {
+            let r = t.split(n, e.ticks());
+            r !== null && (t.delta = r);
+          } else
+            e.status === `finished`
+              ? (t.delta = (e.ticks() - t.ticks) * e.tickInterval)
+              : e.status === `idle` && (t.delta = null);
+          (t.update(u, a, this.camPos, p),
+            (!f || Oa.indexOf(t.kind) < Oa.indexOf(f.kind)) && (f = t));
+        }
+      }
+      this.primaryDelta = f?.delta ?? null;
+      let m = performance.now() - i;
+      return (
+        (this.perf.ms += (m - this.perf.ms) * 0.05),
+        (this.perf.max = Math.max(this.perf.max * 0.999, m)),
+        e.status === `idle` ? null : this.primaryDelta
+      );
+    }
+    pbTick(e) {
+      let t = this.get(`pb`, e);
+      return t && !this.hidden && y.get().ghost.pb ? t.tick : null;
+    }
+    primaryKind(e) {
+      let t = y.get();
+      for (let n of Oa)
+        if (t.showGhost && t.ghost[n] && this.get(n, e)) return n;
+      return null;
+    }
+    dispose() {
+      this.unsub();
+      for (let e of this.ghosts.values()) e.dispose();
+      this.ghosts.clear();
+    }
+  };
+export {
+  nr as $,
+  $r as A,
+  Zr as B,
+  ki as C,
+  an as Ct,
+  ei as D,
+  ji as E,
+  yi as F,
+  z as G,
+  ti as H,
+  Wr as I,
+  er as J,
+  cr as K,
+  Kr as L,
+  ni as M,
+  bi as N,
+  J as O,
+  vi as P,
+  or as Q,
+  li as R,
+  Hi as S,
+  rn as St,
+  Fi as T,
+  Vr as U,
+  xi as V,
+  zr as W,
+  tr as X,
+  ar as Y,
+  rr as Z,
+  Ri as _,
+  wn as _t,
+  ga as a,
+  A as at,
+  Ui as b,
+  _n as bt,
+  ma as c,
+  Rn as ct,
+  fa as d,
+  Pn as dt,
+  k as et,
+  Zi as f,
+  Mn as ft,
+  Ii as g,
+  Fn as gt,
+  Li as h,
+  Nn as ht,
+  Sa as i,
+  Zn as it,
+  Qr as j,
+  Ci as k,
+  Ca as l,
+  An as lt,
+  Ki as m,
+  In as mt,
+  ka as n,
+  $n as nt,
+  ha as o,
+  Yn as ot,
+  Gi as p,
+  kn as pt,
+  ir as q,
+  _a as r,
+  Qn as rt,
+  xa as s,
+  qn as st,
+  Da as t,
+  O as tt,
+  na as u,
+  jn as ut,
+  Bi as v,
+  Tn as vt,
+  Ai as w,
+  on as wt,
+  zi as x,
+  pn as xt,
+  Wi as y,
+  vn as yt,
+  Gr as z,
+};

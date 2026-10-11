@@ -1,0 +1,524 @@
+import { o as e, r as t, s as n, u as r } from "./community-D2zu9OMJ.js";
+import { c as i, i as a, n as o, r as s } from "./api-B2Jj-kgC.js";
+import { a as c, l } from "./account-state-BYMidhZ9.js";
+import { a as u } from "./dom-CUDFsJPS.js";
+import { E as d } from "./cosmetics-PGh_ZGfu.js";
+import { m as f, o as p } from "./notify-CvHg_wVW.js";
+import { c as m, t as h } from "./presence-B4W1kThY.js";
+import { t as g } from "./account-panel-CPsaGxem.js";
+/* empty css                 */ var _ = [
+    [`bug`, `Bug`],
+    [`physics`, `Physics / movement`],
+    [`map`, `Map problem`],
+    [`multiplayer`, `Multiplayer`],
+    [`idea`, `Idea`],
+    [`other`, `Other`],
+    [`application`, `Moderator application`],
+  ],
+  v = {
+    bug: `What happened, and what did you expect? Steps to make it happen again help a lot.`,
+    physics: `What felt off? e.g. lost speed landing on a ramp, a jump that works in CS:S but not here.`,
+    map: `Which part of the map? e.g. the end zone can't be reached, a missing texture, a stuck spot.`,
+    multiplayer: `What went wrong in the server? e.g. lag, chat, a player, map votes.`,
+    idea: `What would make bunnyhop.lol better for you?`,
+    other: `Tell us anything.`,
+    application: ``,
+  },
+  y = [
+    {
+      key: `discord`,
+      label: `Discord username`,
+      max: 64,
+      placeholder: `So we can talk to you there`,
+    },
+    {
+      key: `hours`,
+      label: `Timezone and usual play hours`,
+      max: 200,
+      placeholder: `e.g. UTC+1, evenings and weekends`,
+    },
+    {
+      key: `why`,
+      label: `Why do you want to help?`,
+      max: 800,
+      placeholder: `What you'd like to do as a moderator, and why`,
+      long: !0,
+    },
+    {
+      key: `experience`,
+      label: `Any moderation experience?`,
+      max: 800,
+      placeholder: `Other games, Discord servers, communities. None is fine too.`,
+      long: !0,
+    },
+  ],
+  b = `Bugs, broken maps and ideas all go here. We read every report.`,
+  x = `Moderators keep the servers and chat friendly. Every question is optional. We reply in your Inbox.`,
+  S = 2e3,
+  C = 307200,
+  w = 1280,
+  T = null;
+function E() {
+  let e = [],
+    t = 0,
+    n = !1,
+    r = (i) => {
+      (e.push(i),
+        e.length > 240 && e.shift(),
+        n || (t = requestAnimationFrame(r)));
+    };
+  return (
+    (t = requestAnimationFrame(r)),
+    {
+      read: () =>
+        e.length < 5
+          ? null
+          : Math.round(((e.length - 1) * 1e3) / (e[e.length - 1] - e[0])),
+      stop: () => ((n = !0), cancelAnimationFrame(t)),
+    }
+  );
+}
+function D() {
+  let e = new URL(location.href);
+  for (let t of [`signin`, `token`, `code`, `login_error`])
+    e.searchParams.delete(t);
+  return e.toString();
+}
+function O(t) {
+  let a = d.get(),
+    o = n(),
+    s = h(),
+    c =
+      [...document.scripts]
+        .map((e) => e.getAttribute(`src`))
+        .find((e) => !!e && e.includes(`/assets/`)) ?? null;
+  return {
+    ...(e() ?? { inGame: !1 }),
+    ...(o ? { runId: o } : {}),
+    ...(s ? { room: s } : {}),
+    screen: document.body.dataset.screen || null,
+    page: D(),
+    webBuild: c,
+    ua: navigator.userAgent,
+    lang: navigator.language,
+    screenSize: `${screen.width}x${screen.height}`,
+    viewport: `${innerWidth}x${innerHeight}`,
+    dpr: Math.round(devicePixelRatio * 100) / 100,
+    gpu: i(),
+    fps: t,
+    settings: {
+      sensitivity: a.sensitivity,
+      fov: a.fov,
+      rawInput: a.rawInput,
+      resolutionScale: a.graphics.resolutionScale,
+      menuBackground: a.graphics.menuBackground,
+      potato: a.graphics.potato,
+    },
+    errors: r(),
+  };
+}
+function k(e, t, n) {
+  let r = e.getImageData(0, 0, t, n).data,
+    i = Math.max(4, Math.floor(r.length / 4 / 400)) * 4;
+  for (let e = 0; e < r.length; e += i)
+    if (r[e + 3] !== 0 && (r[e] | r[e + 1] | r[e + 2]) !== 0) return !1;
+  return !0;
+}
+var A = (e, t) => new Promise((n) => e.toBlob(n, `image/jpeg`, t));
+function j(e, t) {
+  let n = u(`canvas`, {
+    width: Math.max(1, Math.round(e.width * t)),
+    height: Math.max(1, Math.round(e.height * t)),
+  });
+  return (n.getContext(`2d`).drawImage(e, 0, 0, n.width, n.height), n);
+}
+async function M() {
+  let e = document.getElementById(`game`);
+  if (!e || !e.width || !e.height) return null;
+  m();
+  let t = await new Promise((t) => {
+    let n = setTimeout(() => t(null), 1500);
+    requestAnimationFrame(() => {
+      clearTimeout(n);
+      try {
+        let n = Math.min(1, w / e.width),
+          r = u(`canvas`, {
+            width: Math.max(1, Math.round(e.width * n)),
+            height: Math.max(1, Math.round(e.height * n)),
+          }),
+          i = r.getContext(`2d`, { willReadFrequently: !0 });
+        if (!i) return t(null);
+        (i.drawImage(e, 0, 0, r.width, r.height),
+          t(k(i, r.width, r.height) ? null : r));
+      } catch {
+        t(null);
+      }
+    });
+  });
+  if (!t) return null;
+  for (let [e, n] of [
+    [0.82, 1],
+    [0.7, 1],
+    [0.62, 0.75],
+    [0.55, 0.5],
+  ]) {
+    let r = await A(n === 1 ? t : j(t, n), e);
+    if (r && r.size <= C) return r;
+  }
+  return null;
+}
+var N = (e) => `${Math.max(1, Math.round(e / 1024))} KB`;
+function P(e = {}) {
+  if (T) {
+    (e.category &&
+      T.querySelector(
+        `input[name="fb-cat"][value="${e.category}"]:not(:checked)`,
+      )?.click(),
+      T.querySelector(
+        e.category === `application` ? `#fb-discord` : `textarea`,
+      )?.focus());
+    return;
+  }
+  let n = E(),
+    r = null,
+    i = g(`acct-dialog fb-dialog`, `Send feedback`, () => {
+      ((T = null), n.stop(), r && URL.revokeObjectURL(r), e.onClose?.());
+    });
+  ((T = i),
+    i.addEventListener(`keydown`, (e) => {
+      e.key === `Escape` &&
+        !e.defaultPrevented &&
+        (e.preventDefault(), i.close());
+    }));
+  let d = e.category ?? `bug`,
+    m = u(`textarea.fb-text`, {
+      id: `fb-text`,
+      rows: 6,
+      maxlength: S,
+      placeholder: v[d],
+      required: !0,
+      "aria-describedby": `fb-count`,
+    }),
+    h = u(`small.fb-count`, { id: `fb-count` }),
+    C = u(
+      `div.fb-cats`,
+      { role: `radiogroup`, "aria-label": `Category` },
+      ..._.map(([e, t]) =>
+        u(
+          `label.fb-cat`,
+          null,
+          u(`input`, {
+            type: `radio`,
+            name: `fb-cat`,
+            value: e,
+            checked: e === d,
+            onchange: () => J(e),
+          }),
+          u(`span`, null, t),
+        ),
+      ),
+    ),
+    w = u(`input.fb-input`, {
+      id: `fb-contact`,
+      type: `text`,
+      maxlength: 120,
+      autocomplete: `off`,
+      placeholder: `Discord handle or email, if you'd like a reply`,
+    }),
+    D = u(`input`, { type: `checkbox`, checked: !0 }),
+    k = u(`input`, { type: `checkbox` }),
+    A = u(`pre.fb-preview`),
+    j = u(`details.fb-details`, null, u(`summary`, null, `What's included`), A);
+  j.addEventListener(`toggle`, () => {
+    j.open && (A.textContent = JSON.stringify(O(n.read()), null, 2));
+  });
+  let P = u(`div.fb-shot`, { hidden: !0 }),
+    F = null,
+    I = 0;
+  k.addEventListener(`change`, async () => {
+    let e = ++I;
+    if (((F = null), (r &&= (URL.revokeObjectURL(r), null)), !k.checked))
+      return void (P.hidden = !0);
+    ((P.hidden = !1), P.replaceChildren(u(`small.dim`, null, `Capturing…`)));
+    let t = await M();
+    if (e === I && k.checked) {
+      if (!t) {
+        P.replaceChildren(
+          u(
+            `small.dim`,
+            null,
+            `There's no game view to capture here. Open feedback from the pause menu in a map to include one.`,
+          ),
+        );
+        return;
+      }
+      ((F = t),
+        (r = URL.createObjectURL(t)),
+        P.replaceChildren(
+          u(`img`, { src: r, alt: `Screenshot preview` }),
+          u(`small.dim`, null, `Game view · ${N(t.size)}`),
+        ));
+    }
+  });
+  let L = Object.fromEntries(
+      y.map((e) => [
+        e.key,
+        e.long
+          ? u(`textarea.fb-text.fb-answer`, {
+              id: `fb-${e.key}`,
+              rows: 3,
+              maxlength: e.max,
+              placeholder: e.placeholder,
+            })
+          : u(`input.fb-input`, {
+              id: `fb-${e.key}`,
+              type: `text`,
+              maxlength: e.max,
+              autocomplete: `off`,
+              placeholder: e.placeholder,
+            }),
+      ]),
+    ),
+    R = u(
+      `p.fb-nudge`,
+      { hidden: !0 },
+      `You're playing as a guest. Moderators need a saved account, so save your progress or link Discord first. `,
+      u(
+        `button.fb-inline`,
+        { type: `button`, onclick: () => (i.close(), l(`save`)) },
+        `Save progress`,
+      ),
+    ),
+    z = !1,
+    B = () => {
+      z ||
+        ((z = !0),
+        c().then(async (e) => {
+          if (
+            !e ||
+            !i.isConnected ||
+            ((R.hidden = e.provider !== `guest`), e.provider === `guest`)
+          )
+            return;
+          let t = (await a.account().catch(() => null))?.methods.find(
+            (e) => e.provider === `discord`,
+          )?.label;
+          t && !L.discord.value && (L.discord.value = t);
+        }));
+    },
+    V = u(`p.fb-lead.dim`, null, b),
+    H = u(`div.fb-group`),
+    U = u(
+      `div.fb-group`,
+      { hidden: !0 },
+      R,
+      ...y.map((e) =>
+        u(
+          `label.fb-field`,
+          { for: `fb-${e.key}` },
+          u(`span.fb-label`, null, e.label),
+          L[e.key],
+        ),
+      ),
+    ),
+    W = () => y.map((e) => L[e.key].value.trim()).join(``),
+    G = u(`p.fb-err`, { role: `alert` }),
+    K = u(`button.btn.primary`, { type: `submit` }, `Send feedback`),
+    q = () => (d === `application` ? `Send application` : `Send feedback`);
+  function J(e) {
+    d = e;
+    let t = e === `application`;
+    (e !== `application` && (m.placeholder = v[e]),
+      (H.hidden = t),
+      (U.hidden = !t),
+      (V.textContent = t ? x : b),
+      (K.textContent = q()),
+      (G.textContent = ``),
+      t && B());
+  }
+  let Y = u(
+      `button.btn`,
+      { type: `button`, onclick: () => i.close() },
+      `Cancel`,
+    ),
+    X = () => {
+      let e = [...m.value].length;
+      ((h.textContent = `${e} / ${S}`),
+        h.classList.toggle(`short`, e > 0 && m.value.trim().length < 10));
+    };
+  (m.addEventListener(`input`, () => {
+    (X(), G.textContent && m.value.trim().length >= 10 && (G.textContent = ``));
+  }),
+    X());
+  let Z = !1,
+    Q = u(
+      `form.fb-form`,
+      {
+        novalidate: !0,
+        onsubmit: async (e) => {
+          if ((e.preventDefault(), Z)) return;
+          let t = m.value,
+            r = d === `application`;
+          if (r && [...W()].length < 10) {
+            ((G.textContent = `Tell us a little about yourself first: a few words in any of the boxes.`),
+              L.why.focus());
+            return;
+          }
+          if (!r && [...t.trim()].length < 10) {
+            ((G.textContent = `Please write at least 10 characters so we can act on it.`),
+              m.focus());
+            return;
+          }
+          ((Z = !0),
+            (K.disabled = !0),
+            (K.textContent = `Sending…`),
+            (G.textContent = ``));
+          try {
+            if (r) {
+              await c();
+              let e = Object.fromEntries(
+                  y
+                    .map((e) => [e.key, L[e.key].value.trim()])
+                    .filter(([, e]) => e),
+                ),
+                t = await a.sendFeedback({
+                  category: d,
+                  message: ``,
+                  application: e,
+                });
+              $(t.id, !1, !0);
+              return;
+            }
+            let e = k.checked ? (F ?? (await M())) : null,
+              i = {
+                category: d,
+                message: t,
+                ...(w.value.trim() ? { contact: w.value.trim() } : {}),
+                ...(D.checked ? { context: O(n.read()) } : {}),
+              },
+              o = await a.sendFeedback(i, e);
+            $(o.id, !!w.value.trim());
+          } catch (e) {
+            ((G.textContent =
+              e instanceof o
+                ? e.message
+                : e instanceof s
+                  ? `Couldn't reach the server. Check your connection and try again.`
+                  : `Something went wrong. Please try again.`),
+              (Z = !1),
+              (K.disabled = !1),
+              (K.textContent = q()));
+          }
+        },
+      },
+      V,
+      u(`div.fb-field`, null, u(`span.fb-label`, null, `Category`), C),
+      U,
+      H,
+      G,
+      u(`div.fb-actions`, null, Y, K),
+    );
+  (H.append(
+    u(
+      `label.fb-field`,
+      { for: `fb-text` },
+      u(`span.fb-label`, null, `Message`),
+      m,
+      h,
+    ),
+    u(
+      `label.fb-field`,
+      { for: `fb-contact` },
+      u(`span.fb-label`, null, `Contact `, u(`small.dim`, null, `(optional)`)),
+      w,
+    ),
+    u(
+      `div.fb-checks`,
+      null,
+      u(
+        `label.fb-check`,
+        null,
+        D,
+        u(
+          `span`,
+          null,
+          `Attach game info`,
+          u(
+            `small.dim`,
+            null,
+            `map, position, settings, browser, recent errors`,
+          ),
+        ),
+      ),
+      j,
+      u(
+        `label.fb-check`,
+        null,
+        k,
+        u(
+          `span`,
+          null,
+          `Attach screenshot`,
+          u(`small.dim`, null, `of the game view, not your screen`),
+        ),
+      ),
+      P,
+    ),
+  ),
+    d === `application` && J(d));
+  let $ = (e, n, r = !1) => {
+    let a = u(
+        `button.btn.primary`,
+        { type: `button`, onclick: () => i.close() },
+        `Close`,
+      ),
+      o = f(`proud`, { size: `5.5rem`, className: `fb-mascot` });
+    (Q.replaceWith(
+      u(
+        `div.fb-thanks`,
+        { role: `status` },
+        o.el,
+        ...(r
+          ? [
+              u(`h3`, null, `Thanks for applying`),
+              u(
+                `p.dim`,
+                null,
+                `We'll look at your account and reply in your Inbox.`,
+              ),
+            ]
+          : [
+              u(`h3`, null, `Thanks for the feedback`),
+              u(
+                `p.dim`,
+                null,
+                n
+                  ? `Replies show up in your Inbox. If we need more details, we'll use the contact you gave.`
+                  : `Replies show up in your Inbox.`,
+              ),
+            ]),
+        u(`p.fb-ref`, null, `Reference `, u(`code`, null, e)),
+        u(`div.fb-actions`, null, r ? t(`btn.discord`) : null, a),
+      ),
+    ),
+      a.focus(),
+      p(o.el, `translateY(16px) scale(0.9)`),
+      window.setTimeout(() => o.react(`hop`), 380));
+  };
+  (i.append(
+    u(
+      `header.acct-head`,
+      null,
+      u(`h2`, null, `Send feedback`),
+      u(
+        `button.acct-close`,
+        { type: `button`, "aria-label": `Close`, onclick: () => i.close() },
+        `×`,
+      ),
+    ),
+    u(`div.acct-body`, null, Q),
+  ),
+    i.showModal(),
+    (d === `application` ? L.discord : m).focus());
+}
+export { P as showFeedback };

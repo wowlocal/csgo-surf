@@ -5,3 +5,7 @@
 __pycache__/
 *.py[cod]
 .DS_Store
+/bunnyhop/cache/
+/bunnyhop/offline/
+/bunnyhop/*.zip
+/assets/**/*.part

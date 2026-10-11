@@ -1,0 +1,58 @@
+{
+  "freshTemporaryCaches": true,
+  "archiveCount": 345,
+  "fileCount": 13171,
+  "allArchiveAndRestoredFileHashesVerified": true,
+  "offlineServerChecks": [
+    {
+      "game": "bunnyhop",
+      "path": "/?map=bh_aztec",
+      "status": 200
+    },
+    {
+      "game": "bunnyhop",
+      "path": "/maps",
+      "status": 200
+    },
+    {
+      "game": "bunnyhop",
+      "path": "/assets/bunnyhop_core-CRpj0v-F.wasm",
+      "status": 200
+    },
+    {
+      "game": "bunnyhop",
+      "path": "/bh_aztec.bsp",
+      "status": 200
+    },
+    {
+      "game": "bunnyhop",
+      "path": "/bhop_lol_tutorial.tutorial.json",
+      "status": 200
+    },
+    {
+      "game": "bunnyhop",
+      "path": "/thumbs/bh_aztec.jpg?v=73c8efbb85",
+      "status": 200
+    },
+    {
+      "game": "surfd",
+      "path": "/?map=boreas",
+      "status": 200
+    },
+    {
+      "game": "surfd",
+      "path": "/assets/game-CtmXm4et.css",
+      "status": 200
+    },
+    {
+      "game": "surfd",
+      "path": "/api/surf",
+      "status": 200
+    },
+    {
+      "game": "surfd",
+      "path": "/replays/boreas-complete.json",
+      "status": 200
+    }
+  ]
+}

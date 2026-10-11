@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- The crawlable #seo block is for crawlers and no-JS visitors; the game hides it before first paint. -->
+  <script>document.documentElement.classList.add("js")</script>
+  <title>Play online · 3 playing · bunnyhop.lol</title>
+  <meta name="description" content="Persistent CS:S-style bhop servers in your browser: map votes, RTV, nominations, chat and live WR announcements. 3 playing now. Free, no install." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#0d0f14" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="canonical" href="https://bunnyhop.lol/servers" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32 48x48" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-C_cI-hiW.svg" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <!-- The map catalogue feeds the home screen's featured card (the LCP) and the menu background. -->
+  <link rel="preload" href="/index.json" as="fetch" crossorigin="anonymous" />
+  <!-- Open Graph / Twitter (per-page values are rewritten by the Worker, apps/api/src/seo/) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="bunnyhop.lol" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://bunnyhop.lol/servers" />
+  <meta property="og:title" content="Play online · 3 playing · bunnyhop.lol" />
+  <meta property="og:description" content="Persistent CS:S-style bhop servers in your browser: map votes, RTV, nominations, chat and live WR announcements. 3 playing now. Free, no install." />
+  <meta property="og:image" content="https://bunnyhop.lol/og/site/servers.jpg?v=2.3" />
+  <meta property="og:image:secure_url" content="https://bunnyhop.lol/og/site/servers.jpg?v=2.3" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="3 playing online on bunnyhop.lol" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Play online · 3 playing · bunnyhop.lol" />
+  <meta name="twitter:description" content="Persistent CS:S-style bhop servers in your browser: map votes, RTV, nominations, chat and live WR announcements. 3 playing now. Free, no install." />
+  <meta name="twitter:image" content="https://bunnyhop.lol/og/site/servers.jpg?v=2.3" />
+  <meta name="twitter:image:alt" content="3 playing online on bunnyhop.lol" />
+  
+  <style>.js #seo{display:none}html:not(.js),html:not(.js) body{height:auto;overflow:auto}html:not(.js) #game,html:not(.js) #hud,html:not(.js) #overlay{display:none}.seo-page{color:#eef1f6;background:#0b0d12;max-width:46rem;margin:0 auto;padding:2rem 1.25rem 4rem;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.seo-page a{color:#ffb43a}.seo-page img{border-radius:.6rem;max-width:100%;height:auto}.seo-page h1{line-height:1.15}</style>
+  <script type="module" crossorigin src="/assets/index-D9qcpU7O.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/preload-helper-DjzSQ1t3.js">
+  <link rel="modulepreload" crossorigin href="/assets/api-B2Jj-kgC.js">
+  <link rel="modulepreload" crossorigin href="/assets/dom-CUDFsJPS.js">
+  <link rel="modulepreload" crossorigin href="/assets/creators-DkuwYE0A.js">
+  <link rel="modulepreload" crossorigin href="/assets/nav-IlBYMvil.js">
+  <link rel="modulepreload" crossorigin href="/assets/community-D2zu9OMJ.js">
+  <link rel="modulepreload" crossorigin href="/assets/core-GuI4LXND.js">
+  <link rel="modulepreload" crossorigin href="/assets/styles-DzitlxVO.js">
+  <link rel="modulepreload" crossorigin href="/assets/loadout-DopA3xcw.js">
+  <link rel="modulepreload" crossorigin href="/assets/cosmetics-PGh_ZGfu.js">
+  <link rel="modulepreload" crossorigin href="/assets/palettes-YJRmTQgw.js">
+  <link rel="modulepreload" crossorigin href="/assets/model-CJn1vZL3.js">
+  <link rel="modulepreload" crossorigin href="/assets/replay-B40kiN_v.js">
+  <link rel="modulepreload" crossorigin href="/assets/notify-CvHg_wVW.js">
+  <link rel="modulepreload" crossorigin href="/assets/events-Q3WT0NU4.js">
+  <link rel="modulepreload" crossorigin href="/assets/avatar-kqcwn86P.js">
+  <link rel="modulepreload" crossorigin href="/assets/account-state-BYMidhZ9.js">
+  <link rel="modulepreload" crossorigin href="/assets/badges-BcPRw2oa.js">
+  <link rel="modulepreload" crossorigin href="/assets/marks-Brbs1gDc.js">
+  <link rel="modulepreload" crossorigin href="/assets/item-preview-m8tHLXeP.js">
+  <link rel="modulepreload" crossorigin href="/assets/pb-CeYyg6BU.js">
+  <link rel="modulepreload" crossorigin href="/assets/lessons-CcKVOcxG.js">
+  <link rel="modulepreload" crossorigin href="/assets/trail-Ci5rx2WO.js">
+  <link rel="modulepreload" crossorigin href="/assets/ghost-BF02H5nr.js">
+  <link rel="modulepreload" crossorigin href="/assets/leaderboard-tX18nlp1.js">
+  <link rel="modulepreload" crossorigin href="/assets/maps-DK5lovd-.js">
+  <link rel="modulepreload" crossorigin href="/assets/account-email-Bsoylshj.js">
+  <link rel="modulepreload" crossorigin href="/assets/presence-B4W1kThY.js">
+  <link rel="modulepreload" crossorigin href="/assets/hud-5C6lff-r.js">
+  <link rel="modulepreload" crossorigin href="/assets/state-B3iqGkeD.js">
+  <link rel="modulepreload" crossorigin href="/assets/play-lock-D2QCla03.js">
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-P2Xu9kJm.js">
+  <link rel="modulepreload" crossorigin href="/assets/three.module-CTHJQ_H0.js">
+  <link rel="modulepreload" crossorigin href="/assets/events-EnaVAdlF.js">
+  <link rel="modulepreload" crossorigin href="/assets/presenter-IuwAtgYT.js">
+  <link rel="modulepreload" crossorigin href="/assets/mesh-C0szPPnc.js">
+  <link rel="modulepreload" crossorigin href="/assets/viewmodel-BDQ_BaCV.js">
+  <link rel="stylesheet" crossorigin href="/assets/notify-B1xuBBxO.css">
+  <link rel="stylesheet" crossorigin href="/assets/account-state-Bl3cc_Rk.css">
+  <link rel="stylesheet" crossorigin href="/assets/marks-D-D2P7Vg.css">
+  <link rel="stylesheet" crossorigin href="/assets/ghost-BTdkhxdS.css">
+  <link rel="stylesheet" crossorigin href="/assets/leaderboard-Dyzw_0Hk.css">
+  <link rel="stylesheet" crossorigin href="/assets/maps-85c90M0p.css">
+  <link rel="stylesheet" crossorigin href="/assets/account-email-Rh3xavDF.css">
+  <link rel="stylesheet" crossorigin href="/assets/hud-D5IE_4pC.css">
+  <link rel="stylesheet" crossorigin href="/assets/state-CuVm8GRj.css">
+  <link rel="stylesheet" crossorigin href="/assets/play-lock-Bgt_A3mV.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-a7mOhp4_.css">
+<meta name="twitter:label1" content="Playing now"><meta name="twitter:data1" content="3"><meta name="twitter:label2" content="Servers"><meta name="twitter:data2" content="2"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"bunnyhop.lol","item":"https://bunnyhop.lol/"},{"@type":"ListItem","position":2,"name":"Play online","item":"https://bunnyhop.lol/servers"}]}</script></head>
+<body>
+  <canvas id="game" aria-label="Game view"></canvas>
+  <div id="hud" aria-hidden="false"></div>
+  <div id="overlay">
+    <div id="menu" class="screen-boot">
+      <section class="boot" aria-busy="true">
+        <div class="wordmark wordmark-lg" role="img" aria-label="bunnyhop.lol"><svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 47 Q14.5 33 21 47 Q29 25 37 47 Q46.5 15 56 47" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="56" cy="47" r="4.5" fill="#fff"/></svg><span class="wm-text"><span class="wm-name">bunnyhop</span><span class="wm-tld">.lol</span></span></div>
+      </section>
+    </div>
+  </div>
+  <main id="seo"><article class="seo-page"><nav class="seo-nav" aria-label="Site"><a href="/">Play</a> · <a href="/maps">Maps</a> · <a href="/servers">Play online</a> · <a href="/ranks">Ranks</a> · <a href="/about">About &amp; FAQ</a></nav><p class="seo-crumbs"><a href="/">bunnyhop.lol</a> › Play online</p><h1>Play online</h1><p>Persistent CS:S-style bhop servers in your browser: map votes, RTV, nominations, chat and live WR announcements. 3 playing now. Free, no install.</p><ul class="seo-board"><li><b>bunnyhop.lol · Easy</b> · 3/20 players · T1–T3 · on <a href="/maps/bhop_sahara">bhop_sahara</a> · US East</li><li><b>bunnyhop.lol · Hard</b> · 0/20 players · T4–T6 · on <a href="/maps/bhop_superdooperhard">bhop_superdooperhard</a> · US East</li></ul></article></main>
+</body>
+</html>

@@ -1,0 +1,109 @@
+import {
+  Lt as e,
+  ln as t,
+  un as n,
+  vt as r,
+  wt as i,
+  yt as a,
+} from "./model-CJn1vZL3.js";
+var o = class {
+  max;
+  mesh;
+  pos;
+  col;
+  color = new i();
+  color2 = null;
+  geo = new a();
+  constructor(i, a = 320, o = null) {
+    ((this.max = a),
+      this.setColor(i, o),
+      (this.pos = new Float32Array(a * 2 * 3)),
+      (this.col = new Float32Array(a * 2 * 4)));
+    let s = [];
+    for (let e = 0; e + 1 < a; e++) {
+      let t = e * 2;
+      s.push(t, t + 1, t + 2, t + 1, t + 3, t + 2);
+    }
+    (this.geo.setIndex(s),
+      this.geo.setAttribute(`position`, new r(this.pos, 3).setUsage(e)),
+      this.geo.setAttribute(`color`, new r(this.col, 4).setUsage(e)),
+      this.geo.setDrawRange(0, 0),
+      (this.mesh = new t(
+        this.geo,
+        new n({ vertexColors: !0, transparent: !0, depthWrite: !1, side: 2 }),
+      )),
+      (this.mesh.frustumCulled = !1),
+      (this.mesh.renderOrder = 30));
+  }
+  setColor(e, t = null) {
+    this.color.set(e);
+    let n = t == null ? null : new i(t);
+    this.color2 = n && !n.equals(this.color) ? n : null;
+  }
+  set(e, t, n, r, i = 3) {
+    if (((t = Math.min(t, this.max)), t < 2)) {
+      this.geo.setDrawRange(0, 0);
+      return;
+    }
+    let a = this.pos,
+      o = this.col,
+      { r: s, g: c, b: l } = this.color,
+      u = this.color2;
+    for (let d = 0; d < t; d++) {
+      let f = d * 3,
+        p = Math.max(0, d - 1) * 3,
+        m = Math.min(t - 1, d + 1) * 3,
+        h = e[m] - e[p],
+        g = e[m + 1] - e[p + 1],
+        _ = e[m + 2] - e[p + 2],
+        v = n.x - e[f],
+        y = n.y - e[f + 1],
+        b = n.z - e[f + 2],
+        x = g * b - _ * y,
+        S = _ * v - h * b,
+        C = h * y - g * v,
+        w = Math.hypot(x, S, C) || 1,
+        T = d / (t - 1),
+        E = (i * (0.15 + 0.85 * T)) / w;
+      ((x *= E), (S *= E), (C *= E));
+      let D = d * 6;
+      ((a[D] = e[f] + x),
+        (a[D + 1] = e[f + 1] + S),
+        (a[D + 2] = e[f + 2] + C),
+        (a[D + 3] = e[f] - x),
+        (a[D + 4] = e[f + 1] - S),
+        (a[D + 5] = e[f + 2] - C));
+      let O = Math.min(1, Math.max(0, (Math.hypot(v, y, b) - 40) / 160)),
+        k = r * T * T * O * O;
+      if (u) {
+        let e = Math.min(1, Math.max(0, (0.92 - T) * 2.4)),
+          t = e * e * (3 - 2 * e);
+        ((s = this.color.r + (u.r - this.color.r) * t),
+          (c = this.color.g + (u.g - this.color.g) * t),
+          (l = this.color.b + (u.b - this.color.b) * t));
+      }
+      let A = d * 8;
+      ((o[A] = o[A + 4] = s),
+        (o[A + 1] = o[A + 5] = c),
+        (o[A + 2] = o[A + 6] = l),
+        (o[A + 3] = o[A + 7] = k));
+    }
+    let d = this.geo.attributes.position,
+      f = this.geo.attributes.color;
+    (d.clearUpdateRanges(),
+      f.clearUpdateRanges(),
+      d.addUpdateRange(0, t * 6),
+      f.addUpdateRange(0, t * 8),
+      (d.needsUpdate = f.needsUpdate = !0),
+      this.geo.setDrawRange(0, (t - 1) * 6));
+  }
+  clear() {
+    this.geo.setDrawRange(0, 0);
+  }
+  dispose() {
+    (this.mesh.removeFromParent(),
+      this.geo.dispose(),
+      this.mesh.material.dispose());
+  }
+};
+export { o as t };

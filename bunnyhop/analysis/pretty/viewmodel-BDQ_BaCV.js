@@ -1,0 +1,686 @@
+import {
+  A as e,
+  B as t,
+  D as n,
+  Dr as r,
+  E as i,
+  I as a,
+  It as o,
+  N as s,
+  Or as c,
+  P as l,
+  Q as u,
+  S as d,
+  Sr as f,
+  U as p,
+  W as m,
+  Z as h,
+  _ as g,
+  b as _,
+  c as v,
+  cn as y,
+  d as b,
+  f as x,
+  g as S,
+  ht as C,
+  i as w,
+  j as T,
+  k as E,
+  n as D,
+  nt as O,
+  q as k,
+  qt as A,
+  r as j,
+  u as M,
+  v as N,
+  y as P,
+  yn as F,
+} from "./model-CJn1vZL3.js";
+import {
+  D as I,
+  E as L,
+  n as R,
+  o as z,
+  r as B,
+  s as V,
+} from "./cosmetics-PGh_ZGfu.js";
+import { a as H } from "./loadout-DopA3xcw.js";
+import { n as U, r as W } from "./palettes-YJRmTQgw.js";
+import { t as G } from "./events-EnaVAdlF.js";
+import { t as K } from "./mesh-C0szPPnc.js";
+var q = class {
+    arm;
+    combo;
+    set;
+    override = null;
+    knife = null;
+    ctx;
+    Wc;
+    Wp;
+    pz = { cur: null, prev: null, mix: 1, weight: 0 };
+    angB = [];
+    angC = [];
+    onSignal = null;
+    blendBones;
+    blendParent;
+    fingerBlend;
+    constructor(e) {
+      this.arm = new _(e);
+      let t = e.bone(`knife_Parent`),
+        n = this.arm.handBone,
+        r = new Set(this.arm.knife);
+      ((this.blendBones = [
+        ...this.arm.all.filter((e) => !r.has(e)).sort((e, t) => e - t),
+        ...this.arm.knife,
+      ]),
+        (this.fingerBlend = {
+          bones: new Set(Object.values(this.arm.fingers).flat()),
+          w: 1,
+        }),
+        (this.blendParent = (r) => (r === t ? n : e.parent[r])));
+      let i = e.names.length * 12;
+      ((this.Wc = new Float32Array(i)),
+        (this.Wp = new Float32Array(i)),
+        (this.set = g(null)),
+        (this.combo = new N(this.set.spec)),
+        (this.ctx = { arm: this.arm, knife: null, state: null }));
+    }
+    setKnife(e, t) {
+      ((this.knife = e),
+        (this.ctx.knife = e),
+        (this.ctx.state = t),
+        this.pick(),
+        this.publish());
+    }
+    setOverride(e) {
+      ((this.override = e), this.pick());
+    }
+    get current() {
+      return this.set;
+    }
+    pick() {
+      let e = this.override ?? g(this.knife);
+      e !== this.set && ((this.set = e), this.combo.setSpec(e.spec));
+    }
+    get active() {
+      return this.combo.active;
+    }
+    get holding() {
+      return this.combo.holding;
+    }
+    press() {
+      (this.handle(this.combo.press()), this.publish());
+    }
+    cancel(e) {
+      (this.handle(this.combo.cancel(e)), this.publish());
+    }
+    update(e, t) {
+      (this.handle(this.combo.update(e, t)), this.publish());
+    }
+    seek(e, t) {
+      (this.combo.seek(e, t), this.publish());
+    }
+    publish() {
+      let e = this.ctx.state;
+      if (!e) return;
+      let t = this.combo.pose(this.pz),
+        n = this.set.clips,
+        r = 0;
+      if (t.cur && t.weight > 0) {
+        let e = (e) => n[e.trick]?.show?.(e.t) ?? 0;
+        ((r = e(t.cur)),
+          t.prev && t.mix < 1 && (r = e(t.prev) + (r - e(t.prev)) * t.mix),
+          (r *= t.weight));
+      }
+      e.show = r;
+    }
+    handle(e) {
+      for (let t of e)
+        if (t.type === `start` || t.type === `trick`) {
+          let e = this.set.clips[t.trick];
+          (G({ type: `inspect`, source: `local`, trick: t.trick, name: e?.id }),
+            this.onSignal?.(t.type === `start` ? 1 : 2));
+        } else
+          t.type === `cue` &&
+            G({ type: t.cue, source: `local`, trick: t.trick });
+    }
+    apply(e) {
+      let t = this.combo.pose(this.pz);
+      if (!t.cur || t.weight <= 0) return;
+      let n = this.set.clips,
+        r = this.ctx.state?.angles;
+      if (r) {
+        this.angB.length = this.angC.length = r.length;
+        for (let e = 0; e < r.length; e++) this.angB[e] = r[e];
+      }
+      let i = this.Wc;
+      (i.set(e), n[t.cur.trick].apply(i, t.cur.t, this.ctx));
+      let a = i;
+      if (t.prev && t.mix < 1) {
+        if (r)
+          for (let e = 0; e < r.length; e++)
+            ((this.angC[e] = r[e]), (r[e] = this.angB[e]));
+        let o = this.Wp;
+        if (
+          (o.set(e),
+          n[t.prev.trick].apply(o, t.prev.t, this.ctx),
+          d(o, i, t.mix, this.blendBones, this.blendParent),
+          r)
+        )
+          for (let e = 0; e < r.length; e++)
+            r[e] += (this.angC[e] - r[e]) * t.mix;
+        a = o;
+      }
+      if (r && t.weight < 1)
+        for (let e = 0; e < r.length; e++)
+          r[e] = this.angB[e] + (r[e] - this.angB[e]) * t.weight;
+      (t.weight < 1 && (this.fingerBlend.w = Math.min(1, t.weight * 2)),
+        d(
+          e,
+          a,
+          t.weight,
+          this.blendBones,
+          this.blendParent,
+          t.weight < 1 ? this.fingerBlend : void 0,
+        ));
+    }
+  },
+  J = Math.PI / 180,
+  Y = (e, t, n) => (e < t ? t : e > n ? n : e),
+  X = 0.4,
+  Z = 0.5,
+  Q = 1,
+  ee = 0.6,
+  $ = {
+    idle: `idle`,
+    draw: `draw`,
+    slash1: `midslash1`,
+    slash2: `midslash2`,
+    stab: `stab_miss`,
+  },
+  te = class extends r {
+    constructor(e) {
+      super(
+        Array.from({ length: e }, () => new C()),
+        Array.from({ length: e }, () => new y()),
+      );
+    }
+    update() {
+      this.boneTexture && (this.boneTexture.needsUpdate = !0);
+    }
+  },
+  ne = class {
+    scene = new f();
+    camera = new F(41, 1, 0.75, 400);
+    uniforms = e();
+    onAttack = null;
+    followSim = !1;
+    lastUpdateMs = 0;
+    timeScale = 1;
+    inspects = new q(h());
+    root = new A();
+    mesh;
+    skeleton;
+    r = h();
+    W;
+    S;
+    proc;
+    cs = null;
+    play = { seq: -1, cycle: 0, prevSeq: -1, prevCycle: 0, fade: 0, fadeT: 0 };
+    now = 0;
+    action = `idle`;
+    actionT = 0;
+    nextPrimary = 0;
+    nextSecondary = 0;
+    slashSide = 0;
+    pressedPrimary = !1;
+    pressedSecondary = !1;
+    bobTime = 0;
+    bobSpeed = 0;
+    vBob = 0;
+    lBob = 0;
+    lastFacing = null;
+    lag = [0, 0, 0];
+    tilt = 0;
+    shift = 0;
+    duck = 0;
+    dip = 0;
+    dipV = 0;
+    V = new Float32Array(12);
+    T = new Float32Array(12);
+    T2 = new Float32Array(12);
+    tmp = new Float32Array(12);
+    conv = new y();
+    m4 = new y();
+    unsub = [];
+    knifeDef = null;
+    knifeHold = null;
+    visible = !0;
+    loadout = R();
+    look = s;
+    finishOverride = void 0;
+    constructor() {
+      let e = this.r.names.length;
+      ((this.W = new Float32Array(e * 12)),
+        (this.S = new Float32Array(e * 12)),
+        (this.skeleton = new te(e)),
+        (this.mesh = new c(K(), T(this.uniforms))),
+        (this.mesh.bindMode = o),
+        this.mesh.bind(this.skeleton, new y()),
+        (this.mesh.frustumCulled = !1),
+        (this.mesh.name = `viewmodel`),
+        this.root.add(this.mesh),
+        (this.root.matrixAutoUpdate = !1),
+        this.scene.add(this.root),
+        (this.proc = new n(this.r)),
+        this.conv.set(0, -1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 1),
+        this.applyColours(B()),
+        M(),
+        this.setKnife(b()),
+        this.setLoadout(R()),
+        this.unsub.push(z((e) => this.setLoadout(e))),
+        this.unsub.push(x((e) => this.setKnife(e))),
+        this.unsub.push(V((e) => this.applyColours(e))),
+        this.unsub.push(v(() => this.tryLoad())),
+        this.tryLoad(),
+        this.draw());
+    }
+    setKnife(e) {
+      (e?.id === `carrot` && (e = null),
+        !(
+          e === this.knifeDef &&
+          this.knifeHold &&
+          this.mesh.geometry === this.geometryFor(e)
+        ) &&
+          ((this.knifeDef = e), (this.knifeHold = null), this.refreshLook()));
+    }
+    refreshHold() {
+      let e = this.knifeDef,
+        n = H(this.loadout.glove).style;
+      (this.knifeHold &&
+        this.knifeHold.def === (e ?? k) &&
+        this.knifeHold.glove === n) ||
+        ((this.knifeHold = new p(e ?? k, this.r, n)),
+        this.inspects.setKnife(e, e ? this.knifeHold.state : null),
+        n !== this.prewarmed && m(t, (this.prewarmed = n), this.r));
+    }
+    prewarmed = null;
+    setLoadout(e) {
+      ((this.loadout = e), this.refreshLook());
+    }
+    setFinishOverride(e) {
+      ((this.finishOverride = e), this.refreshLook());
+    }
+    geometryFor(e) {
+      return K(e ?? void 0, H(this.loadout.glove).style);
+    }
+    refreshLook() {
+      this.refreshHold();
+      let e = this.geometryFor(this.knifeDef);
+      (this.mesh.geometry !== e && (this.mesh.geometry = e),
+        S(this.mesh.geometry));
+      let t = l(this.uniforms, this.loadout, this.finishOverride);
+      a(t, this.look) ||
+        ((this.look = t),
+        this.mesh.material.dispose(),
+        (this.mesh.material = T(this.uniforms, t)));
+    }
+    get knife() {
+      return this.knifeDef;
+    }
+    applyColours(e) {
+      let t = U(e),
+        n = W(t);
+      (this.uniforms.uPalette.value.forEach((e, t) => e.set(n[t])),
+        this.uniforms.uAccent.value.set(t.accent));
+    }
+    tryLoad() {
+      if (this.cs || !D() || new URLSearchParams(location.search).has(`vmproc`))
+        return;
+      let e = w();
+      if (e) return this.setAnimations(e);
+      j().then(
+        (e) => this.setAnimations(e),
+        (e) =>
+          console.warn(
+            `viewmodel: CS:S knife animations unavailable, procedural fallback`,
+            e,
+          ),
+      );
+    }
+    setAnimations(e) {
+      if (this.cs?.d === e) return;
+      let t = new Int16Array(this.r.names.length).fill(-1);
+      for (let n = 0; n < t.length; n++) t[n] = e.bone(this.r.names[n]);
+      let n = {};
+      for (let t of Object.keys($)) n[t] = e.seq($[t]);
+      n.idle < 0 ||
+        (e.warm(Object.values(n).filter((e) => e >= 0)),
+        (this.cs = { d: e, bs: new E(e), map: t, seqs: n }),
+        (this.play = {
+          seq: -1,
+          cycle: 0,
+          prevSeq: -1,
+          prevCycle: 0,
+          fade: 0,
+          fadeT: 0,
+        }),
+        this.startSeq(this.action, this.actionT));
+    }
+    get animSource() {
+      return this.cs ? `cs` : `procedural`;
+    }
+    get feelMatrix() {
+      return this.V;
+    }
+    draw() {
+      (this.setAction(`draw`),
+        (this.nextPrimary = this.nextSecondary = this.now + ee),
+        this.inspects.cancel(`draw`),
+        G({ type: `draw`, source: `local` }));
+    }
+    press(e) {
+      e ? (this.pressedSecondary = !0) : (this.pressedPrimary = !0);
+    }
+    inspect() {
+      (this.action === `idle` || this.action === `draw`) &&
+        this.inspects.press();
+    }
+    seek(e, t, n = 0) {
+      if (((this.timeScale = 0), e === `inspect`)) {
+        (this.setAction(`idle`),
+          (this.play.prevSeq = -1),
+          this.inspects.seek(n, t));
+        return;
+      }
+      (this.inspects.seek(-1, 0),
+        this.setAction(e),
+        (this.actionT = t),
+        (this.play.prevSeq = -1),
+        this.cs &&
+          (this.play.cycle = Y(t * this.cs.bs.cycleRate(this.play.seq), 0, 1)));
+    }
+    setAction(e) {
+      ((this.action = e), (this.actionT = 0), this.startSeq(e, 0));
+    }
+    startSeq(e, t) {
+      let n = this.cs;
+      if (!n) return;
+      let r = n.seqs[e] >= 0 ? n.seqs[e] : n.seqs.idle,
+        i = this.play,
+        a = n.d.seqs[r];
+      if (a.flags & 2 || i.seq < 0) ((i.prevSeq = -1), (i.fade = 0));
+      else {
+        let e = n.d.seqs[i.seq];
+        ((i.prevSeq = i.seq),
+          (i.prevCycle = i.cycle),
+          (i.fade = Math.min(e?.fadeOut ?? 0.2, a.fadeIn || 0.2)),
+          (i.fadeT = 0));
+      }
+      ((i.seq = r), (i.cycle = Y(t * n.bs.cycleRate(r), 0, 1)));
+    }
+    duration(e) {
+      let t = this.cs;
+      if (t) {
+        let n = t.seqs[e] >= 0 ? t.seqs[e] : t.seqs.idle,
+          r = t.bs.cycleRate(n);
+        return r > 0 ? 1 / r : 1;
+      }
+      return i[e];
+    }
+    attack(e) {
+      let t = this.pressedPrimary || e.primary,
+        n = this.pressedSecondary || e.secondary;
+      ((this.pressedPrimary = this.pressedSecondary = !1),
+        !this.followSim &&
+          (t && this.now >= this.nextPrimary
+            ? (this.slash(),
+              (this.nextPrimary = this.now + X),
+              (this.nextSecondary = this.now + Z))
+            : n &&
+              !t &&
+              this.now >= this.nextSecondary &&
+              (this.stab(),
+              (this.nextPrimary = this.nextSecondary = this.now + Q))));
+    }
+    slash() {
+      this.slashSide ^= 1;
+      let e = this.slashSide ? 1 : 2;
+      (this.setAction(e === 1 ? `slash1` : `slash2`),
+        this.inspects.cancel(`attack`),
+        G({ type: `slash`, variant: e, source: `local` }),
+        this.onAttack?.(1));
+    }
+    stab() {
+      (this.setAction(`stab`),
+        this.inspects.cancel(`attack`),
+        G({ type: `stab`, source: `local` }),
+        this.onAttack?.(2));
+    }
+    simAttack(e) {
+      e === 2 ? this.stab() : this.slash();
+    }
+    update(e, t, n) {
+      let r = performance.now();
+      ((e = Y(e, 0, 0.1) * this.timeScale),
+        (this.now += e),
+        (this.actionT += e),
+        this.attack(n),
+        ((this.action !== `idle` &&
+          this.actionT >= this.duration(this.action)) ||
+          (this.action === `idle` && this.actionT >= this.duration(`idle`))) &&
+          this.setAction(`idle`),
+        this.inspects.update(e, n.inspect ?? !1),
+        this.pose(e),
+        this.feel(e, t),
+        (this.lastUpdateMs = performance.now() - r));
+    }
+    pose(e) {
+      let t = this.W,
+        n = this.cs,
+        r = this.r;
+      if (n) {
+        let { bs: i, d: a, map: o } = n,
+          s = this.play;
+        ((s.cycle = Math.min(1, s.cycle + e * i.cycleRate(s.seq))),
+          i.initPose());
+        let c = 1;
+        if (s.prevSeq >= 0 && s.fade > 0) {
+          ((s.fadeT += e),
+            (s.prevCycle = Math.min(
+              1,
+              s.prevCycle + e * i.cycleRate(s.prevSeq),
+            )));
+          let t = Y(s.fadeT / s.fade, 0, 1);
+          t >= 1
+            ? (s.prevSeq = -1)
+            : (i.accumulate(s.prevSeq, s.prevCycle, 1),
+              (c = t * t * (3 - 2 * t)));
+        }
+        i.accumulate(s.seq, s.cycle, c);
+        let l = i.buildMatrices();
+        for (let e = 0; e < o.length; e++) {
+          let n = o[e];
+          n >= 0
+            ? t.set(l.subarray(n * 12, n * 12 + 12), e * 12)
+            : t.set(r.bind.subarray(e * 12, e * 12 + 12), e * 12);
+        }
+      } else this.proc.pose(this.action, this.actionT, t);
+      (this.knifeHold?.apply(
+        t,
+        this.action,
+        this.actionT,
+        n ? `cs` : `procedural`,
+      ),
+        this.inspects.apply(t),
+        this.knifeHold?.solve(t),
+        P(t, this.r));
+      let i = this.S,
+        a = r.inv,
+        o = this.skeleton.boneMatrices;
+      for (let e = 0; e < r.names.length; e++) {
+        O(t, e * 12, a, e * 12, i, e * 12);
+        let n = e * 12,
+          r = e * 16;
+        ((o[r] = i[n]),
+          (o[r + 1] = i[n + 4]),
+          (o[r + 2] = i[n + 8]),
+          (o[r + 3] = 0),
+          (o[r + 4] = i[n + 1]),
+          (o[r + 5] = i[n + 5]),
+          (o[r + 6] = i[n + 9]),
+          (o[r + 7] = 0),
+          (o[r + 8] = i[n + 2]),
+          (o[r + 9] = i[n + 6]),
+          (o[r + 10] = i[n + 10]),
+          (o[r + 11] = 0),
+          (o[r + 12] = i[n + 3]),
+          (o[r + 13] = i[n + 7]),
+          (o[r + 14] = i[n + 11]),
+          (o[r + 15] = 1));
+      }
+      this.skeleton.update();
+    }
+    feel(e, t) {
+      let n = L.get().viewmodel,
+        r = n.bob,
+        i = n.sway,
+        a = t.grounded ? Math.hypot(t.velocity[0], t.velocity[1]) : 0,
+        o = e * 320,
+        s = Y(a, this.bobSpeed - o, this.bobSpeed + o);
+      ((s = Y(s, -320, 320)),
+        (this.bobSpeed = s),
+        (this.bobTime += (s / 320) * e));
+      let c = 0.8,
+        l = 0.5,
+        d = (e) => {
+          let t = (this.bobTime % e) / e;
+          return (
+            (t =
+              t < l ? (Math.PI * t) / l : Math.PI + (Math.PI * (t - l)) / 0.5),
+            t
+          );
+        },
+        f = s * 0.005;
+      ((this.vBob = Y(f * 0.3 + f * 0.7 * Math.sin(d(c)), -7, 4) * r),
+        (f = s * 0.005),
+        (this.lBob = Y(f * 0.3 + f * 0.7 * Math.sin(d(c * 2)), -7, 4) * r));
+      let p = Math.cos(t.yaw * J),
+        m = Math.sin(t.yaw * J),
+        h = Math.cos(t.pitch * J),
+        g = Math.sin(t.pitch * J),
+        _ = [h * p, h * m, -g],
+        v = [-m, p, 0],
+        y = [g * p, g * m, h];
+      this.lastFacing ||= [..._];
+      let b = this.lastFacing;
+      Math.hypot(_[0] - b[0], _[1] - b[1], _[2] - b[2]) > 1.9 &&
+        ((b[0] = _[0]), (b[1] = _[1]), (b[2] = _[2]));
+      let x = _[0] - b[0],
+        S = _[1] - b[1],
+        C = _[2] - b[2];
+      if (e > 0) {
+        let t = 5,
+          n = Math.hypot(x, S, C);
+        (n > 1.5 && (t *= n / 1.5),
+          (b[0] += x * t * e),
+          (b[1] += S * t * e),
+          (b[2] += C * t * e));
+        let r = Math.hypot(b[0], b[1], b[2]) || 1;
+        ((b[0] /= r), (b[1] /= r), (b[2] /= r));
+      }
+      let w = -5 * x * i,
+        T = -5 * S * i,
+        E = -5 * C * i;
+      ((this.lag[0] = w * _[0] + T * _[1] + E * _[2]),
+        (this.lag[1] = w * v[0] + T * v[1] + E * v[2]),
+        (this.lag[2] = w * y[0] + T * y[1] + E * y[2]));
+      let D = Y(t.sidemove / 450, -1, 1),
+        O = 1 - Math.exp(-e * 7);
+      ((this.tilt += (D * 3.2 * i - this.tilt) * O),
+        (this.shift += (D * 0.35 * i - this.shift) * O));
+      let k = Y((64 - t.viewOffsetZ) / 18, 0, 1);
+      ((this.duck += (k - this.duck) * (1 - Math.exp(-e * 10))),
+        t.landed < -50 && (this.dipV -= Y(-t.landed / 300, 0, 2.2) * 9 * r));
+      let A = Math.ceil(e / (1 / 240)),
+        j = A ? e / A : 0;
+      for (let e = 0; e < A; e++)
+        ((this.dipV += (-170 * this.dip - 20 * this.dipV) * j),
+          (this.dip += this.dipV * j));
+      this.dip = Y(this.dip, -4, 2);
+      let M = Math.sin(this.now * ((2 * Math.PI) / 3.8)) * r,
+        N = t.pitch > 180 ? t.pitch - 360 : t.pitch,
+        P = this.vBob * 0.4 + this.lag[0] - N * 0.035 - this.duck * 0.4,
+        F =
+          -this.lBob * 0.2 +
+          this.lag[1] +
+          N * 0.03 +
+          this.shift +
+          this.duck * 0.25,
+        I =
+          this.vBob * 0.1 +
+          this.lag[2] -
+          N * 0.02 -
+          this.duck * 0.55 +
+          this.dip * 0.6 +
+          M * 0.07,
+        R = -this.vBob * 0.4 + M * 0.12 + this.dip * -1.2,
+        z = -this.lBob * 0.3,
+        B = this.vBob * 0.5 + this.tilt - this.duck * 1.5;
+      u(R, z, B, P, F, I, this.V);
+    }
+    setVisible(e) {
+      (e && !this.visible && this.draw(), (this.visible = e));
+    }
+    get shown() {
+      return this.visible;
+    }
+    render(e, t) {
+      if (!this.visible) return;
+      let n = L.get().viewmodel,
+        r = this.camera;
+      (t.updateMatrixWorld(),
+        r.position.copy(t.position),
+        r.quaternion.copy(t.quaternion),
+        (r.aspect = t.aspect));
+      let i = I(n.fov);
+      ((r.fov !== i || r.aspect !== t.aspect) && r.updateProjectionMatrix(),
+        (r.fov = i),
+        r.updateProjectionMatrix(),
+        r.updateMatrixWorld());
+      let a = this.V,
+        o = n.hand === `left`;
+      this.m4.set(
+        a[0],
+        a[1],
+        a[2],
+        a[3] + n.y,
+        a[4],
+        a[5],
+        a[6],
+        a[7] + (o ? n.x : -n.x),
+        a[8],
+        a[9],
+        a[10],
+        a[11] + n.z,
+        0,
+        0,
+        0,
+        1,
+      );
+      let s = this.root.matrix;
+      (s.multiplyMatrices(r.matrixWorld, this.conv).multiply(this.m4),
+        o && s.multiply(this.m4.makeScale(1, -1, 1)),
+        (this.root.matrixWorldNeedsUpdate = !0));
+      let c = e.autoClear;
+      ((e.autoClear = !1),
+        e.clearDepth(),
+        e.render(this.scene, r),
+        (e.autoClear = c));
+    }
+    dispose() {
+      for (let e of this.unsub) e();
+      (this.mesh.material.dispose(), this.skeleton.dispose());
+    }
+  };
+export { ne as t };

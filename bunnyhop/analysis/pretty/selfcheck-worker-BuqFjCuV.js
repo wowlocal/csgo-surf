@@ -1,0 +1,3594 @@
+(function () {
+  let e = /* @__PURE__ */ new Map();
+  function t(t) {
+    for (let [n, r] of t) e.set(n.toLowerCase(), r);
+  }
+  let n = (e) => Number.isInteger(e) && e >= 1 && e <= 10,
+    r = {
+      tickInterval: 0.01,
+      airAccelerate: 1e3,
+      accelerate: 5,
+      friction: 4,
+      stopSpeed: 75,
+      gravity: 800,
+      maxSpeed: 260,
+      autohop: !0,
+      physics: 10,
+    },
+    i = new TextDecoder(),
+    a = WebAssembly;
+  var o = class t {
+    x;
+    constructor(e) {
+      this.x = e;
+    }
+    static async create(e) {
+      let n;
+      return (
+        (n =
+          e instanceof WebAssembly.Module
+            ? await WebAssembly.instantiate(e, {})
+            : e instanceof Response || e instanceof Promise
+              ? (await a.instantiateStreaming(e, {})).instance
+              : (await a.instantiate(e, {})).instance),
+        new t(n.exports)
+      );
+    }
+    str(e, t) {
+      return i.decode(new Uint8Array(this.x.memory.buffer, e, t));
+    }
+    f32(e, t) {
+      return new Float32Array(this.x.memory.buffer, e, t);
+    }
+    u32(e, t) {
+      return new Uint32Array(this.x.memory.buffer, e, t);
+    }
+    loadMap(e) {
+      this.addPhysicsContent();
+      let t = this.x.alloc(e.length);
+      if (
+        (new Uint8Array(this.x.memory.buffer, t, e.length).set(e),
+        !this.x.load_map(t, e.length))
+      )
+        throw Error(this.lastError());
+    }
+    loadMapPhysics(e) {
+      this.addPhysicsContent();
+      let t = this.x.alloc(e.length);
+      (new Uint8Array(this.x.memory.buffer, t, e.length).set(e),
+        this.commitPhysics(t, e.length));
+    }
+    async loadMapPhysicsStream(e, t) {
+      this.addPhysicsContent();
+      let n = this.x.alloc(t),
+        r = 0,
+        i = e.getReader();
+      try {
+        for (;;) {
+          let { done: e, value: a } = await i.read();
+          if (e) break;
+          if (r + a.length > t)
+            throw Error(`map stream longer than ${t} bytes`);
+          (new Uint8Array(this.x.memory.buffer, n + r, a.length).set(a),
+            (r += a.length));
+        }
+        if (r !== t) throw Error(`map stream ended at ${r} of ${t} bytes`);
+      } catch (e) {
+        throw (this.x.dealloc(n, t), e);
+      } finally {
+        i.releaseLock();
+      }
+      this.commitPhysics(n, t);
+    }
+    commitPhysics(e, t) {
+      if (!this.x.load_map_physics)
+        throw Error(
+          `wasm build lacks load_map_physics export; rebuild with tools/scripts/build-wasm.sh`,
+        );
+      if (!this.x.load_map_physics(e, t)) throw Error(this.lastError());
+    }
+    physicsAdded = /* @__PURE__ */ new Set();
+    addPhysicsContent() {
+      if (this.hasContentApi())
+        for (let [t, n] of e)
+          this.physicsAdded.has(t) ||
+            (this.contentAddFile(t, n), this.physicsAdded.add(t));
+    }
+    physicsFiles() {
+      if (!this.x.physics_files) return [];
+      let e = this.x.physics_files();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean);
+    }
+    physicsMissing() {
+      if (!this.x.physics_missing) return [];
+      let e = this.x.physics_missing();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean);
+    }
+    physicsReload() {
+      this.x.physics_reload &&
+        (this.addPhysicsContent(), this.x.physics_reload());
+    }
+    memoryBytes() {
+      return this.x.memory.buffer.byteLength;
+    }
+    lastError() {
+      return this.str(this.x.error_ptr(), this.x.error_len());
+    }
+    mesh() {
+      let e = this.f32(
+          this.x.mesh_vertices_ptr(),
+          this.x.mesh_vertices_len(),
+        ).slice(),
+        t = this.u32(
+          this.x.mesh_indices_ptr(),
+          this.x.mesh_indices_len(),
+        ).slice(),
+        n = this.x.mesh_groups(),
+        r = this.u32(this.x.scratch_u32_ptr(), n),
+        i = [];
+      for (let e = 0; e < r.length; e += 4)
+        i.push({
+          model: r[e],
+          material: r[e + 1],
+          firstIndex: r[e + 2],
+          indexCount: r[e + 3],
+        });
+      if (this.x.mesh_group_sky3d) {
+        let e = this.x.mesh_group_sky3d(),
+          t = this.u32(this.x.scratch_u32_ptr(), e);
+        e === i.length && i.forEach((e, n) => (e.sky3d = t[n] !== 0));
+      }
+      let a = this.x.mesh_materials(),
+        o = this.str(this.x.scratch_str_ptr(), a)
+          .split(
+            `
+`,
+          )
+          .filter(Boolean)
+          .map((e) => {
+            let t = e.split(` `),
+              n = Number(t.pop()),
+              r = Number(t.pop());
+            return { name: t.join(` `), width: r, height: n };
+          });
+      return {
+        vertices: e,
+        indices: t,
+        stride: this.x.mesh_vertex_floats(),
+        groups: i,
+        materials: o,
+      };
+    }
+    skyMesh() {
+      let e = this.x;
+      if (
+        !e.mesh_sky_vertices_ptr ||
+        !e.mesh_sky_vertices_len ||
+        !e.mesh_sky_indices_ptr ||
+        !e.mesh_sky_indices_len ||
+        !e.mesh_sky_groups
+      )
+        return null;
+      let t = this.f32(
+          e.mesh_sky_vertices_ptr(),
+          e.mesh_sky_vertices_len(),
+        ).slice(),
+        n = this.u32(
+          e.mesh_sky_indices_ptr(),
+          e.mesh_sky_indices_len(),
+        ).slice(),
+        r = this.u32(e.scratch_u32_ptr(), e.mesh_sky_groups()),
+        i = [];
+      for (let e = 0; e + 3 <= r.length; e += 3)
+        i.push({ model: r[e], firstIndex: r[e + 1], indexCount: r[e + 2] });
+      return { vertices: t, indices: n, groups: i };
+    }
+    skyCamera() {
+      if (!this.x.sky_camera) return null;
+      let e = this.x.sky_camera();
+      if (e < 19) return null;
+      let t = this.f32(this.x.scratch_f32_ptr(), e).slice();
+      return {
+        origin: [t[0], t[1], t[2]],
+        scale: t[3],
+        area: t[4],
+        fog: {
+          enable: t[5] !== 0,
+          blend: t[6] !== 0,
+          color: [t[7], t[8], t[9]],
+          color2: [t[10], t[11], t[12]],
+          dir: [t[13], t[14], t[15]],
+          start: t[16],
+          end: t[17],
+          maxDensity: t[18],
+        },
+      };
+    }
+    materials() {
+      let e = this.x.material_info();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean)
+        .map((e) => {
+          let t = e.split(` `);
+          return {
+            kind: Number(t[0]),
+            flags: Number(t[1]),
+            texture: Number(t[2]),
+            alpha: Number(t[3]),
+            alphaRef: Number(t[4]),
+            color: [Number(t[5]), Number(t[6]), Number(t[7])],
+            shader: t.slice(8).join(` `),
+          };
+        });
+    }
+    textureCount() {
+      return this.x.texture_count();
+    }
+    texture(e, t, n) {
+      let r = this.x.texture_payload(e, +!!t, +!!n);
+      if (!r) return null;
+      let i = this.u32(this.x.scratch_u32_ptr(), r).slice(),
+        a = this.x.tex_bytes_ptr(),
+        o = [];
+      for (let e = 0; e < i[1]; e++) {
+        let [t, n, r, s] = i.subarray(2 + e * 4, 6 + e * 4);
+        o.push({
+          width: t,
+          height: n,
+          data: new Uint8Array(this.x.memory.buffer, a + r, s).slice(),
+        });
+      }
+      return { format: i[0], levels: o };
+    }
+    lightmap() {
+      let e = this.x.lightmap_size(),
+        [t, n] = this.u32(this.x.scratch_u32_ptr(), e);
+      return {
+        width: t,
+        height: n,
+        data: new Uint8Array(
+          this.x.memory.buffer,
+          this.x.lightmap_ptr(),
+          t * n * 4,
+        ).slice(),
+        scale: this.x.lightmap_scale(),
+      };
+    }
+    entities() {
+      let e = this.x.entities_text();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean)
+        .map((e) =>
+          Object.fromEntries(
+            e.split(`	`).map((e) => {
+              let t = e.indexOf(`=`);
+              return [e.slice(0, t), e.slice(t + 1)];
+            }),
+          ),
+        );
+    }
+    pakfile() {
+      let e = this.x.pak_len();
+      return new Uint8Array(this.x.memory.buffer, this.x.pak_ptr(), e).slice();
+    }
+    setSettings(e) {
+      this.x.set_settings(
+        e.tickInterval,
+        e.airAccelerate,
+        e.accelerate,
+        e.friction,
+        e.stopSpeed,
+        e.gravity,
+        e.maxSpeed,
+        +!!e.autohop,
+      );
+      let t = e.physics ?? 1;
+      if (this.x.set_physics_version) {
+        if (this.x.set_physics_version(t) !== 1)
+          throw Error(`this wasm build can't simulate physics v${t}`);
+      } else if (t !== 1)
+        throw Error(
+          `wasm build lacks physics versions (set_physics_version), can't simulate physics v${t}; rebuild with tools/scripts/build-wasm.sh`,
+        );
+    }
+    reset() {
+      this.x.reset();
+    }
+    step(e, t, n, r, i) {
+      let a = this.x.step(e, t, n, r, i);
+      if (a === 4294967295) throw Error(this.lastError());
+      return a;
+    }
+    state() {
+      let e = this.x.player_state(),
+        t = this.f32(this.x.scratch_f32_ptr(), e);
+      return {
+        position: [t[0], t[1], t[2]],
+        velocity: [t[3], t[4], t[5]],
+        viewOffsetZ: t[6],
+        grounded: t[7] !== 0,
+        crouched: t[8] !== 0,
+        tick: t[9],
+        teleportAngles: [t[10], t[11], t[12]],
+        onLadder: e > 13 && t[13] === 6,
+        angleChange: e > 16 ? [t[14], t[15], t[16]] : [0, 0, 0],
+        ...(e > 20 && t[17] === t[17]
+          ? { touchPosition: [t[17], t[18], t[19]], touchCrouched: t[20] !== 0 }
+          : {}),
+        ...(e > 22 ? { weapons: t[21], activeWeapon: t[22] } : {}),
+      };
+    }
+    brushOrigins() {
+      let e = this.x.brush_origins(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = /* @__PURE__ */ new Map();
+      for (let e = 0; e < t.length; e += 7)
+        n.set(t[e], [
+          t[e + 1],
+          t[e + 2],
+          t[e + 3],
+          t[e + 4],
+          t[e + 5],
+          t[e + 6],
+        ]);
+      if (this.x.brush_states) {
+        let e = this.x.brush_states(),
+          t = this.f32(this.x.scratch_f32_ptr(), e);
+        for (let e = 0; e + 3 <= t.length; e += 3) {
+          let r = n.get(t[e]);
+          r && r.length === 6 && n.set(t[e], [...r, t[e + 1]]);
+        }
+      }
+      let r = this.x.prop_transforms?.() ?? 0,
+        i = this.f32(this.x.scratch_f32_ptr(), r);
+      for (let e = 0; e < i.length; e += 7)
+        n.set(1048576 + i[e], [
+          i[e + 1],
+          i[e + 2],
+          i[e + 3],
+          i[e + 4],
+          i[e + 5],
+          i[e + 6],
+        ]);
+      return n;
+    }
+    overlayVolumes() {
+      if (!this.x.overlay_volumes) return null;
+      let e = this.x.overlay_volumes(),
+        t = this.f32(this.x.scratch_f32_ptr(), e).slice(),
+        n = [];
+      for (let e = 0; e + 5 <= t.length; ) {
+        let r = t[e + 4];
+        (n.push({
+          kind: t[e],
+          entity: t[e + 1],
+          model: t[e + 2],
+          flags: t[e + 3],
+          planes: t.subarray(e + 5, e + 5 + r * 4),
+        }),
+          (e += 5 + r * 4));
+      }
+      return n;
+    }
+    overlayStates() {
+      if (!this.x.overlay_states) return null;
+      let e = this.x.overlay_states();
+      return this.u32(this.x.scratch_u32_ptr(), e);
+    }
+    get cx() {
+      return this.x;
+    }
+    give(e) {
+      let t = this.x.alloc(e.length);
+      return (
+        new Uint8Array(this.x.memory.buffer, t, e.length).set(e),
+        [t, e.length]
+      );
+    }
+    giveStr(e) {
+      return this.give(s.encode(e));
+    }
+    hasContentApi() {
+      return typeof this.cx.content_resolve == `function`;
+    }
+    contentMountVpk(e, t) {
+      let n = this.cx.content_mount_vpk(...this.giveStr(e), ...this.give(t));
+      if (!n) throw Error(this.lastError());
+      return n;
+    }
+    contentMountListing(e, t) {
+      return this.cx.content_mount_listing(
+        ...this.giveStr(e),
+        ...this.giveStr(
+          t.join(`
+`),
+        ),
+      );
+    }
+    contentUnmountAll() {
+      this.cx.content_unmount_all();
+    }
+    contentAddFile(e, t) {
+      this.cx.content_add_file(...this.giveStr(e), ...this.give(t));
+    }
+    contentFile(e) {
+      let t = this.cx.content_file(...this.giveStr(e));
+      return t
+        ? new Uint8Array(
+            this.x.memory.buffer,
+            this.x.tex_bytes_ptr(),
+            t,
+          ).slice()
+        : null;
+    }
+    contentProvide(e, t) {
+      return this.cx.content_provide(...this.giveStr(e), ...this.give(t)) === 1;
+    }
+    contentMaterialOverrides(e) {
+      if (typeof this.cx.content_material_overrides != `function`) return 0;
+      let t = Object.entries(e).map(([e, t]) => `${e}\t${t}`).join(`
+`);
+      return this.cx.content_material_overrides(...this.giveStr(t));
+    }
+    contentResolve(e = []) {
+      return this.requests(
+        this.cx.content_resolve(
+          ...this.giveStr(
+            e.join(`
+`),
+          ),
+        ),
+      );
+    }
+    requests(e) {
+      return e
+        ? this.str(this.x.scratch_str_ptr(), e)
+            .split(
+              `
+`,
+            )
+            .filter(Boolean)
+            .map((e) => {
+              let [t, n, r, i, a] = e.split(`	`);
+              return {
+                path: t,
+                mount: n,
+                archive: Number(r),
+                offset: Number(i),
+                length: Number(a),
+              };
+            })
+        : [];
+    }
+    lines(e) {
+      return e
+        ? this.str(this.x.scratch_str_ptr(), e)
+            .split(
+              `
+`,
+            )
+            .filter(Boolean)
+        : [];
+    }
+    contentRead(e) {
+      return this.cx.content_read(...this.giveStr(e))
+        ? new Uint8Array(
+            this.x.memory.buffer,
+            this.x.tex_bytes_ptr(),
+            this.cx.tex_bytes_len(),
+          ).slice()
+        : null;
+    }
+    contentPending() {
+      return this.requests(this.cx.content_pending());
+    }
+    contentList(e) {
+      return this.lines(this.cx.content_list(...this.giveStr(e)));
+    }
+    modelMaterials(e) {
+      return this.lines(this.cx.model_materials(...this.giveStr(e)));
+    }
+    propsLoad(e) {
+      return this.lines(this.cx.props_load(...this.give(e)));
+    }
+    propsBuild() {
+      return this.lines(this.cx.props_build());
+    }
+    propsMesh() {
+      let e = this.cx.props_info(),
+        [t, n, r, i, a] = this.u32(this.x.scratch_u32_ptr(), e).slice(),
+        o = this.f32(this.cx.props_vertices_ptr(), i).slice(),
+        s = this.u32(this.cx.props_indices_ptr(), a).slice(),
+        c = this.cx.props_groups(),
+        l = this.u32(this.x.scratch_u32_ptr(), c).slice(),
+        u = [];
+      for (let e = 0; e < l.length; e += 3)
+        u.push({ material: l[e], firstIndex: l[e + 1], indexCount: l[e + 2] });
+      if (typeof this.cx.props_group_sky3d == `function`) {
+        let e = this.cx.props_group_sky3d(),
+          t = this.u32(this.x.scratch_u32_ptr(), e);
+        e === u.length && u.forEach((e, n) => (e.sky3d = t[n] !== 0));
+      }
+      let d =
+          typeof this.cx.props_dynamic_groups == `function`
+            ? this.cx.props_dynamic_groups()
+            : 0,
+        f = this.u32(this.x.scratch_u32_ptr(), d).slice(),
+        p = [];
+      for (let e = 0; e < f.length; e += 4)
+        p.push({
+          entity: f[e],
+          material: f[e + 1],
+          firstIndex: f[e + 2],
+          indexCount: f[e + 3],
+        });
+      return {
+        vertices: o,
+        indices: s,
+        groups: u,
+        dynamicGroups: p,
+        instances: t,
+        models: n,
+        missingModels: r,
+      };
+    }
+    materialWater() {
+      if (typeof this.cx.material_water != `function`) return [];
+      let e = this.cx.material_water(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = [];
+      for (let e = 0; e < t.length; e += 4)
+        n.push({
+          fogStart: t[e],
+          fogEnd: t[e + 1],
+          aboveWater: t[e + 2] !== 0,
+        });
+      return n;
+    }
+    waterVolumes() {
+      if (typeof this.cx.water_volumes != `function`) return [];
+      let e = this.cx.water_volumes(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = [];
+      for (let e = 0; e + 6 <= t.length; e += 6)
+        n.push(Array.from(t.subarray(e, e + 6)));
+      return n;
+    }
+    texturePaths() {
+      let e = this.cx.texture_paths();
+      return e
+        ? this.str(this.x.scratch_str_ptr(), e).split(`
+`)
+        : [];
+    }
+    materialExtras() {
+      if (typeof this.cx.material_extras != `function`) return [];
+      let e = this.cx.material_extras(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = [];
+      for (let e = 0; e < t.length; e += 4)
+        n.push({
+          texture2: t[e],
+          detail: t[e + 1],
+          detailScale: t[e + 2],
+          detailBlend: t[e + 3],
+        });
+      return n;
+    }
+    meshBlend() {
+      return typeof this.cx.mesh_blend_ptr == `function`
+        ? this.f32(this.cx.mesh_blend_ptr(), this.cx.mesh_blend_len()).slice()
+        : null;
+    }
+    hasStudioApi() {
+      return typeof this.cx.studio_load == `function`;
+    }
+    studioLoad(e) {
+      return this.cx.studio_load(...this.giveStr(e));
+    }
+    studioInfo(e) {
+      let t = this.cx.studio_info(e);
+      return this.str(this.x.scratch_str_ptr(), t);
+    }
+    studioVertices(e) {
+      let t = this.cx.studio_vertices(e);
+      return this.f32(this.x.scratch_f32_ptr(), t).slice();
+    }
+    studioIndices(e) {
+      let t = this.cx.studio_indices(e);
+      return this.u32(this.x.scratch_u32_ptr(), t).slice();
+    }
+    studioAnim(e, t) {
+      let n = this.cx.studio_anim(e, t);
+      return this.f32(this.x.scratch_f32_ptr(), n).slice();
+    }
+    texturePath(e, t, n) {
+      let r = this.cx.texture_payload_path(...this.giveStr(e), +!!t, +!!n);
+      if (!r) return null;
+      let i = this.u32(this.x.scratch_u32_ptr(), r).slice(),
+        a = this.x.tex_bytes_ptr(),
+        o = [];
+      for (let e = 0; e < i[1]; e++) {
+        let [t, n, r, s] = i.subarray(2 + e * 4, 6 + e * 4);
+        o.push({
+          width: t,
+          height: n,
+          data: new Uint8Array(this.x.memory.buffer, a + r, s).slice(),
+        });
+      }
+      return { format: i[0], levels: o };
+    }
+  };
+  let s = new TextEncoder(),
+    c = (e) => e.x,
+    l = /* @__PURE__ */ new WeakMap();
+  function u(e, t, n, r, i) {
+    let a = c(e);
+    if (!a.set_position)
+      throw Error(
+        `wasm build lacks set_position export; rebuild with tools/scripts/build-wasm.sh`,
+      );
+    (a.set_position(t, n, r, i), l.delete(e));
+  }
+  function d(e, t, n) {
+    let r = c(e);
+    if (!r.set_restart_names || !r.alloc)
+      throw Error(
+        `wasm build lacks set_restart_names export; rebuild with tools/scripts/build-wasm.sh`,
+      );
+    let i = new TextEncoder().encode(t),
+      a = new TextEncoder().encode(n),
+      o = r.alloc(i.length + a.length),
+      s = new Uint8Array(r.memory.buffer, o, i.length + a.length);
+    (s.set(i, 0),
+      s.set(a, i.length),
+      r.set_restart_names(o, i.length, a.length),
+      l.set(e, { targetname: t, classname: n }));
+  }
+  function f(e, t) {
+    (u(e, t.position[0], t.position[1], t.position[2], t.yaw),
+      (t.targetname || t.classname) &&
+        d(e, t.targetname ?? ``, t.classname ?? ``));
+  }
+  function p(e) {
+    let t = c(e);
+    if (!t.restart_point) return null;
+    let n = t.restart_point();
+    if (n < 4) return null;
+    let r = new Float32Array(t.memory.buffer, t.scratch_f32_ptr(), n),
+      i = l.get(e),
+      a = { position: [r[0], r[1], r[2]], yaw: r[3] };
+    return (
+      i?.targetname && (a.targetname = i.targetname),
+      i?.classname && (a.classname = i.classname),
+      a
+    );
+  }
+  let m =
+      /* @__PURE__ */ `.knife.glock.usp.p228.deagle.elite.fiveseven.m3.xm1014.mac10.tmp.mp5navy.ump45.p90.galil.famas.ak47.m4a1.sg552.aug.scout.awp.g3sg1.sg550.m249`.split(
+        `.`,
+      ),
+    h = (e) => e.track ?? 0;
+  function g(e, t, n) {
+    let r = t ? 45 : 62;
+    return (
+      e[0] - 16 <= n.maxs[0] &&
+      e[0] + 16 >= n.mins[0] &&
+      e[1] - 16 <= n.maxs[1] &&
+      e[1] + 16 >= n.mins[1] &&
+      e[2] <= n.maxs[2] &&
+      e[2] + r >= n.mins[2]
+    );
+  }
+  function _(e, t, n, r, i) {
+    let a = null;
+    for (let o of n)
+      o.kind !== r ||
+        (i !== void 0 && h(o) !== i) ||
+        !g(e, t, o) ||
+        ((!a || h(o) < h(a)) && (a = o));
+    return a;
+  }
+  function ee(e, t) {
+    return new Set(
+      e
+        .filter(
+          (e) => (e.kind === `stage` || e.kind === `checkpoint`) && h(e) === t,
+        )
+        .map((e) => e.index ?? 0),
+    ).size;
+  }
+  function v(e, t) {
+    return (
+      e.length === t.length &&
+      e.every(
+        (e, n) =>
+          e.kind === t[n].kind &&
+          h(e) === h(t[n]) &&
+          (e.index ?? 0) === (t[n].index ?? 0) &&
+          e.mins.every((e, r) => e === t[n].mins[r]) &&
+          e.maxs.every((e, r) => e === t[n].maxs[r]),
+      )
+    );
+  }
+  let te = (e) => Number.isInteger(e) && e >= 1 && e <= 2,
+    y = { prespeedCap: 290, strafeKeys: `ad`, rules: 2 };
+  var b = class {
+    zones;
+    tickInterval;
+    options;
+    status = `idle`;
+    track = 0;
+    startTick = 0;
+    endTick = 0;
+    lastTick = 0;
+    jumps = 0;
+    strafes = 0;
+    syncGood = 0;
+    syncTotal = 0;
+    splits = [];
+    inStart = !1;
+    wasInStart = !1;
+    armed = !1;
+    pendingStart = 0;
+    groundSince = 0;
+    wasOnGround = !1;
+    lastSide = 0;
+    prevYaw = NaN;
+    constructor(e, t, n = y) {
+      ((this.zones = e), (this.tickInterval = t), (this.options = n));
+    }
+    get rules() {
+      return this.options.rules ?? 2;
+    }
+    reset() {
+      ((this.status = `idle`),
+        (this.track = 0),
+        (this.startTick = this.endTick = this.lastTick = 0),
+        (this.wasInStart = this.inStart = this.armed = !1),
+        (this.pendingStart = this.groundSince = 0),
+        (this.wasOnGround = !1),
+        (this.prevYaw = NaN),
+        this.clearStats());
+    }
+    clearStats() {
+      ((this.jumps = this.strafes = this.syncGood = this.syncTotal = 0),
+        (this.lastSide = 0),
+        (this.splits = []));
+    }
+    get started() {
+      return this.status === `running` || this.pendingStart !== 0;
+    }
+    stop() {
+      ((this.status = `idle`),
+        (this.startTick = this.endTick = 0),
+        (this.wasInStart = this.inStart = this.armed = !1),
+        (this.pendingStart = this.groundSince = 0),
+        (this.wasOnGround = !1),
+        (this.prevYaw = NaN),
+        this.clearStats());
+    }
+    splitTotal() {
+      return ee(this.zones, this.track);
+    }
+    ticks(e = this.lastTick) {
+      return this.status === `running`
+        ? e - this.startTick
+        : this.status === `finished`
+          ? this.endTick - this.startTick
+          : 0;
+    }
+    time(e = this.lastTick) {
+      return this.ticks(e) * this.tickInterval;
+    }
+    syncPercent() {
+      return this.syncTotal ? (100 * this.syncGood) / this.syncTotal : 0;
+    }
+    update(e, t, n) {
+      let r = {};
+      this.lastTick = n.tick;
+      let i =
+          this.status === `running` &&
+          !!n.touchPosition &&
+          !(t & 8) &&
+          _(
+            n.touchPosition,
+            n.touchCrouched ?? n.crouched,
+            this.zones,
+            `end`,
+            this.track,
+          ) !== null,
+        a =
+          _(n.position, n.crouched, this.zones, `start`, this.track) ??
+          _(n.position, n.crouched, this.zones, `start`),
+        o = a !== null;
+      if (
+        (this.rules === 1
+          ? a && !i
+            ? (this.status !== `idle` && (r.restarted = !0),
+              (this.status = `idle`),
+              (this.track = h(a)),
+              this.clearStats())
+            : this.status === `idle` &&
+              this.wasInStart &&
+              ((this.status = `running`),
+              (this.startTick = n.tick),
+              this.clearStats(),
+              (r.started = !0),
+              this.capPrespeed(n, r))
+          : this.validStart(n) && a !== null && !i
+            ? (this.status !== `idle` && (r.restarted = !0),
+              (this.status = `idle`),
+              (this.track = h(a)),
+              this.clearStats(),
+              (this.pendingStart = 0),
+              (this.armed = !0))
+            : (this.status === `idle` &&
+                this.armed &&
+                ((this.pendingStart = n.tick), this.capPrespeed(n, r)),
+              (this.armed = !1),
+              this.status === `idle` &&
+                this.pendingStart &&
+                !o &&
+                ((this.status = `running`),
+                (this.startTick = this.pendingStart),
+                (this.pendingStart = 0),
+                (r.started = !0))),
+        (this.wasInStart = this.inStart = o),
+        this.status === `running` || this.pendingStart)
+      ) {
+        t & 2 && this.jumps++;
+        let r = this.options.strafeKeys ?? `ad`,
+          i =
+            r === `ad`
+              ? e.side > 0
+                ? 1
+                : e.side < 0
+                  ? -1
+                  : 0
+              : e.forward > 0
+                ? 1
+                : e.forward < 0
+                  ? -1
+                  : 0;
+        if (
+          (r === `w`
+            ? (i > 0 && this.lastSide <= 0 && this.strafes++,
+              (this.lastSide = i))
+            : (i !== 0 && i !== this.lastSide && this.strafes++,
+              i !== 0 && (this.lastSide = i)),
+          !n.grounded && this.prevYaw === this.prevYaw)
+        ) {
+          let t = e.yaw - this.prevYaw;
+          if ((t > 180 ? (t -= 360) : t < -180 && (t += 360), t !== 0)) {
+            this.syncTotal++;
+            let r = (e.yaw * Math.PI) / 180,
+              i = Math.cos(r),
+              a = Math.sin(r),
+              o = e.forward * i + e.side * a,
+              s = e.forward * a - e.side * i,
+              c = n.velocity[0] * s - n.velocity[1] * o;
+            ((t > 0 && c > 0) || (t < 0 && c < 0)) && this.syncGood++;
+          }
+        }
+      }
+      if (this.status === `running`) {
+        let e = this.splits.length
+          ? this.splits[this.splits.length - 1].index
+          : -1;
+        for (let t of this.zones) {
+          if (
+            (t.kind !== `stage` && t.kind !== `checkpoint`) ||
+            h(t) !== this.track ||
+            (t.index ?? 0) <= e ||
+            !g(n.position, n.crouched, t)
+          )
+            continue;
+          let i = {
+            index: t.index ?? 0,
+            kind: t.kind,
+            ticks: n.tick - this.startTick,
+          };
+          (this.splits.push(i), (r.split = i));
+          break;
+        }
+        (i || _(n.position, n.crouched, this.zones, `end`, this.track)) &&
+          ((this.status = `finished`),
+          (this.endTick = n.tick),
+          (r.finished = !0));
+      }
+      return ((this.prevYaw = e.yaw), r);
+    }
+    validStart(e) {
+      let t = e.grounded && !e.onLadder,
+        [n, r, i] = e.velocity,
+        a = n * n + r * r;
+      if (
+        (t
+          ? !this.wasOnGround || this.groundSince === 0
+            ? (this.groundSince = e.tick)
+            : this.groundSince > 0 &&
+              a + i * i <= 1e3 &&
+              (this.groundSince = -1)
+          : (this.groundSince = 0),
+        (this.wasOnGround = t),
+        !t)
+      )
+        return !1;
+      let o = Math.sqrt(a),
+        s = this.options.prespeedCap;
+      return s !== null && o > s
+        ? !1
+        : o <= 50 ||
+            this.groundSince < 0 ||
+            e.tick - this.groundSince >= Math.round(0.5 / this.tickInterval);
+    }
+    capPrespeed(e, t) {
+      let n = this.options.prespeedCap;
+      if (n === null) return;
+      let r = e.velocity[0],
+        i = e.velocity[1],
+        a = Math.sqrt(r * r + i * i);
+      if (a > n) {
+        let o = n / a;
+        t.clampVelocity = [
+          Math.fround(r * o),
+          Math.fround(i * o),
+          e.velocity[2],
+        ];
+      }
+    }
+  };
+  function x(e, t) {
+    if (e !== e || !Number.isFinite(e) || !Number.isFinite(t)) return 0;
+    let n = (t - e) % 360;
+    return (n > 180 ? (n -= 360) : n < -180 && (n += 360), n);
+  }
+  function S(e) {
+    return e > 0 ? -1 : +(e < 0);
+  }
+  let C = 1024,
+    w = { w: !1, a: !1, s: !1, d: !1 },
+    T = [
+      {
+        id: `autohop`,
+        name: `Normal`,
+        short: `NM`,
+        brief: `Normal`,
+        autohop: !0,
+        block: w,
+        hsw: !1,
+        rule: `Autohop: hold jump. Every key works.`,
+      },
+      {
+        id: `legit`,
+        name: `Legit Scroll`,
+        short: `SCR`,
+        brief: `Scroll`,
+        autohop: !1,
+        block: w,
+        hsw: !1,
+        rule: `No autohop: press (scroll) jump for every hop.`,
+      },
+      {
+        id: `wonly`,
+        name: `W-Only`,
+        short: `W`,
+        brief: `W-Only`,
+        autohop: !0,
+        block: { w: !1, a: !0, s: !0, d: !0 },
+        hsw: !1,
+        rule: `Only W in the air. A, S and D are blocked.`,
+      },
+      {
+        id: `sideways`,
+        name: `Sideways`,
+        short: `SW`,
+        brief: `Sideways`,
+        autohop: !0,
+        block: { w: !1, a: !0, s: !1, d: !0 },
+        hsw: !1,
+        rule: `Only W and S in the air: face sideways and strafe with W/S.`,
+      },
+      {
+        id: `hsw`,
+        name: `Half-Sideways`,
+        short: `HSW`,
+        brief: `Half-SW`,
+        autohop: !0,
+        block: { w: !1, a: !1, s: !0, d: !1 },
+        hsw: !0,
+        rule: `Hold W plus A or D together in the air. S, pure W and pure A/D do nothing.`,
+      },
+      {
+        id: `autostrafe`,
+        name: `Auto-strafe`,
+        short: `AS`,
+        brief: `Auto-strafe`,
+        autohop: !0,
+        block: w,
+        hsw: !1,
+        auto: !0,
+        rule: `Move the mouse in the air and the game presses A/D for you. Hold A, D or S to take over.`,
+      },
+    ],
+    E = new Map(T.map((e) => [e.id, e]));
+  function D(e) {
+    return E.get(e) ?? null;
+  }
+  function O(e) {
+    return { ...r, autohop: E.get(e)?.autohop ?? !0 };
+  }
+  function k(e) {
+    return e.hsw || e.block.w || e.block.a || e.block.s || e.block.d;
+  }
+  function A(e, t, n) {
+    if (!e || !k(e) || n.grounded || n.onLadder) return t;
+    let r = t.forward,
+      i = t.side,
+      a = t.buttons,
+      o = e.block;
+    if (
+      (o.w && (a & 8 || r > 0) && ((r = 0), (a &= -9)),
+      o.a && (a & 512 || i < 0) && ((i = 0), (a &= -513)),
+      o.s && (a & 16 || r < 0) && ((r = 0), (a &= -17)),
+      o.d && (a & C || i > 0) && ((i = 0), (a &= -1025)),
+      e.hsw)
+    ) {
+      let e = r > 0,
+        t = i !== 0;
+      if (
+        (e && !t && ((r = 0), (a &= -25)),
+        t && !e && ((i = 0), (a &= -1537)),
+        r !== 0 && i !== 0 && r !== Math.abs(i))
+      ) {
+        let e = Math.min(r, Math.abs(i));
+        ((r = e), (i = i < 0 ? -e : e));
+      }
+    }
+    return r === t.forward && i === t.side && a === t.buttons
+      ? t
+      : { forward: r, side: i, yaw: t.yaw, pitch: t.pitch, buttons: a };
+  }
+  function j(e) {
+    return e?.id === `wonly` ? `w` : e?.id === `sideways` ? `ws` : `ad`;
+  }
+  var M = class {
+    style;
+    fromLadder = !1;
+    prevYaw = NaN;
+    autoDir = 0;
+    still = 0;
+    groundTicks = 2;
+    sStops;
+    keys;
+    constructor(e, t = 1) {
+      ((this.style = e), (this.sStops = t >= 5), (this.keys = t >= 8));
+    }
+    reset() {
+      ((this.fromLadder = !1),
+        (this.prevYaw = NaN),
+        (this.autoDir = 0),
+        (this.still = 0),
+        (this.groundTicks = 2));
+    }
+    apply(e, t) {
+      return (
+        t.onLadder
+          ? (this.fromLadder = !0)
+          : t.grounded && (this.fromLadder = !1),
+        this.style?.auto
+          ? this.assist(e, t)
+          : A(this.style, e, {
+              grounded: t.grounded,
+              onLadder: t.onLadder || this.fromLadder,
+            })
+      );
+    }
+    assist(e, t) {
+      let n = x(this.prevYaw, e.yaw);
+      this.prevYaw = e.yaw;
+      let r = S(n);
+      if (
+        (r ? ((this.autoDir = r), (this.still = 0)) : this.still++,
+        (this.groundTicks = t.grounded ? Math.min(this.groundTicks + 1, 2) : 0),
+        t.onLadder ||
+          this.fromLadder ||
+          this.groundTicks > 1 ||
+          (this.sStops && e.forward < 0) ||
+          (this.keys && e.side !== 0))
+      )
+        return e;
+      let i = this.keys && e.forward > 0 ? e.forward : 0,
+        a;
+      ((a = r
+        ? r * 450
+        : e.side === 0
+          ? this.still <= 5
+            ? this.autoDir * 450
+            : 0
+          : e.side),
+        (a += 0));
+      let o = e.buttons & -1561;
+      return (
+        i > 0 && (o |= 8),
+        a > 0 ? (o |= C) : a < 0 && (o |= 512),
+        i === e.forward && a === e.side && o === e.buttons
+          ? e
+          : { forward: i, side: a, yaw: e.yaw, pitch: e.pitch, buttons: o }
+      );
+    }
+  };
+  let N = (e, t) => [Math.min(e, t), t],
+    P = {
+      1: void 0,
+      2: void 0,
+      3: `Climber`,
+      4: `Daredevil`,
+      5: `Untouchable`,
+      6: `Ascended`,
+    },
+    F = { 1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 3 },
+    ne = [
+      { map: `bhop_eazy`, seconds: 60, name: `Eazy Does It`, ring: 0 },
+      {
+        map: `bhop_eazy`,
+        seconds: 30,
+        name: `Eazy Money`,
+        ring: 2,
+        title: `Eazy`,
+      },
+    ],
+    re = `discord_link`,
+    I = `discord_member`,
+    L = `discord_booster`,
+    R = `supporter`,
+    ie = (e) =>
+      e >= 60
+        ? `${Math.floor(e / 60)}:${String(e % 60).padStart(2, `0`)}`
+        : `${e}s`,
+    z = [
+      {
+        id: `first_finish`,
+        name: `First Hop`,
+        desc: `Finish a run on any map`,
+        group: `start`,
+        icon: `flag`,
+        ring: 0,
+        title: `Hopper`,
+        progress: (e) => N(e.runs, 1),
+      },
+      ...[1, 2, 3, 4, 5, 6].map((e) => ({
+        id: `tier_${e}`,
+        name: `First T${e}`,
+        desc: `Finish the main track of a tier ${e} map`,
+        group: `tier`,
+        icon: `t${e}`,
+        ring: F[e],
+        title: P[e],
+        progress: (t) => N(+!!t.clearsByTier[e], 1),
+      })),
+      ...[1, 2, 3, 4, 5, 6].map((e) => ({
+        id: `sweep_${e}`,
+        name: `T${e} Sweep`,
+        desc: `Finish every ranked tier ${e} map`,
+        group: `sweep`,
+        icon: `t${e}`,
+        ring: Math.min(3, F[e] + 1),
+        title: e >= 4 ? `T${e} Sweeper` : void 0,
+        progress: (t) =>
+          t.rankedByTier[e] ? N(t.clearsByTier[e], t.rankedByTier[e]) : [0, 1],
+      })),
+      {
+        id: `maps_10`,
+        name: `Explorer`,
+        desc: `Finish 10 different maps`,
+        group: `maps`,
+        icon: `map`,
+        ring: 0,
+        progress: (e) => N(e.maps, 10),
+      },
+      {
+        id: `maps_25`,
+        name: `Globetrotter`,
+        desc: `Finish 25 different maps`,
+        group: `maps`,
+        icon: `map`,
+        ring: 1,
+        title: `Globetrotter`,
+        progress: (e) => N(e.maps, 25),
+      },
+      {
+        id: `maps_100`,
+        name: `Centurion`,
+        desc: `Finish 100 different maps`,
+        group: `maps`,
+        icon: `map`,
+        ring: 3,
+        title: `Centurion`,
+        progress: (e) => N(e.maps, 100),
+      },
+      {
+        id: `pbs_10`,
+        name: `Personal Best`,
+        desc: `Hold 10 personal bests`,
+        group: `records`,
+        icon: `pb`,
+        ring: 0,
+        progress: (e) => N(e.pbs, 10),
+      },
+      {
+        id: `pbs_50`,
+        name: `Best of the Best`,
+        desc: `Hold 50 personal bests`,
+        group: `records`,
+        icon: `pb`,
+        ring: 2,
+        progress: (e) => N(e.pbs, 50),
+      },
+      {
+        id: `top10_1`,
+        name: `Top 10`,
+        desc: `Hold a top-10 place on any board`,
+        group: `records`,
+        icon: `podium`,
+        ring: 1,
+        progress: (e) => N(e.top10s, 1),
+      },
+      {
+        id: `top10_10`,
+        name: `Regular Contender`,
+        desc: `Hold 10 top-10 places at once`,
+        group: `records`,
+        icon: `podium`,
+        ring: 2,
+        title: `Contender`,
+        progress: (e) => N(e.top10s, 10),
+      },
+      {
+        id: `wr_1`,
+        name: `World Record`,
+        desc: `Hold a world record`,
+        group: `records`,
+        icon: `crown`,
+        ring: 2,
+        title: `Record Holder`,
+        progress: (e) => N(e.wrs, 1),
+      },
+      {
+        id: `wr_5`,
+        name: `Record Collector`,
+        desc: `Hold 5 world records at once`,
+        group: `records`,
+        icon: `crown`,
+        ring: 3,
+        title: `Record Collector`,
+        progress: (e) => N(e.wrs, 5),
+      },
+      {
+        id: `bonus_1`,
+        name: `Bonus Round`,
+        desc: `Finish a bonus track`,
+        group: `maps`,
+        icon: `bonus`,
+        ring: 0,
+        progress: (e) => N(e.bonuses, 1),
+      },
+      {
+        id: `bonus_10`,
+        name: `Bonus Hunter`,
+        desc: `Finish 10 bonus tracks`,
+        group: `maps`,
+        icon: `bonus`,
+        ring: 1,
+        title: `Bonus Hunter`,
+        progress: (e) => N(e.bonuses, 10),
+      },
+      {
+        id: `style_legit`,
+        name: `Scroll Wheel`,
+        desc: `Finish a map in Legit Scroll`,
+        group: `style`,
+        icon: `scroll`,
+        ring: 1,
+        progress: (e) => N(e.styleMaps.legit ?? 0, 1),
+      },
+      {
+        id: `style_wonly`,
+        name: `W Only`,
+        desc: `Finish a map in W-Only`,
+        group: `style`,
+        icon: `w`,
+        ring: 1,
+        progress: (e) => N(e.styleMaps.wonly ?? 0, 1),
+      },
+      {
+        id: `style_sideways`,
+        name: `Sideways`,
+        desc: `Finish a map in Sideways`,
+        group: `style`,
+        icon: `sw`,
+        ring: 1,
+        progress: (e) => N(e.styleMaps.sideways ?? 0, 1),
+      },
+      {
+        id: `style_hsw`,
+        name: `Half and Half`,
+        desc: `Finish a map in Half-Sideways`,
+        group: `style`,
+        icon: `hsw`,
+        ring: 1,
+        progress: (e) => N(e.styleMaps.hsw ?? 0, 1),
+      },
+      {
+        id: `style_all`,
+        name: `Stylist`,
+        desc: `Finish a map in every style`,
+        group: `style`,
+        icon: `styles`,
+        ring: 2,
+        title: `Stylist`,
+        progress: (e) =>
+          N(
+            [`autohop`, `legit`, `wonly`, `sideways`, `hsw`].filter(
+              (t) => (e.styleMaps[t] ?? 0) > 0,
+            ).length,
+            5,
+          ),
+      },
+      {
+        id: `style_t4`,
+        name: `Off the Beaten Path`,
+        desc: `Finish a T4+ map in a style other than Normal`,
+        group: `style`,
+        icon: `styles`,
+        ring: 3,
+        title: `Stylish`,
+        progress: (e) => N(+(e.altStyleMaxTier >= 4), 1),
+      },
+      {
+        id: `scroll_10`,
+        name: `Wheel Warrior`,
+        desc: `Finish 10 maps in Legit Scroll`,
+        group: `style`,
+        icon: `scroll`,
+        ring: 2,
+        title: `Scroller`,
+        progress: (e) => N(e.styleMaps.legit ?? 0, 10),
+      },
+      ...ne.map((e) => ({
+        id: `time_${e.map}_${e.seconds}`,
+        name: e.name,
+        desc: `Finish ${e.map} under ${ie(e.seconds)} (Normal)`,
+        group: `time`,
+        icon: `clock`,
+        ring: e.ring,
+        title: e.title,
+        progress: (t) =>
+          N(
+            +(
+              t.bestNormal[e.map] !== void 0 && t.bestNormal[e.map] < e.seconds
+            ),
+            1,
+          ),
+      })),
+      {
+        id: `sync_90`,
+        name: `In Sync`,
+        desc: `Finish a T2+ map with 90% sync or better`,
+        group: `time`,
+        icon: `sync`,
+        ring: 1,
+        progress: (e) => N(+(e.bestSync >= 90), 1),
+      },
+      {
+        id: `jumps_1k`,
+        name: `Bunny`,
+        desc: `1,000 jumps in finished runs`,
+        group: `lifetime`,
+        icon: `jump`,
+        ring: 0,
+        progress: (e) => N(e.jumps, 1e3),
+      },
+      {
+        id: `jumps_10k`,
+        name: `Jackrabbit`,
+        desc: `10,000 jumps in finished runs`,
+        group: `lifetime`,
+        icon: `jump`,
+        ring: 1,
+        progress: (e) => N(e.jumps, 1e4),
+      },
+      {
+        id: `jumps_100k`,
+        name: `Hare Raiser`,
+        desc: `100,000 jumps in finished runs`,
+        group: `lifetime`,
+        icon: `jump`,
+        ring: 3,
+        title: `Hare Raiser`,
+        progress: (e) => N(e.jumps, 1e5),
+      },
+      {
+        id: `clock_1h`,
+        name: `Clocked In`,
+        desc: `Play for one hour`,
+        group: `lifetime`,
+        icon: `clock`,
+        ring: 0,
+        progress: (e) => N(Math.floor(e.playtime), 3600),
+      },
+      {
+        id: `clock_10h`,
+        name: `Overtime`,
+        desc: `Play for ten hours`,
+        group: `lifetime`,
+        icon: `clock`,
+        ring: 2,
+        title: `Workhorse`,
+        progress: (e) => N(Math.floor(e.playtime), 36e3),
+      },
+      {
+        id: `level_10`,
+        name: `Level 10`,
+        desc: `Reach level 10`,
+        group: `level`,
+        icon: `level`,
+        ring: 0,
+        progress: (e) => N(e.level, 10),
+      },
+      {
+        id: `level_25`,
+        name: `Level 25`,
+        desc: `Reach level 25`,
+        group: `level`,
+        icon: `level`,
+        ring: 2,
+        title: `Veteran`,
+        progress: (e) => N(e.level, 25),
+      },
+      {
+        id: `level_50`,
+        name: `Level 50`,
+        desc: `Reach level 50`,
+        group: `level`,
+        icon: `level`,
+        ring: 3,
+        title: `Legend of the Hop`,
+        progress: (e) => N(e.level, 50),
+      },
+      {
+        id: `play_with_owner`,
+        name: `Play with the Owner`,
+        desc: `Be on a multiplayer server at the same time as Huddled, who made bunnyhop.lol, for 30 seconds`,
+        group: `social`,
+        icon: `together`,
+        ring: 2,
+        title: `Hopped with Huddled`,
+        event: !0,
+        progress: () => [0, 1],
+      },
+      {
+        id: re,
+        name: `Linked Up`,
+        desc: `Link a Discord account to your bunnyhop.lol account`,
+        goal: `Link Discord`,
+        group: `social`,
+        icon: `link`,
+        ring: 0,
+        event: !0,
+        progress: () => [0, 1],
+      },
+      {
+        id: I,
+        name: `In the Burrow`,
+        desc: `Join the bunnyhop.lol Discord server. It stays yours if you leave`,
+        goal: `Join the Discord server`,
+        group: `social`,
+        icon: `burrow`,
+        ring: 1,
+        event: !0,
+        availability: `discord_server`,
+        progress: () => [0, 1],
+      },
+      {
+        id: L,
+        name: `Burrow Booster`,
+        desc: `Boost the bunnyhop.lol Discord server. The Afterglow set stays yours after the boost ends`,
+        goal: `Boost the Discord server`,
+        group: `social`,
+        icon: `spark`,
+        ring: 3,
+        event: !0,
+        availability: `discord_server`,
+        progress: () => [0, 1],
+      },
+      {
+        id: `early_hopper`,
+        name: `Early Hopper`,
+        desc: `Finished a run in the early alpha, before v0.0.8`,
+        goal: `Played before v0.0.8`,
+        group: `social`,
+        icon: `sprout`,
+        ring: 2,
+        title: `Early Hopper`,
+        event: !0,
+        availability: `closed`,
+        progress: () => [0, 1],
+      },
+      {
+        id: R,
+        name: `Supporter`,
+        desc: `Supported bunnyhop.lol with a donation. Every supporter set is yours to keep`,
+        goal: `Supporter item`,
+        group: `social`,
+        icon: `heart`,
+        ring: 3,
+        title: `Supporter`,
+        event: !0,
+        availability: `support`,
+        progress: () => [0, 1],
+      },
+    ],
+    ae = `wings`,
+    oe = `bhop_lol_hermes`;
+  (z.push({
+    id: ae,
+    name: `Winged Feet`,
+    desc: `Clear ${oe}`,
+    goal: `Clear ${oe}`,
+    group: `records`,
+    icon: `wing`,
+    ring: 3,
+    hidden: !0,
+    event: !0,
+    progress: () => [0, 1],
+  }),
+    new Map(z.map((e) => [e.id, e])));
+  let B = { kind: `free` },
+    V = (e) => ({ kind: `level`, level: e }),
+    H = (e) => ({ kind: `achievement`, id: e }),
+    U = (e, t = `all`) => ({ kind: `rank`, max: e, scope: t }),
+    W = (e) => ({ kind: `role`, role: e }),
+    G = [
+      {
+        id: `bg-night`,
+        slot: `background`,
+        name: `Night`,
+        unlock: B,
+        color: `#151a26`,
+      },
+      {
+        id: `bg-dusk`,
+        slot: `background`,
+        name: `Dusk`,
+        unlock: V(3),
+        color: `#3a2546`,
+      },
+      {
+        id: `bg-grid`,
+        slot: `background`,
+        name: `Blueprint`,
+        unlock: V(6),
+        color: `#14304a`,
+      },
+      {
+        id: `bg-meadow`,
+        slot: `background`,
+        name: `Meadow`,
+        unlock: H(`sweep_1`),
+        color: `#1f4a33`,
+      },
+      {
+        id: `bg-arcade`,
+        slot: `background`,
+        name: `Arcade`,
+        unlock: V(12),
+        color: `#2b1450`,
+      },
+      {
+        id: `bg-ember`,
+        slot: `background`,
+        name: `Ember`,
+        unlock: H(`tier_5`),
+        color: `#4a1a14`,
+      },
+      {
+        id: `bg-void`,
+        slot: `background`,
+        name: `Void`,
+        unlock: H(`tier_6`),
+        color: `#1a0f2e`,
+      },
+      {
+        id: `bg-aurora`,
+        slot: `background`,
+        name: `Aurora`,
+        unlock: V(20),
+        color: `#0f3a3a`,
+      },
+      {
+        id: `bg-gold`,
+        slot: `background`,
+        name: `Gilded`,
+        unlock: H(`wr_1`),
+        color: `#4a3a12`,
+      },
+      {
+        id: `bg-prism`,
+        slot: `background`,
+        name: `Prism`,
+        unlock: H(`style_all`),
+        color: `#3a2a5a`,
+      },
+      {
+        id: `bg-geode`,
+        slot: `background`,
+        name: `Geode`,
+        unlock: H(R),
+        color: `#15161f`,
+        rarity: 4,
+      },
+      {
+        id: `bg-highroller`,
+        slot: `background`,
+        name: `High Roller`,
+        unlock: H(R),
+        color: `#0f4a30`,
+        rarity: 4,
+      },
+      {
+        id: `bg-borealis`,
+        slot: `background`,
+        name: `Borealis`,
+        unlock: H(R),
+        color: `#0b1530`,
+        rarity: 4,
+      },
+      {
+        id: `frame-plain`,
+        slot: `frame`,
+        name: `Plain`,
+        unlock: B,
+        color: `#2a3040`,
+      },
+      {
+        id: `frame-steel`,
+        slot: `frame`,
+        name: `Steel`,
+        unlock: V(5),
+        color: `#9aa4b5`,
+      },
+      {
+        id: `frame-mint`,
+        slot: `frame`,
+        name: `Mint`,
+        unlock: H(`sweep_1`),
+        color: `#5ee08a`,
+      },
+      {
+        id: `frame-tiers`,
+        slot: `frame`,
+        name: `Tier Ramp`,
+        unlock: H(`tier_4`),
+        color: `#ff9a3c`,
+      },
+      {
+        id: `frame-ember`,
+        slot: `frame`,
+        name: `Ember`,
+        unlock: H(`tier_5`),
+        color: `#ff5468`,
+      },
+      {
+        id: `frame-violet`,
+        slot: `frame`,
+        name: `Ascended`,
+        unlock: H(`tier_6`),
+        color: `#c477ff`,
+      },
+      {
+        id: `frame-gold`,
+        slot: `frame`,
+        name: `Gold`,
+        unlock: H(`wr_1`),
+        color: `#ffd45e`,
+      },
+      {
+        id: `frame-holo`,
+        slot: `frame`,
+        name: `Holo`,
+        unlock: V(30),
+        color: `#79d2ff`,
+      },
+      {
+        id: `frame-podium`,
+        slot: `frame`,
+        name: `Podium`,
+        unlock: U(3),
+        color: `#e8b931`,
+        rarity: 5,
+      },
+      {
+        id: `frame-reigning`,
+        slot: `frame`,
+        name: `Reigning`,
+        unlock: U(1),
+        color: `#fff2b0`,
+        rarity: 5,
+      },
+      {
+        id: `frame-founder`,
+        slot: `frame`,
+        name: `Founder`,
+        unlock: W(`owner`),
+        color: `#ff7a1a`,
+        rarity: 5,
+      },
+      {
+        id: `frame-geode`,
+        slot: `frame`,
+        name: `Geode`,
+        unlock: H(R),
+        color: `#5ff2df`,
+        rarity: 4,
+      },
+      {
+        id: `frame-highroller`,
+        slot: `frame`,
+        name: `High Roller`,
+        unlock: H(R),
+        color: `#e0b13a`,
+        rarity: 4,
+      },
+      {
+        id: `frame-borealis`,
+        slot: `frame`,
+        name: `Borealis`,
+        unlock: H(R),
+        color: `#3ff0a0`,
+        rarity: 4,
+      },
+      {
+        id: `ghost-gold`,
+        slot: `ghost`,
+        name: `Gold`,
+        unlock: B,
+        color: `#ffc23d`,
+      },
+      {
+        id: `ghost-mint`,
+        slot: `ghost`,
+        name: `Mint`,
+        unlock: V(2),
+        color: `#5ee08a`,
+      },
+      {
+        id: `ghost-cyan`,
+        slot: `ghost`,
+        name: `Cyan`,
+        unlock: V(4),
+        color: `#3fd0c9`,
+      },
+      {
+        id: `ghost-rose`,
+        slot: `ghost`,
+        name: `Rose`,
+        unlock: V(8),
+        color: `#ff7aa8`,
+      },
+      {
+        id: `ghost-ember`,
+        slot: `ghost`,
+        name: `Ember`,
+        unlock: H(`tier_4`),
+        color: `#ff6a3c`,
+      },
+      {
+        id: `ghost-violet`,
+        slot: `ghost`,
+        name: `Violet`,
+        unlock: H(`tier_6`),
+        color: `#c477ff`,
+      },
+      {
+        id: `ghost-white`,
+        slot: `ghost`,
+        name: `Pearl`,
+        unlock: V(15),
+        color: `#f2f5ff`,
+      },
+      {
+        id: `ghost-lime`,
+        slot: `ghost`,
+        name: `Lime`,
+        unlock: H(`style_all`),
+        color: `#c6ff4d`,
+      },
+      {
+        id: `ghost-reigning`,
+        slot: `ghost`,
+        name: `Reigning`,
+        unlock: U(1),
+        color: `#fff2b0`,
+        rarity: 5,
+      },
+      {
+        id: `ghost-founder`,
+        slot: `ghost`,
+        name: `Founder`,
+        unlock: W(`owner`),
+        color: `#3ff0ff`,
+        rarity: 5,
+      },
+      {
+        id: `ghost-geode`,
+        slot: `ghost`,
+        name: `Geode`,
+        unlock: H(R),
+        color: `#5ff2df`,
+        color2: `#8f72ff`,
+        rarity: 4,
+      },
+      {
+        id: `ghost-highroller`,
+        slot: `ghost`,
+        name: `High Roller`,
+        unlock: H(R),
+        color: `#2fbf73`,
+        color2: `#ffcf4a`,
+        rarity: 4,
+      },
+      {
+        id: `ghost-borealis`,
+        slot: `ghost`,
+        name: `Borealis`,
+        unlock: H(R),
+        color: `#4dffb0`,
+        color2: `#a77cff`,
+        rarity: 4,
+      },
+      {
+        id: `trail-gold`,
+        slot: `trail`,
+        name: `Gold`,
+        unlock: B,
+        color: `#ffc23d`,
+      },
+      {
+        id: `trail-sky`,
+        slot: `trail`,
+        name: `Sky`,
+        unlock: V(3),
+        color: `#66b3ff`,
+      },
+      {
+        id: `trail-mint`,
+        slot: `trail`,
+        name: `Mint`,
+        unlock: H(`tier_2`),
+        color: `#5ee08a`,
+      },
+      {
+        id: `trail-rose`,
+        slot: `trail`,
+        name: `Rose`,
+        unlock: V(10),
+        color: `#ff7aa8`,
+      },
+      {
+        id: `trail-ember`,
+        slot: `trail`,
+        name: `Ember`,
+        unlock: H(`tier_5`),
+        color: `#ff5468`,
+      },
+      {
+        id: `trail-violet`,
+        slot: `trail`,
+        name: `Violet`,
+        unlock: H(`jumps_10k`),
+        color: `#c477ff`,
+      },
+      {
+        id: `trail-white`,
+        slot: `trail`,
+        name: `Pearl`,
+        unlock: H(`wr_1`),
+        color: `#f2f5ff`,
+      },
+      {
+        id: `trail-podium`,
+        slot: `trail`,
+        name: `Podium`,
+        unlock: U(3),
+        color: `#e8b931`,
+        rarity: 5,
+      },
+      {
+        id: `trail-reigning`,
+        slot: `trail`,
+        name: `Reigning`,
+        unlock: U(1),
+        color: `#fff2b0`,
+        rarity: 5,
+      },
+      {
+        id: `trail-founder`,
+        slot: `trail`,
+        name: `Founder`,
+        unlock: W(`owner`),
+        color: `#ff7a1a`,
+        rarity: 5,
+      },
+      {
+        id: `trail-afterglow`,
+        slot: `trail`,
+        name: `Afterglow`,
+        unlock: H(L),
+        color: `#f47fff`,
+      },
+      {
+        id: `trail-geode`,
+        slot: `trail`,
+        name: `Geode`,
+        unlock: H(R),
+        color: `#5ff2df`,
+        color2: `#8f72ff`,
+        rarity: 4,
+      },
+      {
+        id: `trail-highroller`,
+        slot: `trail`,
+        name: `High Roller`,
+        unlock: H(R),
+        color: `#ffcf4a`,
+        color2: `#1f9a5c`,
+        rarity: 4,
+      },
+      {
+        id: `trail-borealis`,
+        slot: `trail`,
+        name: `Borealis`,
+        unlock: H(R),
+        color: `#3ff0a0`,
+        color2: `#9a6bff`,
+        rarity: 4,
+      },
+      {
+        id: `outfit-cream`,
+        slot: `outfit`,
+        name: `Cream`,
+        unlock: B,
+        color: `#ece5d8`,
+      },
+      {
+        id: `outfit-midnight`,
+        slot: `outfit`,
+        name: `Midnight`,
+        unlock: B,
+        color: `#262b38`,
+      },
+      {
+        id: `outfit-neon`,
+        slot: `outfit`,
+        name: `Neon`,
+        unlock: B,
+        color: `#7dff4a`,
+      },
+      {
+        id: `outfit-carrot`,
+        slot: `outfit`,
+        name: `Carrot`,
+        unlock: V(3),
+        color: `#ff8a2a`,
+      },
+      {
+        id: `outfit-mint`,
+        slot: `outfit`,
+        name: `Mint`,
+        unlock: H(`tier_2`),
+        color: `#c9f2dc`,
+      },
+      {
+        id: `outfit-sakura`,
+        slot: `outfit`,
+        name: `Sakura`,
+        unlock: V(8),
+        color: `#ffd3e2`,
+      },
+      {
+        id: `outfit-arctic`,
+        slot: `outfit`,
+        name: `Arctic`,
+        unlock: V(15),
+        color: `#f3f7fb`,
+      },
+      {
+        id: `outfit-ember`,
+        slot: `outfit`,
+        name: `Ember`,
+        unlock: H(`tier_5`),
+        color: `#ff5a36`,
+      },
+      {
+        id: `outfit-void`,
+        slot: `outfit`,
+        name: `Void`,
+        unlock: H(`tier_6`),
+        color: `#c477ff`,
+      },
+      {
+        id: `outfit-gold`,
+        slot: `outfit`,
+        name: `Gilded`,
+        unlock: H(`wr_1`),
+        color: `#ffd45e`,
+      },
+      {
+        id: `outfit-blurple`,
+        slot: `outfit`,
+        name: `Blurple`,
+        unlock: H(I),
+        color: `#5865f2`,
+      },
+      {
+        id: `outfit-afterglow`,
+        slot: `outfit`,
+        name: `Afterglow`,
+        unlock: H(L),
+        color: `#f47fff`,
+      },
+      {
+        id: `outfit-geode`,
+        slot: `outfit`,
+        name: `Geode`,
+        unlock: H(R),
+        color: `#1d6b74`,
+        rarity: 4,
+      },
+      {
+        id: `outfit-highroller`,
+        slot: `outfit`,
+        name: `High Roller`,
+        unlock: H(R),
+        color: `#0f5a3a`,
+        rarity: 4,
+      },
+      {
+        id: `outfit-borealis`,
+        slot: `outfit`,
+        name: `Borealis`,
+        unlock: H(R),
+        color: `#101a33`,
+        rarity: 4,
+      },
+      {
+        id: `outfit-bronzehare`,
+        slot: `outfit`,
+        name: `Bronze Hare`,
+        unlock: U(3),
+        color: `#c98a52`,
+        rarity: 5,
+      },
+      {
+        id: `outfit-silverhare`,
+        slot: `outfit`,
+        name: `Silver Hare`,
+        unlock: U(2),
+        color: `#dfe5ee`,
+        rarity: 5,
+      },
+      {
+        id: `outfit-reigning`,
+        slot: `outfit`,
+        name: `Reigning`,
+        unlock: U(1),
+        color: `#ffd45e`,
+        rarity: 5,
+      },
+      {
+        id: `outfit-founder`,
+        slot: `outfit`,
+        name: `Founder`,
+        unlock: W(`owner`),
+        color: `#2a1660`,
+        rarity: 5,
+      },
+      {
+        id: `knife-carrot`,
+        slot: `knife`,
+        name: `Carrot Blade`,
+        unlock: B,
+        color: `#ff7a1a`,
+        rarity: 1,
+      },
+      {
+        id: `knife-bayonet`,
+        slot: `knife`,
+        name: `Carrot Bayonet`,
+        unlock: B,
+        color: `#ff8a2a`,
+        rarity: 2,
+      },
+      {
+        id: `knife-parsnip`,
+        slot: `knife`,
+        name: `Parsnip Stiletto`,
+        unlock: B,
+        color: `#efe2b8`,
+        rarity: 2,
+      },
+      {
+        id: `knife-karrotbit`,
+        slot: `knife`,
+        name: `Karrotbit`,
+        unlock: B,
+        color: `#ff7a1a`,
+        rarity: 3,
+      },
+      {
+        id: `knife-radish`,
+        slot: `knife`,
+        name: `Radish Kukri`,
+        unlock: B,
+        color: `#ff5c8a`,
+        rarity: 3,
+      },
+      {
+        id: `knife-leek`,
+        slot: `knife`,
+        name: `Leek Saber`,
+        unlock: B,
+        color: `#8fdc6a`,
+        rarity: 3,
+      },
+      {
+        id: `knife-cleaver`,
+        slot: `knife`,
+        name: `Clover Cleaver`,
+        unlock: B,
+        color: `#5ee08a`,
+        rarity: 3,
+      },
+      {
+        id: `knife-bunnyfly`,
+        slot: `knife`,
+        name: `Bunnyfly`,
+        unlock: B,
+        color: `#ff9a3c`,
+        rarity: 4,
+      },
+      {
+        id: `knife-daikon`,
+        slot: `knife`,
+        name: `Daikon-tana`,
+        unlock: B,
+        color: `#f3f1ea`,
+        rarity: 4,
+      },
+      {
+        id: `knife-sprouts`,
+        slot: `knife`,
+        name: `Twin Sprouts`,
+        unlock: B,
+        color: `#ffb04a`,
+        rarity: 4,
+      },
+      {
+        id: `knife-candycane`,
+        slot: `knife`,
+        name: `Candy Cane Shiv`,
+        unlock: B,
+        color: `#e8333f`,
+        rarity: 5,
+      },
+      {
+        id: `knife-golden`,
+        slot: `knife`,
+        name: `Golden Carrot`,
+        unlock: B,
+        color: `#ffd45e`,
+        rarity: 5,
+      },
+      {
+        id: `knife-thornback`,
+        slot: `knife`,
+        name: `Thornback`,
+        unlock: H(R),
+        color: `#2b6870`,
+        rarity: 4,
+      },
+      {
+        id: `knife-thistle`,
+        slot: `knife`,
+        name: `Thistle`,
+        unlock: H(R),
+        color: `#b46ad8`,
+        rarity: 4,
+      },
+      {
+        id: `fin-garden`,
+        slot: `finish`,
+        name: `Garden Fresh`,
+        unlock: B,
+        color: `#ff7a1a`,
+        rarity: 1,
+      },
+      {
+        id: `fin-sunset`,
+        slot: `finish`,
+        name: `Sunset`,
+        unlock: V(20),
+        color: `#f86a7c`,
+        rarity: 3,
+      },
+      {
+        id: `fin-ember`,
+        slot: `finish`,
+        name: `Ember Glaze`,
+        unlock: H(`jumps_10k`),
+        color: `#e0582a`,
+        rarity: 3,
+      },
+      {
+        id: `fin-tigerlily`,
+        slot: `finish`,
+        name: `Tiger Lily`,
+        unlock: H(`style_t4`),
+        color: `#f5862a`,
+        rarity: 3,
+      },
+      {
+        id: `fin-nebula`,
+        slot: `finish`,
+        name: `Nebula`,
+        unlock: H(`tier_4`),
+        color: `#6a3ad0`,
+        rarity: 3,
+        legacy: [H(`maps_25`), V(30), H(`wr_5`)],
+      },
+      {
+        id: `fin-dewweb`,
+        slot: `finish`,
+        name: `Dewdrop Web`,
+        unlock: H(`tier_5`),
+        color: `#3a5a9a`,
+        rarity: 4,
+        legacy: [H(`sweep_5`)],
+      },
+      {
+        id: `fin-frost`,
+        slot: `finish`,
+        name: `Frost`,
+        unlock: H(`tier_6`),
+        color: `#9fd8ff`,
+        rarity: 4,
+        legacy: [H(`top10_1`)],
+      },
+      {
+        id: `fin-heartbeet`,
+        slot: `finish`,
+        name: `Heartbeet`,
+        unlock: H(`wr_1`),
+        color: `#c0144a`,
+        rarity: 5,
+      },
+      {
+        id: `fin-fourleaf`,
+        slot: `finish`,
+        name: `Four-Leaf`,
+        unlock: H(`level_50`),
+        color: `#1aa851`,
+        rarity: 5,
+      },
+      {
+        id: `fin-founder`,
+        slot: `finish`,
+        name: `Founder's Gold`,
+        unlock: W(`owner`),
+        color: `#ffc23d`,
+        rarity: 5,
+      },
+      {
+        id: `fin-geode`,
+        slot: `finish`,
+        name: `Geode`,
+        unlock: H(R),
+        color: `#5ff2df`,
+        rarity: 4,
+      },
+      {
+        id: `fin-rift`,
+        slot: `finish`,
+        name: `Rift`,
+        unlock: H(R),
+        color: `#6a2cff`,
+        rarity: 4,
+      },
+      {
+        id: `fin-spectrum`,
+        slot: `finish`,
+        name: `Spectrum`,
+        unlock: H(R),
+        color: `#2a8cff`,
+        rarity: 4,
+      },
+      {
+        id: `fin-goldleaf`,
+        slot: `finish`,
+        name: `Gold Leaf`,
+        unlock: H(R),
+        color: `#e0b13a`,
+        rarity: 4,
+      },
+      {
+        id: `fin-aurora`,
+        slot: `finish`,
+        name: `Aurora`,
+        unlock: H(R),
+        color: `#3ff0a0`,
+        rarity: 4,
+      },
+      {
+        id: `glove-knit`,
+        slot: `glove`,
+        name: `Knit`,
+        unlock: B,
+        color: `#2a2e38`,
+        rarity: 1,
+      },
+      {
+        id: `glove-garden-classic`,
+        slot: `glove`,
+        name: `Garden · Classic`,
+        unlock: H(`first_finish`),
+        color: `#2e7d4a`,
+        rarity: 1,
+      },
+      {
+        id: `glove-wraps-ducttape`,
+        slot: `glove`,
+        name: `Hand Wraps · Duct Tape`,
+        unlock: H(`bonus_1`),
+        color: `#a3a9b1`,
+        rarity: 1,
+      },
+      {
+        id: `glove-sport-carrot`,
+        slot: `glove`,
+        name: `Sport · Carrot`,
+        unlock: V(5),
+        color: `#ff8a2a`,
+        rarity: 2,
+      },
+      {
+        id: `glove-garden-tulip`,
+        slot: `glove`,
+        name: `Garden · Tulip`,
+        unlock: H(`maps_10`),
+        color: `#e0457b`,
+        rarity: 2,
+      },
+      {
+        id: `glove-wraps-spruce`,
+        slot: `glove`,
+        name: `Hand Wraps · Spruce`,
+        unlock: H(`clock_1h`),
+        color: `#3f7a5a`,
+        rarity: 2,
+      },
+      {
+        id: `glove-sport-vice`,
+        slot: `glove`,
+        name: `Sport · Vice`,
+        unlock: V(12),
+        color: `#ff6fae`,
+        rarity: 2,
+      },
+      {
+        id: `glove-driver-tan`,
+        slot: `glove`,
+        name: `Driver · Tan`,
+        unlock: V(15),
+        color: `#c08a55`,
+        rarity: 2,
+      },
+      {
+        id: `glove-garden-moss`,
+        slot: `glove`,
+        name: `Garden · Moss`,
+        unlock: H(`maps_25`),
+        color: `#4d6b2a`,
+        rarity: 2,
+      },
+      {
+        id: `glove-paws-cocoa`,
+        slot: `glove`,
+        name: `Paw Pads · Cocoa`,
+        unlock: H(`jumps_10k`),
+        color: `#7a5236`,
+        rarity: 2,
+      },
+      {
+        id: `glove-driver-cocoa`,
+        slot: `glove`,
+        name: `Driver · Cocoa`,
+        unlock: H(`pbs_10`),
+        color: `#4a3326`,
+        rarity: 2,
+      },
+      {
+        id: `glove-sport-pandora`,
+        slot: `glove`,
+        name: `Sport · Pandora`,
+        unlock: V(20),
+        color: `#5b2a86`,
+        rarity: 3,
+      },
+      {
+        id: `glove-sport-superconductor`,
+        slot: `glove`,
+        name: `Sport · Superconductor`,
+        unlock: H(`tier_4`),
+        color: `#2a62e8`,
+        rarity: 3,
+      },
+      {
+        id: `glove-driver-racing`,
+        slot: `glove`,
+        name: `Driver · Racing Green`,
+        unlock: H(`tier_3`),
+        color: `#2f5a3a`,
+        rarity: 3,
+      },
+      {
+        id: `glove-wraps-ember`,
+        slot: `glove`,
+        name: `Hand Wraps · Ember`,
+        unlock: H(`bonus_10`),
+        color: `#d8433a`,
+        rarity: 3,
+      },
+      {
+        id: `glove-moto-boom`,
+        slot: `glove`,
+        name: `Moto · Boom`,
+        unlock: H(`sync_90`),
+        color: `#ff7a3c`,
+        rarity: 3,
+      },
+      {
+        id: `glove-moto-spearmint`,
+        slot: `glove`,
+        name: `Moto · Spearmint`,
+        unlock: H(`top10_10`),
+        color: `#2fd39a`,
+        rarity: 3,
+      },
+      {
+        id: `glove-paws-snow`,
+        slot: `glove`,
+        name: `Paw Pads · Snow`,
+        unlock: V(30),
+        color: `#f7f4ef`,
+        rarity: 3,
+      },
+      {
+        id: `glove-moto-eclipse`,
+        slot: `glove`,
+        name: `Moto · Eclipse`,
+        unlock: H(`clock_10h`),
+        color: `#ffb43c`,
+        rarity: 4,
+      },
+      {
+        id: `glove-specialist-forest`,
+        slot: `glove`,
+        name: `Specialist · Forest`,
+        unlock: H(`tier_5`),
+        color: `#3d5a3a`,
+        rarity: 4,
+      },
+      {
+        id: `glove-specialist-crimson`,
+        slot: `glove`,
+        name: `Specialist · Crimson`,
+        unlock: H(`sweep_5`),
+        color: `#b02a3a`,
+        rarity: 4,
+      },
+      {
+        id: `glove-specialist-arctic`,
+        slot: `glove`,
+        name: `Specialist · Arctic`,
+        unlock: H(`tier_6`),
+        color: `#49b6ff`,
+        rarity: 4,
+      },
+      {
+        id: `glove-paws-sakura`,
+        slot: `glove`,
+        name: `Paw Pads · Sakura`,
+        unlock: H(`jumps_100k`),
+        color: `#ff7aa8`,
+        rarity: 4,
+      },
+      {
+        id: `glove-sport-blurple`,
+        slot: `glove`,
+        name: `Sport · Blurple`,
+        unlock: H(re),
+        color: `#5865f2`,
+        rarity: 2,
+      },
+      {
+        id: `glove-moto-afterglow`,
+        slot: `glove`,
+        name: `Moto · Afterglow`,
+        unlock: H(L),
+        color: `#f47fff`,
+        rarity: 4,
+      },
+      {
+        id: `glove-specialist-geode`,
+        slot: `glove`,
+        name: `Specialist · Geode`,
+        unlock: H(R),
+        color: `#1d6b74`,
+        rarity: 4,
+      },
+      {
+        id: `glove-driver-highroller`,
+        slot: `glove`,
+        name: `Driver · High Roller`,
+        unlock: H(R),
+        color: `#17181c`,
+        rarity: 4,
+      },
+      {
+        id: `glove-sport-borealis`,
+        slot: `glove`,
+        name: `Sport · Borealis`,
+        unlock: H(R),
+        color: `#14203d`,
+        rarity: 4,
+      },
+    ],
+    K = (e) =>
+      e
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, `-`)
+        .replace(/^-|-$/g, ``);
+  for (let e of z)
+    e.title &&
+      G.push({
+        id: `title-${K(e.title)}`,
+        slot: `title`,
+        name: e.title,
+        unlock: H(e.id),
+      });
+  for (let [e, t] of [
+    [1, `Newcomer`],
+    [5, `Regular`],
+    [15, `Seasoned`],
+  ])
+    G.push({
+      id: `title-${K(t)}`,
+      slot: `title`,
+      name: t,
+      unlock: e === 1 ? B : V(e),
+    });
+  (G.push({
+    id: `title-reigning-champion`,
+    slot: `title`,
+    name: `Reigning Champion`,
+    unlock: U(1),
+    rarity: 5,
+  }),
+    G.push({
+      id: `title-style-champion`,
+      slot: `title`,
+      name: `Style Champion`,
+      unlock: U(1, `style`),
+      rarity: 5,
+    }),
+    G.push({
+      id: `title-owner`,
+      slot: `title`,
+      name: `Owner`,
+      unlock: W(`owner`),
+      rarity: 5,
+    }),
+    G.push({
+      id: `title-staff`,
+      slot: `title`,
+      name: `Staff`,
+      unlock: W(`staff`),
+      rarity: 5,
+    }),
+    G.push(
+      {
+        id: `hat-founder-crown`,
+        slot: `hat`,
+        name: `Founder Crown`,
+        unlock: W(`owner`),
+        color: `#7a3cff`,
+        rarity: 5,
+      },
+      {
+        id: `hat-tophat`,
+        slot: `hat`,
+        name: `Tiny Top Hat`,
+        unlock: W(`owner`),
+        color: `#2a2340`,
+        rarity: 5,
+      },
+      {
+        id: `hat-beanie`,
+        slot: `hat`,
+        name: `Carrot Beanie`,
+        unlock: W(`owner`),
+        color: `#ff7a1a`,
+        rarity: 5,
+      },
+      {
+        id: `hat-gem-orbit`,
+        slot: `hat`,
+        name: `Gem Orbit`,
+        unlock: H(R),
+        color: `#9b5cf5`,
+        rarity: 4,
+      },
+      {
+        id: `hat-halo`,
+        slot: `hat`,
+        name: `Halo`,
+        unlock: H(R),
+        color: `#8f72ff`,
+        rarity: 4,
+      },
+      {
+        id: `hat-circlet`,
+        slot: `hat`,
+        name: `Circlet`,
+        unlock: H(R),
+        color: `#342a78`,
+        rarity: 4,
+      },
+      {
+        id: `hat-dealer-visor`,
+        slot: `hat`,
+        name: `Dealer's Visor`,
+        unlock: H(R),
+        color: `#1e9a5a`,
+        rarity: 4,
+      },
+      {
+        id: `hat-lucky-coins`,
+        slot: `hat`,
+        name: `Lucky Coins`,
+        unlock: H(R),
+        color: `#ffcf4a`,
+        rarity: 4,
+      },
+      {
+        id: `hat-aurora`,
+        slot: `hat`,
+        name: `Aurora`,
+        unlock: H(R),
+        color: `#3ff0a0`,
+        rarity: 4,
+      },
+    ),
+    G.push({
+      id: `outfit-tek`,
+      slot: `outfit`,
+      name: `Tek`,
+      unlock: H(ae),
+      color: `#1f4a33`,
+      rarity: 5,
+    }),
+    G.push(
+      {
+        id: `title-high-roller`,
+        slot: `title`,
+        name: `High Roller`,
+        unlock: H(R),
+        rarity: 4,
+      },
+      {
+        id: `title-stargazer`,
+        slot: `title`,
+        name: `Stargazer`,
+        unlock: H(R),
+        rarity: 4,
+      },
+    ));
+  let q = [
+    {
+      id: `geode`,
+      name: `Geode`,
+      items: [
+        `bg-geode`,
+        `frame-geode`,
+        `ghost-geode`,
+        `trail-geode`,
+        `outfit-geode`,
+        `fin-geode`,
+        `fin-rift`,
+        `fin-spectrum`,
+        `glove-specialist-geode`,
+        `hat-gem-orbit`,
+        `hat-halo`,
+        `hat-circlet`,
+      ],
+      look: {
+        finish: `fin-geode`,
+        glove: `glove-specialist-geode`,
+        outfit: `outfit-geode`,
+        hat: `hat-gem-orbit`,
+        ghost: `ghost-geode`,
+        trail: `trail-geode`,
+      },
+    },
+    {
+      id: `highroller`,
+      name: `High Roller`,
+      items: [
+        `bg-highroller`,
+        `frame-highroller`,
+        `ghost-highroller`,
+        `trail-highroller`,
+        `outfit-highroller`,
+        `fin-goldleaf`,
+        `glove-driver-highroller`,
+        `hat-dealer-visor`,
+        `hat-lucky-coins`,
+        `title-high-roller`,
+      ],
+      look: {
+        finish: `fin-goldleaf`,
+        glove: `glove-driver-highroller`,
+        outfit: `outfit-highroller`,
+        hat: `hat-lucky-coins`,
+        ghost: `ghost-highroller`,
+        trail: `trail-highroller`,
+      },
+    },
+    {
+      id: `borealis`,
+      name: `Borealis`,
+      items: [
+        `bg-borealis`,
+        `frame-borealis`,
+        `ghost-borealis`,
+        `trail-borealis`,
+        `outfit-borealis`,
+        `fin-aurora`,
+        `glove-sport-borealis`,
+        `hat-aurora`,
+        `title-stargazer`,
+      ],
+      look: {
+        finish: `fin-aurora`,
+        glove: `glove-sport-borealis`,
+        outfit: `outfit-borealis`,
+        hat: `hat-aurora`,
+        ghost: `ghost-borealis`,
+        trail: `trail-borealis`,
+      },
+    },
+  ];
+  for (let e of q)
+    for (let t of e.items) {
+      let n = G.find((e) => e.id === t);
+      n && (n.set = e.id);
+    }
+  let se = {
+      "fin-fade": `fin-sunset`,
+      "fin-case": `fin-ember`,
+      "fin-tiger": `fin-tigerlily`,
+      "fin-web": `fin-dewweb`,
+      "fin-doppelhop-p1": `fin-nebula`,
+      "fin-doppelhop-p2": `fin-nebula`,
+      "fin-doppelhop-p4": `fin-nebula`,
+      "fin-doppelhop-blackpearl": `fin-nebula`,
+      "fin-doppelhop-p3": `fin-frost`,
+      "fin-doppelhop-sapphire": `fin-frost`,
+      "fin-doppelhop-ruby": `fin-heartbeet`,
+      "fin-gamma-emerald": `fin-fourleaf`,
+    },
+    ce = new Map(G.map((e) => [e.id, e])),
+    le = (e) => (e ? (ce.get(e) ?? ce.get(se[e] ?? ``) ?? null) : null),
+    J = {
+      background: `bg-night`,
+      frame: `frame-plain`,
+      title: null,
+      ghost: `ghost-gold`,
+      trail: `trail-gold`,
+      outfit: `outfit-cream`,
+      knife: `knife-carrot`,
+      finish: `fin-garden`,
+      glove: `glove-knit`,
+      hat: null,
+    };
+  q[0].look;
+  let Y = J.knife,
+    ue = J.finish,
+    de = J.glove;
+  Object.freeze({ knife: Y, finish: ue, glove: de });
+  let X = (e, t, n) => {
+    let r = typeof t == `string` ? le(t) : null;
+    return r && r.slot === e ? r.id : n;
+  };
+  function fe(e, t = null) {
+    let n = e ?? {},
+      r = {
+        knife: X(`knife`, n.knife, Y),
+        finish: X(`finish`, n.finish, ue),
+        glove: X(`glove`, n.glove, de),
+      };
+    t && (r.crown = t);
+    let i = X(`hat`, n.hat, ``);
+    return (i && (r.hat = i), r);
+  }
+  let pe = (e) => (e === 1 || e === 2 || e === 3 ? e : null);
+  function me(e) {
+    if (!e || typeof e != `object`) return null;
+    let t = e;
+    return fe(t, pe(t.crown));
+  }
+  function he(e) {
+    if (!e || e.length > 200) return null;
+    let t = e.split(`;`);
+    return t[0] === `2` && t.length >= 4
+      ? me({
+          knife: t[1],
+          finish: t[2],
+          glove: t[3],
+          crown: t[4] ? Number(t[4]) : null,
+          hat: t[5],
+        })
+      : t[0] === `1` && t.length >= 6
+        ? !Number.isInteger(Number(t[3])) || !Number.isInteger(Number(t[4]))
+          ? null
+          : me({
+              knife: t[1],
+              finish: t[2],
+              glove: t[5],
+              crown: t[6] ? Number(t[6]) : null,
+            })
+        : null;
+  }
+  new Uint32Array(/* @__PURE__ */ new Float32Array(1).buffer);
+  let ge = (e) => e.settings.physics ?? 1,
+    _e = (e) => e.timerRules ?? 1,
+    ve = (e) => ((e % 360) + 360) % 360,
+    ye = (e, t, n) => ve(e - t * n),
+    be = [`start`, `end`, `stage`, `checkpoint`];
+  function xe(e) {
+    return e.autohop ? `autohop` : `legit`;
+  }
+  function Z(e) {
+    return e.style ?? xe(e.settings);
+  }
+  var Se = class {
+    buf;
+    dv;
+    pos = 0;
+    constructor(e) {
+      ((this.buf = e),
+        (this.dv = new DataView(e.buffer, e.byteOffset, e.byteLength)));
+    }
+    get remaining() {
+      return this.buf.length - this.pos;
+    }
+    need(e) {
+      if (this.pos + e > this.buf.length) throw Error(`replay: truncated`);
+    }
+    u8() {
+      return (this.need(1), this.buf[this.pos++]);
+    }
+    u16() {
+      this.need(2);
+      let e = this.dv.getUint16(this.pos, !0);
+      return ((this.pos += 2), e);
+    }
+    u32() {
+      this.need(4);
+      let e = this.dv.getUint32(this.pos, !0);
+      return ((this.pos += 4), e);
+    }
+    f32() {
+      this.need(4);
+      let e = this.dv.getFloat32(this.pos, !0);
+      return ((this.pos += 4), e);
+    }
+    f64() {
+      this.need(8);
+      let e = this.dv.getFloat64(this.pos, !0);
+      return ((this.pos += 8), e);
+    }
+    bytes(e) {
+      this.need(e);
+      let t = this.buf.subarray(this.pos, this.pos + e);
+      return ((this.pos += e), t);
+    }
+    str8() {
+      return new TextDecoder().decode(this.bytes(this.u8()));
+    }
+    varint() {
+      let e = 0,
+        t = 0;
+      for (;;) {
+        let n = this.u8();
+        if (((e |= (n & 127) << t), !(n & 128))) break;
+        if (((t += 7), t > 28)) throw Error(`replay: bad varint`);
+      }
+      return e >>> 0;
+    }
+    svarint() {
+      let e = this.varint();
+      return (e >>> 1) ^ -(e & 1);
+    }
+  };
+  let Ce = (e) =>
+    Array.from(e, (e) => e.toString(16).padStart(2, `0`)).join(``);
+  function we(e, t = {}) {
+    let n = new Se(e);
+    if (n.u32() !== 1347569730) throw Error(`replay: bad magic`);
+    let r = n.u16();
+    if (r < 1 || r > 8) throw Error(`replay: unsupported version ${r}`);
+    let i = n.u16(),
+      a = n.str8(),
+      o = Ce(n.bytes(32)),
+      s = Array.from({ length: 7 }, () => n.f32()),
+      c = {
+        tickInterval: s[0],
+        airAccelerate: s[1],
+        accelerate: s[2],
+        friction: s[3],
+        stopSpeed: s[4],
+        gravity: s[5],
+        maxSpeed: s[6],
+        autohop: !!(i & 1),
+        physics: 1,
+      },
+      l = n.f32(),
+      u = n.u32(),
+      d = n.u32(),
+      f = n.u32(),
+      p = [],
+      m = 0,
+      h = null,
+      g = xe(c),
+      _ = 1;
+    if (r === 1)
+      for (let e = n.u8(); e > 0; e--) {
+        let e = n.u8() === 0 ? `start` : `end`,
+          t = Array.from({ length: 6 }, () => n.f32());
+        p.push({ kind: e, mins: [t[0], t[1], t[2]], maxs: [t[3], t[4], t[5]] });
+      }
+    else {
+      if (((m = n.u8()), r >= 3 && n.u8() === 1)) {
+        let e = Array.from({ length: 4 }, () => n.f32());
+        if (((h = { position: [e[0], e[1], e[2]], yaw: e[3] }), r >= 5)) {
+          let e = n.str8(),
+            t = n.str8();
+          (e && (h.targetname = e), t && (h.classname = t));
+        }
+      }
+      (r >= 4 && (g = n.str8()),
+        r >= 6 && (c.physics = n.u8()),
+        r >= 7 && (_ = n.u8()));
+      for (let e = n.varint(); e > 0; e--) {
+        let e = be[n.u8()];
+        if (!e) throw Error(`replay: bad zone kind`);
+        let t = n.u8(),
+          r = n.u8(),
+          i = Array.from({ length: 6 }, () => n.f32()),
+          a = { kind: e, mins: [i[0], i[1], i[2]], maxs: [i[3], i[4], i[5]] };
+        (t && (a.track = t),
+          (e === `stage` || e === `checkpoint`) && (a.index = r),
+          p.push(a));
+      }
+    }
+    let ee = n.str8(),
+      v = n.str8(),
+      te = n.f64(),
+      y = n.varint(),
+      b = n.varint(),
+      x = t.commands ?? !0,
+      S = x ? f : 0,
+      C = new Int16Array(S),
+      w = new Int16Array(S),
+      T = (c.physics ?? 1) >= 7 ? 4294967295 : 65535,
+      E = new Uint32Array(S),
+      D = new Float32Array(S),
+      O = new Float32Array(S),
+      k = r >= 8,
+      A,
+      j = 0;
+    if (x) {
+      for (let e = 0; e < f; e++) C[e] = j += n.svarint();
+      j = 0;
+      for (let e = 0; e < f; e++) w[e] = j += n.svarint();
+      j = 0;
+      for (let e = 0; e < f; e++) E[e] = (j ^= n.varint()) & T;
+      for (let e of k ? [O] : [D, O]) {
+        let t = new Int32Array(e.buffer);
+        j = 0;
+        for (let e = 0; e < f; e++) t[e] = j = (j + n.svarint()) | 0;
+      }
+      k && (A = Te(n, f, D));
+    } else {
+      for (let e = 0; e < 5 * f; e++) n.varint();
+      if (k) {
+        for (let e = n.varint(); e > 0; e--)
+          (n.varint(), n.u8(), n.f64(), n.f64());
+        for (let e = 0; e < 3 * f; e++) n.varint();
+      }
+    }
+    let M = [];
+    j = 0;
+    for (let e = 0; e < b; e++) {
+      let e = (j += n.varint()),
+        t = Array.from({ length: 6 }, () => n.f32());
+      M.push({
+        tick: e,
+        position: [t[0], t[1], t[2]],
+        velocity: [t[3], t[4], t[5]],
+      });
+    }
+    let N = Ee(n),
+      P = Oe(n),
+      F = De(n);
+    return {
+      header: {
+        version: r,
+        map: a,
+        mapSha256: o,
+        settings: c,
+        prespeedCap: l > 0 ? l : null,
+        startTick: u,
+        endTick: d,
+        totalTicks: f,
+        track: m,
+        spawn: h,
+        style: g,
+        timerRules: _,
+        zones: p,
+        clientBuild: ee,
+        player: v,
+        recordedAt: te,
+        checkpointInterval: y,
+      },
+      forward: C,
+      side: w,
+      buttons: E,
+      yaw: D,
+      pitch: O,
+      checkpoints: M,
+      ...(N.length ? { cosmetic: N } : {}),
+      ...(P ? { loadout: P } : {}),
+      ...(F.length ? { inspect: F } : {}),
+      ...(A ? { counted: A } : {}),
+    };
+  }
+  function Te(e, t, n) {
+    let r = new Int32Array(t);
+    for (let n = 0; n < t; n++) r[n] = e.svarint();
+    let i = [],
+      a = 0;
+    for (let n = e.varint(); n > 0; n--) {
+      a += e.varint();
+      let n = e.u8(),
+        r = e.f64(),
+        o = e.f64();
+      if (a >= t || (i.length && a < i[i.length - 1].tick))
+        throw Error(`replay: bad rebase tick`);
+      i.push({ tick: a, kind: n, base: r, k: o });
+    }
+    if (t > 0 && (!i.length || i[0].tick !== 0))
+      throw Error(`replay: counted yaw without a base at tick 0`);
+    let o = new Int32Array(t),
+      s = 0,
+      c = 0,
+      l = 0;
+    for (let e = 0; e < t; e++) {
+      let t = !1;
+      for (; s < i.length && i[s].tick === e; )
+        (({ base: c, k: l } = i[s++]), (t = !0));
+      ((o[e] = t ? r[e] : (o[e - 1] + r[e]) | 0), (n[e] = ye(c, o[e], l)));
+    }
+    let u = () => {
+      let n = new Uint16Array(t);
+      for (let r = 0; r < t; r++) n[r] = Math.min(65535, e.varint());
+      return n;
+    };
+    return { count: o, rebases: i, frames: u(), events: u(), reports: u() };
+  }
+  function Ee(e) {
+    if (e.remaining < 4) return [];
+    let t = e.pos;
+    try {
+      if (e.u32() !== 1480804418) return ((e.pos = t), []);
+      let n = e.varint();
+      if (n > 2e4 || n * 2 > e.remaining) return [];
+      let r = [],
+        i = 0;
+      for (let t = 0; t < n; t++)
+        ((i += e.varint()), r.push({ tick: i, kind: e.u8() }));
+      return r;
+    } catch {
+      return ((e.pos = t), []);
+    }
+  }
+  function De(e) {
+    if (e.remaining < 4) return [];
+    let t = e.pos;
+    try {
+      if (e.u32() !== 1229146178) return ((e.pos = t), []);
+      let n = e.varint();
+      if (n > 2e4 || n * 2 > e.remaining) return ((e.pos = t), []);
+      let r = [],
+        i = 0;
+      for (let t = 0; t < n; t++)
+        ((i += e.varint()), r.push({ tick: i, kind: e.u8() }));
+      return r;
+    } catch {
+      return ((e.pos = t), []);
+    }
+  }
+  function Oe(e) {
+    if (e.remaining < 5) return null;
+    let t = e.pos;
+    try {
+      return e.u32() === 1330399298 ? he(e.str8()) : ((e.pos = t), null);
+    } catch {
+      return ((e.pos = t), null);
+    }
+  }
+  async function ke(e, t) {
+    let n = new Response(new Blob([e]).stream().pipeThrough(t));
+    return new Uint8Array(await n.arrayBuffer());
+  }
+  async function Ae(e) {
+    return we(
+      e[0] === 31 && e[1] === 139
+        ? await ke(e, new DecompressionStream(`gzip`))
+        : e,
+    );
+  }
+  let je = { bhop_japan: { main: { classname: `beginner` } } };
+  function Me(e, t) {
+    let n = je[e]?.[t === 0 ? `main` : `bonus`];
+    return n
+      ? { targetname: n.targetname ?? ``, classname: n.classname ?? `` }
+      : null;
+  }
+  function Ne(e, t) {
+    let n = t.targetname ?? ``,
+      r = t.classname ?? ``;
+    return (
+      (!n && !r) ||
+      [0, 1].some((t) => {
+        let i = Me(e, t);
+        return !!i && i.targetname === n && i.classname === r;
+      })
+    );
+  }
+  function Pe(e, t, n) {
+    let r = (e) => e.map((e) => e.toFixed(1)).join(`, `);
+    if (!n.position.every(Number.isFinite) || !Number.isFinite(n.yaw))
+      return `restart point (${r(n.position)}) is not a finite position`;
+    (e.setSettings(t), e.reset(), f(e, n));
+    let i = p(e);
+    if (!i) return null;
+    let a = Math.fround;
+    if (![0, 1, 2].every((e) => Object.is(a(i.position[e]), a(n.position[e]))))
+      return `restart point (${r(n.position)}) is not settled (the core puts it at ${r(i.position)})`;
+    let o = e.step(0, 0, n.yaw, 0, 0),
+      s = e.state();
+    return (s.grounded && !s.onLadder) || (o >>> 0 != 4294967295 && o & 1)
+      ? null
+      : `restart point (${r(n.position)}) is not on the ground`;
+  }
+  function Fe(e, t) {
+    let n = e.x;
+    if (!n.set_velocity)
+      throw Error(
+        `wasm build lacks set_velocity export; rebuild with tools/scripts/build-wasm.sh`,
+      );
+    n.set_velocity(t[0], t[1], t[2]);
+  }
+  function Ie(e, t, n, r = null, i = 2) {
+    return new b(e, Math.fround(t.tickInterval), {
+      prespeedCap: n,
+      strafeKeys: j(r),
+      rules: i,
+    });
+  }
+  function Le(e, t, n, r) {
+    let i = e.state(),
+      a = t.update(n, r, i);
+    return (
+      a.clampVelocity && (Fe(e, a.clampVelocity), (i = e.state())),
+      { state: i, update: a }
+    );
+  }
+  function Re(e, t) {
+    return Object.is(Math.fround(e), Math.fround(t));
+  }
+  function ze(e, t) {
+    return [0, 1, 2].every(
+      (n) =>
+        Re(e.position[n], t.position[n]) && Re(e.velocity[n], t.velocity[n]),
+    );
+  }
+  function Be(e, t) {
+    return {
+      forward: e.forward[t],
+      side: e.side[t],
+      yaw: e.yaw[t],
+      pitch: e.pitch[t],
+      buttons: e.buttons[t],
+    };
+  }
+  function Ve(e, t, n, r, i, a) {
+    let o = Be(r, i),
+      s = n.apply(o, a),
+      c = e.step(s.forward, s.side, s.yaw, s.pitch, s.buttons),
+      l = Le(e, t, s, c);
+    return { raw: o, cmd: s, events: c, state: l.state, update: l.update };
+  }
+  let He = (e) => +!!e.crouched | (e.grounded ? 2 : 0);
+  var Ue = class {
+    core;
+    replay;
+    opts;
+    n;
+    i = 0;
+    timer;
+    filter;
+    frames;
+    state;
+    cp = 0;
+    checked = 0;
+    firstMismatch = null;
+    startTick = 0;
+    endTick = 0;
+    track = 0;
+    violations = 0;
+    firstViolationTick = null;
+    firstViolation = null;
+    constructor(e, t, n, r = {}) {
+      ((this.core = e), (this.replay = t), (this.opts = r));
+      let i = t.header;
+      (e.setSettings(i.settings),
+        e.reset(),
+        i.spawn && f(e, i.spawn),
+        (this.timer = Ie(n, i.settings, i.prespeedCap, D(Z(i)), _e(i))),
+        this.timer.reset());
+      let a = (this.n = Math.min(r.untilTick ?? i.totalTicks, i.totalTicks));
+      ((this.frames = r.frames ? new Float32Array((a + 1) * 6) : void 0),
+        (this.state = e.state()),
+        this.putFrame(
+          0,
+          this.state,
+          a > 0 ? t.yaw[0] : this.state.teleportAngles[1],
+          a > 0 ? t.pitch[0] : this.state.teleportAngles[0],
+        ),
+        (this.filter = new M(D(Z(i)), ge(i))));
+    }
+    get ticksDone() {
+      return this.i;
+    }
+    get done() {
+      return this.i >= this.n;
+    }
+    putFrame(e, t, n, r) {
+      let i = this.frames;
+      if (!i) return;
+      let a = e * 6;
+      ((i[a] = t.position[0]),
+        (i[a + 1] = t.position[1]),
+        (i[a + 2] = t.position[2]),
+        (i[a + 3] = He(t)),
+        (i[a + 4] = n),
+        (i[a + 5] = r));
+    }
+    step(e = 1 / 0) {
+      let { core: t, timer: n, filter: r, replay: i, opts: a } = this,
+        o = i.checkpoints,
+        s = Math.min(this.n, this.i + e);
+      for (let e = this.i; e < s; e++) {
+        let s = Ve(t, n, r, i, e, this.state),
+          { raw: c, cmd: l, events: u } = s;
+        l !== c &&
+          this.violations++ === 0 &&
+          ((this.firstViolationTick = e + 1), (this.firstViolation = c));
+        let d = (this.state = s.state);
+        (s.update.started &&
+          ((this.startTick = n.startTick), (this.track = n.track)),
+          s.update.restarted && (this.startTick = this.endTick = 0),
+          s.update.finished && (this.endTick = d.tick));
+        let f = e + 1;
+        for (; this.cp < o.length && o[this.cp].tick < f; ) this.cp++;
+        (this.cp < o.length &&
+          o[this.cp].tick === f &&
+          (this.checked++,
+          !ze(o[this.cp], d) &&
+            this.firstMismatch === null &&
+            (this.firstMismatch = f),
+          this.cp++),
+          this.putFrame(f, d, l.yaw, l.pitch),
+          a.onTick?.(f, d, u, {
+            timer: n,
+            filter: r,
+            cmd: l,
+            update: s.update,
+          }));
+      }
+      this.i = s;
+    }
+    result() {
+      return {
+        timer: this.timer,
+        final: this.state,
+        ticks: this.i,
+        checkpointsChecked: this.checked,
+        checkpointsMatch: this.firstMismatch === null,
+        firstMismatchTick: this.firstMismatch,
+        track: this.track,
+        startTick: this.startTick,
+        endTick: this.endTick,
+        frames: this.frames,
+        styleViolations: this.violations,
+        filter: this.filter,
+        firstViolationTick: this.firstViolationTick,
+        firstViolation: this.firstViolation,
+      };
+    }
+  };
+  let We = [`usp`, `glock`, `knife`],
+    Ge = (e) => (e & 2031616) >>> 16,
+    Ke = (e) => We.includes(m[e] ?? ``);
+  function qe(e) {
+    for (let t = 0; t < e.length; t++) {
+      let n = Ge(e[t]);
+      if (n && !Ke(n)) return { tick: t, weapon: m[n] || `#${n}` };
+    }
+    return null;
+  }
+  let Je = Object.fromEntries(T.map((e) => [e.id, O(e.id)]));
+  function Ye(e, t) {
+    return (
+      e.autohop === t.autohop &&
+      [
+        `tickInterval`,
+        `airAccelerate`,
+        `accelerate`,
+        `friction`,
+        `stopSpeed`,
+        `gravity`,
+        `maxSpeed`,
+      ].every((n) => Object.is(Math.fround(e[n]), Math.fround(t[n])))
+    );
+  }
+  function Xe(e, t) {
+    return t.some(
+      (t) =>
+        t.kind === `start` &&
+        e[0] >= t.mins[0] - 1 &&
+        e[0] <= t.maxs[0] + 1 &&
+        e[1] >= t.mins[1] - 1 &&
+        e[1] <= t.maxs[1] + 1 &&
+        e[2] + 62 >= t.mins[2] &&
+        e[2] <= t.maxs[2] + 64,
+    );
+  }
+  function Ze(e, t, n) {
+    return {
+      valid: !1,
+      problems: t,
+      style: n,
+      track: 0,
+      ticks: 0,
+      time: 0,
+      startTick: 0,
+      endTick: 0,
+      totalTicks: 0,
+      checkpointsMatch: !1,
+      checkpointsChecked: 0,
+      firstMismatchTick: null,
+      finalStateMatches: !1,
+      final: e.state(),
+      stats: { jumps: 0, strafes: 0, sync: 0 },
+      simMs: 0,
+    };
+  }
+  function Qe(e, t, n, r) {
+    let i = $e(e, t, n, r);
+    if (`result` in i) return i.result;
+    let a = () => (typeof performance < `u` ? performance.now() : Date.now()),
+      o = a();
+    return (i.run.step(), et(t, i.problems, i.run.result(), a() - o));
+  }
+  function $e(e, t, r, i) {
+    let a = t.header,
+      o = [],
+      s = Z(a),
+      c = D(s),
+      l = i.ranked ?? !0;
+    (i.mapSha256 !== null &&
+      i.mapSha256 !== a.mapSha256 &&
+      o.push(
+        `map sha256 mismatch (replay ${a.mapSha256.slice(0, 12)}, server ${i.mapSha256.slice(0, 12)})`,
+      ),
+      c
+        ? c.autohop !== a.settings.autohop &&
+          o.push(
+            `style ${c.name} ${c.autohop ? `requires` : `forbids`} autohop`,
+          )
+        : o.push(`unknown style ${s}`));
+    let u = ge(a);
+    if (!n(u))
+      return (
+        o.unshift(`unknown physics version ${u}`),
+        { result: Ze(e, o, s) }
+      );
+    let d = _e(a);
+    if (!te(d))
+      return (o.unshift(`unknown timer rules ${d}`), { result: Ze(e, o, s) });
+    if (l) {
+      let e = Je[s];
+      ((!e || !Ye(e, a.settings)) &&
+        o.push(`non-standard physics settings for style ${s}`),
+        a.prespeedCap !== y.prespeedCap &&
+          o.push(`non-standard prespeed cap ${a.prespeedCap}`));
+      let n = qe(t.buttons);
+      n &&
+        o.push(
+          `weapon command for ${n.weapon} at tick ${n.tick}: ranked runs only allow ${We.join(`, `)}`,
+        );
+    }
+    (v(r, a.zones) ||
+      o.push(`zones differ from ${i.zoneSource ?? `authoritative zones`}`),
+      a.spawn &&
+        !Xe(a.spawn.position, r) &&
+        o.push(
+          `restart point (${a.spawn.position.map((e) => e.toFixed(1)).join(`, `)}) is not in a start zone`,
+        ));
+    let f = a.spawn ? Pe(e, a.settings, a.spawn) : null;
+    return (
+      f && o.push(f),
+      a.spawn &&
+        !Ne(a.map, a.spawn) &&
+        o.push(
+          `restart names (targetname "${a.spawn.targetname ?? ``}", classname "${a.spawn.classname ?? ``}") are not ${a.map}'s restart names`,
+        ),
+      {
+        problems: o,
+        run: new Ue(e, t, r, i.onTick ? { onTick: i.onTick } : {}),
+      }
+    );
+  }
+  function et(e, t, n, r) {
+    let i = e.header,
+      a = Z(i),
+      o = D(a);
+    if (n.styleViolations > 0) {
+      let e = n.firstViolation,
+        r = `${n.styleViolations} command${n.styleViolations === 1 ? `` : `s`}`;
+      t.unshift(
+        `style violation: ${o?.auto ? `${r} differ from the movement ${o.name} computes` : `${r} use keys ${o?.name ?? a} blocks`} (first at tick ${n.firstViolationTick}: forward ${e.forward}, side ${e.side}, buttons 0x${e.buttons.toString(16)})`,
+      );
+    }
+    let s = n.endTick > 0 && n.timer.status === `finished`,
+      c = s ? n.endTick - n.startTick : 0,
+      l = c * Math.fround(i.settings.tickInterval),
+      u = e.checkpoints[e.checkpoints.length - 1],
+      d =
+        !!u &&
+        u.tick === n.ticks &&
+        [0, 1, 2].every(
+          (e) =>
+            Object.is(u.position[e], n.final.position[e]) &&
+            Object.is(u.velocity[e], n.final.velocity[e]),
+        );
+    return (
+      n.checkpointsMatch ||
+        t.push(`desync: checkpoint mismatch at tick ${n.firstMismatchTick}`),
+      d || t.push(`final state does not match final checkpoint`),
+      s || t.push(`run did not finish (end zone never reached)`),
+      s &&
+        (n.startTick !== i.startTick || n.endTick !== i.endTick) &&
+        t.push(
+          `claimed ticks ${i.startTick}..${i.endTick} != recomputed ${n.startTick}..${n.endTick}`,
+        ),
+      s &&
+        n.track !== (i.track ?? 0) &&
+        t.push(`claimed track ${i.track} != recomputed track ${n.track}`),
+      s &&
+        n.track > 0 &&
+        a !== `autohop` &&
+        t.push(
+          `bonus runs are ${D(`autohop`).name} style only (replay style ${a})`,
+        ),
+      s &&
+        n.ticks !== n.endTick &&
+        t.push(`replay continues ${n.ticks - n.endTick} ticks past the finish`),
+      {
+        valid: t.length === 0,
+        problems: t,
+        style: a,
+        track: n.track,
+        ticks: c,
+        time: l,
+        startTick: n.startTick,
+        endTick: n.endTick,
+        totalTicks: n.ticks,
+        checkpointsMatch: n.checkpointsMatch,
+        checkpointsChecked: n.checkpointsChecked,
+        firstMismatchTick: n.firstMismatchTick,
+        finalStateMatches: d,
+        final: n.final,
+        stats: {
+          jumps: n.timer.jumps,
+          strafes: n.timer.strafes,
+          sync: n.timer.syncPercent(),
+        },
+        simMs: r,
+      }
+    );
+  }
+  let Q = self,
+    $ = null;
+  Q.onmessage = async (e) => {
+    let n = e.data;
+    if (n.type === `init`) {
+      (t(n.physics),
+        ($ = (async () => {
+          let e = await o.create(n.wasm);
+          return (e.loadMapPhysics(n.bsp), e);
+        })()),
+        $.catch(() => {}));
+      return;
+    }
+    try {
+      if (!$) throw Error(`not initialised`);
+      let e = await $,
+        t = await Ae(n.replay),
+        r = Qe(e, t, t.header.zones, { mapSha256: null, ranked: !0 });
+      Q.postMessage({
+        id: n.id,
+        valid: r.valid,
+        firstMismatchTick: r.firstMismatchTick,
+        problems: r.problems.slice(0, 3),
+        simMs: r.simMs,
+      });
+    } catch (e) {
+      Q.postMessage({ id: n.id, error: String(e?.message ?? e) });
+    }
+  };
+})();

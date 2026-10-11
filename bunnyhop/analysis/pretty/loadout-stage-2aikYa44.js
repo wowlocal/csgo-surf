@@ -1,0 +1,958 @@
+const __vite__mapDeps = (
+  i,
+  m = __vite__mapDeps,
+  d = m.f ||
+    (m.f = [
+      "assets/item3d-scenes-MQRPUo-S.js",
+      "assets/model-CJn1vZL3.js",
+      "assets/core-GuI4LXND.js",
+      "assets/api-B2Jj-kgC.js",
+      "assets/cosmetics-PGh_ZGfu.js",
+      "assets/styles-DzitlxVO.js",
+      "assets/loadout-DopA3xcw.js",
+      "assets/palettes-YJRmTQgw.js",
+      "assets/badges-BcPRw2oa.js",
+      "assets/dom-CUDFsJPS.js",
+      "assets/trail-Ci5rx2WO.js",
+      "assets/mesh-C0szPPnc.js",
+      "assets/showcase-s3hPAh4D.js",
+    ]),
+) => i.map((i) => d[i]);
+import { t as e } from "./preload-helper-DjzSQ1t3.js";
+import {
+  B as t,
+  Jr as n,
+  M as r,
+  Sr as i,
+  St as a,
+  V as o,
+  Z as s,
+  cn as c,
+  g as l,
+  gt as u,
+  hr as d,
+  ln as f,
+  on as p,
+  q as m,
+  qr as h,
+  t as g,
+  un as _,
+  wn as v,
+  yn as y,
+  z as b,
+  zt as x,
+} from "./model-CJn1vZL3.js";
+import { t as ee } from "./three.module-CTHJQ_H0.js";
+import { E as te, r as ne, s as S } from "./cosmetics-PGh_ZGfu.js";
+import { C, n as w } from "./loadout-DopA3xcw.js";
+import { t as T } from "./item-preview-m8tHLXeP.js";
+import { t as re } from "./trail-Ci5rx2WO.js";
+import { t as E } from "./mesh-C0szPPnc.js";
+import { t as D } from "./viewmodel-BDQ_BaCV.js";
+import { n as ie, t as O } from "./showcase-s3hPAh4D.js";
+var k = 42,
+  A = 300,
+  j = 301.993,
+  M = 800,
+  N = (2 * j) / M,
+  P = 1.1,
+  F = 1 / 60,
+  I = 8,
+  L = 20,
+  R = 1.16,
+  z = Math.PI / 180,
+  B = new h(),
+  ae = new h(),
+  oe = new u(),
+  V = (e, t) => C(e)?.color ?? t,
+  H = (e) => C(e)?.color2 ?? null,
+  se = (e, t, n, r) => r.set(e, n, -t),
+  ce = class {
+    scene = new i();
+    camera = new y(30, 1, 1, 4e3);
+    model;
+    trail;
+    floor;
+    ring;
+    look;
+    t = 0.35;
+    pts = new Float32Array(204);
+    turn = 0;
+    turnV = 0;
+    body = null;
+    reduced = matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+    dragging = !1;
+    constructor(e) {
+      ((this.look = { ...e }),
+        (this.floor = new f(
+          new a(76, 64).rotateX(-Math.PI / 2),
+          new _({
+            color: 16777215,
+            transparent: !0,
+            opacity: 0.05,
+            depthWrite: !1,
+          }),
+        )),
+        (this.ring = new f(
+          new d(41, 43, 96).rotateX(-Math.PI / 2),
+          new _({
+            color: 16777215,
+            transparent: !0,
+            opacity: 0.08,
+            depthWrite: !1,
+          }),
+        )),
+        this.scene.add(this.floor, this.ring),
+        (this.model = new g(this.modelOptions(e))),
+        this.model.setNearFade(0, 0),
+        this.model.setOpacity(e.mode === `ghost` ? 0.75 : 1),
+        this.model.bunnyModel?.setSilhouette(!!e.veil && e.mode === `solid`),
+        (this.trail = new re(
+          V(e.trail, `#ffc23d`),
+          this.pts.length / 3,
+          H(e.trail),
+        )),
+        this.scene.add(this.model.root, this.trail.mesh),
+        this.advance(this.reduced ? 1.2 : F));
+    }
+    modelOptions(e) {
+      return e.mode === `ghost`
+        ? {
+            model: `bunny`,
+            style: `ghost`,
+            color: V(e.ghost, `#ffc23d`),
+            rim: H(e.ghost),
+            loadout: e.loadout,
+          }
+        : {
+            model: `bunny`,
+            style: `solid`,
+            outfit: e.outfit ?? void 0,
+            loadout: e.loadout,
+          };
+    }
+    set(e) {
+      let t = this.look;
+      ((this.look = { ...e }),
+        (e.mode !== t.mode || e.ghost !== t.ghost) &&
+          (this.model.setStyle(
+            e.mode,
+            e.mode === `ghost` ? V(e.ghost, `#ffc23d`) : void 0,
+            void 0,
+            e.mode === `ghost` ? H(e.ghost) : void 0,
+          ),
+          this.model.setOpacity(e.mode === `ghost` ? 0.75 : 1)),
+        e.outfit !== t.outfit && this.model.bunnyModel?.setOutfit(e.outfit),
+        e.loadout !== t.loadout && this.model.setLoadout(e.loadout),
+        this.model.bunnyModel?.setSilhouette(!!e.veil && e.mode === `solid`),
+        this.trail.setColor(V(e.trail, `#ffc23d`), H(e.trail)),
+        e.mode !== t.mode && this.advance(0));
+    }
+    drag(e, t) {
+      let n = 540 / Math.max(240, t);
+      ((this.turn += e * n), (this.turnV = e * n * 60));
+    }
+    release() {
+      this.turnV = Math.max(-240, Math.min(240, this.turnV));
+    }
+    flourish() {
+      this.reduced || (this.turnV += 420);
+    }
+    standPose() {
+      return {
+        position: [0, 0, 0],
+        velocity: [0, 0, 0],
+        yaw: 250 + this.turn,
+        pitch: 4,
+        crouched: !1,
+        grounded: !0,
+      };
+    }
+    hopPose(e) {
+      let t = (e * A) / k,
+        n = ((e % N) + N) % N,
+        r = Math.max(0, j * n - 0.5 * M * n * n),
+        i = (t * 180) / Math.PI + 90,
+        a = Math.sin(e * Math.PI * (2 / N));
+      return {
+        position: [Math.cos(t) * k, Math.sin(t) * k, r],
+        velocity: [-Math.sin(t) * A, Math.cos(t) * A, j - M * n],
+        yaw: i + 12 * a,
+        pitch: 6,
+        crouched: !1,
+        grounded: n < 0.02,
+        sidemove: -450,
+      };
+    }
+    advance(e) {
+      if (this.look.mode === `solid`) {
+        if (!this.dragging) {
+          let t = Math.exp(-e * 2.4);
+          ((this.turnV *= t),
+            (this.turn += (this.turnV + (this.reduced ? 0 : 14)) * e));
+        }
+        (this.model.setState(this.standPose()),
+          this.model.update(Math.max(e, 1e-4)),
+          this.centre(e));
+        return;
+      }
+      if ((this.reduced && (e = 0), e <= 0)) {
+        (this.model.setState(this.hopPose(this.t)), this.model.update(1e-4));
+        return;
+      }
+      for (let t = e; t > 1e-6; t -= F)
+        ((this.t += Math.min(F, t)),
+          this.model.setState(this.hopPose(this.t)),
+          this.model.update(Math.min(F, t)));
+    }
+    centre(e) {
+      let t = this.model.bunnyModel;
+      if (!t) return;
+      let n = t.bodyBox(oe);
+      if (n.isEmpty()) return;
+      let r = (n.min.x + n.max.x) / 2,
+        i = (n.min.y + n.max.y) / 2,
+        a = {
+          cx: r,
+          cy: i,
+          reach: Math.hypot(n.max.x - r, n.max.y - i),
+          z0: n.min.z,
+          z1: n.max.z,
+        },
+        o = this.body;
+      if (!o) this.body = a;
+      else {
+        let t = 1 - Math.exp(-Math.max(e, 1e-4) * 5);
+        for (let e of [`cx`, `cy`, `reach`, `z0`, `z1`])
+          o[e] += (a[e] - o[e]) * t;
+      }
+      let { cx: s, cy: c } = this.body,
+        l = t.feetYaw * z,
+        u = s * Math.cos(l) - c * Math.sin(l),
+        d = s * Math.sin(l) + c * Math.cos(l);
+      this.model.root.position.set(-u, this.model.root.position.y, d);
+    }
+    render(e, t, n) {
+      let r = this.camera;
+      r.aspect = t / Math.max(1, n);
+      let i = this.look.mode === `ghost`;
+      if (((this.ring.visible = i), (this.trail.mesh.visible = i), i)) {
+        this.frame(L, 60, 0, 136.99985753062498);
+        let e = this.pts.length / 3,
+          t = new h();
+        for (let n = 0; n < e; n++) {
+          let r = this.t - P + (P * n) / (e - 1),
+            i = this.hopPose(r).position;
+          (se(i[0], i[1], i[2] + 34, t),
+            (this.pts[n * 3] = t.x),
+            (this.pts[n * 3 + 1] = t.y),
+            (this.pts[n * 3 + 2] = t.z));
+        }
+        this.trail.set(this.pts, e, r.position, 0.9, 5);
+      } else {
+        let e = this.body;
+        this.frame(I, e ? e.reach : 24, e ? e.z0 : 0, e ? e.z1 : 80);
+      }
+      e.render(this.scene, r);
+    }
+    frame(e, t, n, r) {
+      let i = this.camera,
+        a = e * z,
+        o = B.set(0, Math.sin(a), Math.cos(a)),
+        s = ae.set(0, Math.cos(a), -Math.sin(a)),
+        c = (n + r) / 2,
+        l = Math.tan((i.fov * z) / 2) / R,
+        u = l * i.aspect,
+        d = 0;
+      for (let e = 0; e < 16; e++) {
+        let i = (e / 16) * Math.PI * 2,
+          a = Math.cos(i) * t,
+          f = Math.sin(i) * t;
+        for (let e of [n - c, r - c]) {
+          let t = e * o.y + f * o.z,
+            n = e * s.y + f * s.z;
+          d = Math.max(d, t + Math.abs(n) / l, t + Math.abs(a) / u);
+        }
+      }
+      (i.position.set(0, c, 0).addScaledVector(o, d),
+        i.lookAt(0, c, 0),
+        i.updateProjectionMatrix());
+    }
+    dispose() {
+      (this.model.dispose(), this.trail.dispose());
+      for (let e of [this.floor, this.ring])
+        (e.geometry.dispose(), e.material.dispose());
+    }
+  },
+  U = { primary: !1, secondary: !1 },
+  W = (e, t) => ({
+    velocity: [0, 0, 0],
+    grounded: !0,
+    viewOffsetZ: 64,
+    sidemove: 0,
+    yaw: e,
+    pitch: t,
+    landed: 0,
+  }),
+  G = (e) => o(e) ?? m,
+  K = (e) => (e.id === `carrot` ? null : e),
+  le = [...new Set(Object.values(r))],
+  ue = 4.6,
+  q = new Map(),
+  de = 240,
+  J = new WeakMap();
+function Y(e) {
+  let t = J.get(e);
+  if (t) return t;
+  l(e);
+  let n = s(),
+    r = new Set(
+      n.names
+        .map((e, t) =>
+          /Right_(Hand|Index|Middle|Ring|Pinky|Thumb)|R_wrist/.test(e) ? t : -1,
+        )
+        .filter((e) => e >= 0),
+    ),
+    i = e.getAttribute(`finishUV`),
+    a = e.getAttribute(`skinIndex`);
+  t = { blade: [], knife: [], hand: [] };
+  for (let e = 0; e < i.count; e += 2) {
+    let n = i.getZ(e);
+    n > 0.5 && n < 1.5
+      ? t.blade.push(e)
+      : n > 1.5 && n < 3.5
+        ? t.knife.push(e)
+        : r.has(a.getX(e)) && t.hand.push(e);
+  }
+  return (J.set(e, t), t);
+}
+var X = (e, t) =>
+    e
+      ? t
+        ? [
+            Math.min(e[0], t[0]),
+            Math.min(e[1], t[1]),
+            Math.max(e[2], t[2]),
+            Math.max(e[3], t[3]),
+          ]
+        : e
+      : t,
+  fe = (e) =>
+    e
+      ? [
+          Math.max(0, e[0]),
+          Math.max(0, e[1]),
+          Math.min(1, e[2]),
+          Math.min(1, e[3]),
+        ]
+      : null,
+  pe = (e, t) =>
+    e && t ? [e[0], e[1], e[2], Math.max(e[3], Math.min(1.18, t[3]))] : e,
+  me = class {
+    host;
+    canvas;
+    onView = null;
+    renderer;
+    world = new y(74, 16 / 9, 1, 1e3);
+    vm;
+    probe;
+    show = new O();
+    thumbShow = new O();
+    closeScene = new i();
+    thumbScene = new i();
+    closeCam = new y(24, 1, 0.5, 400);
+    thumbCam = new y(18, 384 / 240, 0.5, 600);
+    itemCam = new y(24, 384 / 240, 0.05, 4e3);
+    shown;
+    look = { outfit: null, ghost: null, trail: null, veil: !1 };
+    bunny = null;
+    building = 0;
+    viewMode = `fp`;
+    raf = 0;
+    last = 0;
+    t = 0;
+    visible = !0;
+    disposed = !1;
+    reduced = matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+    ro;
+    io;
+    offOutfit;
+    w = 1;
+    h = 1;
+    rect = null;
+    boundsCache = new Map();
+    lookYaw = 0;
+    lookPitch = 0;
+    spin = 0.35;
+    spinV = 0;
+    tilt = 0.08;
+    tiltV = 0;
+    dragging = null;
+    idleSpin = 0;
+    inspectHeld = !1;
+    jobs = [];
+    waiting = new Map();
+    constructor(e, t) {
+      ((this.host = e),
+        (this.canvas = document.createElement(`canvas`)),
+        (this.canvas.className = `lo-canvas`),
+        this.canvas.setAttribute(`aria-hidden`, `true`),
+        (this.renderer = new ee({
+          canvas: this.canvas,
+          antialias: !0,
+          alpha: !0,
+          powerPreference: `high-performance`,
+        })),
+        e.prepend(this.canvas),
+        this.renderer.setClearColor(0, 0),
+        (this.shown = t),
+        (this.vm = new D()),
+        this.vm.setVisible(!0),
+        (this.probe = new D()),
+        this.probe.seek(`idle`, 0),
+        this.closeScene.add(this.show.root),
+        this.thumbScene.add(this.thumbShow.root));
+      let n = ne();
+      (this.show.setColours(n),
+        this.thumbShow.setColours(n),
+        (this.offOutfit = S((e) => {
+          (this.show.setColours(e), this.thumbShow.setColours(e));
+        })),
+        this.display(t),
+        (this.ro = new ResizeObserver(() => this.resize())),
+        this.ro.observe(e),
+        (this.io = new IntersectionObserver((e) => {
+          if (!this.canvas.isConnected) return this.dispose();
+          ((this.visible = e.some((e) => e.isIntersecting)), this.kick());
+        })),
+        this.io.observe(this.canvas),
+        document.addEventListener(`visibilitychange`, this.onVis),
+        this.bindDrag(),
+        this.resize(),
+        this.warm(),
+        this.kick());
+    }
+    get alive() {
+      return !this.disposed;
+    }
+    get view() {
+      return this.viewMode;
+    }
+    display(e, t) {
+      if (this.disposed) return;
+      ((this.shown = e), t && (this.look = { ...t }));
+      let n = G(e.knife);
+      (this.vm.setKnife(K(n)),
+        this.vm.setLoadout(e),
+        this.show.setKnife(n),
+        this.show.setFinish(b(e)),
+        this.bunny?.set(this.bunnyLook()),
+        this.kick());
+    }
+    bunnyLook() {
+      return {
+        mode: this.viewMode === `ghost` ? `ghost` : `solid`,
+        ...this.look,
+        loadout: this.shown,
+      };
+    }
+    setView(e) {
+      e === this.viewMode ||
+        this.disposed ||
+        ((this.viewMode = e),
+        (this.host.dataset.view = e),
+        e === `close` && (this.spinV = 2.2),
+        (e === `bunny` || e === `ghost`) &&
+          (this.bunny
+            ? this.bunny.set(this.bunnyLook())
+            : (this.bunny = new ce(this.bunnyLook()))),
+        this.onView?.(e),
+        this.kick());
+    }
+    inspect() {
+      this.disposed ||
+        this.viewMode === `bunny` ||
+        this.viewMode === `ghost` ||
+        (this.viewMode !== `fp` && this.setView(`fp`),
+        this.vm.inspect(),
+        this.kick());
+    }
+    holdInspect(e) {
+      this.inspectHeld = e;
+    }
+    flourish(e) {
+      if (!(this.disposed || this.reduced)) {
+        if (this.viewMode === `bunny` || this.viewMode === `ghost`) {
+          (this.bunny?.flourish(), this.kick());
+          return;
+        }
+        if (this.viewMode === `close`) {
+          ((this.spinV += 7.5), this.kick());
+          return;
+        }
+        (e === `knife` ? this.vm.draw() : e === `finish` && this.vm.inspect(),
+          this.kick());
+      }
+    }
+    static cached(e) {
+      return q.get(e) ?? null;
+    }
+    requestThumb(e, t) {
+      let n = q.get(e.key);
+      if (n) return t(n);
+      let r = this.waiting.get(e.key);
+      if (r) return void r.push(t);
+      (this.waiting.set(e.key, [t]), this.jobs.push(e), this.kick());
+    }
+    buildItems() {
+      for (let t of this.jobs) {
+        if (this.building >= 2) return;
+        t.kind === `item` &&
+          t.scene === void 0 &&
+          ((t.scene = null),
+          this.building++,
+          e(
+            () =>
+              import(`./item3d-scenes-MQRPUo-S.js`).then((e) =>
+                e.buildItemScene(t.spec),
+              ),
+            __vite__mapDeps([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+          )
+            .then(
+              (e) => {
+                if (this.disposed || !this.jobs.includes(t)) return e.dispose();
+                t.scene = e;
+              },
+              () => (this.jobs = this.jobs.filter((e) => e !== t)),
+            )
+            .finally(() => {
+              (this.building--, this.buildItems(), this.kick());
+            }));
+      }
+    }
+    cancelThumbs(e) {
+      this.jobs = this.jobs.filter(
+        (t) =>
+          e(t.key) ||
+          (this.waiting.delete(t.key),
+          t.kind === `item` && t.scene?.dispose(),
+          !1),
+      );
+    }
+    nextJob() {
+      let e = this.jobs.findIndex((e) => e.kind !== `item` || !!e.scene);
+      return e < 0 ? null : this.jobs.splice(e, 1)[0];
+    }
+    runJob(e) {
+      let t = this.renderer,
+        n = t.getPixelRatio(),
+        r = this.canvas.width,
+        i = this.canvas.height,
+        a = Math.min(1, r / 384, i / 240),
+        o = Math.floor(384 * a),
+        s = Math.floor(240 * a);
+      (t.setScissorTest(!0),
+        t.setViewport(0, 0, o / n, s / n),
+        t.setScissor(0, 0, o / n, s / n),
+        t.clear(),
+        e.kind === `knife`
+          ? this.drawKnifeThumb(e.knife, e.loadout)
+          : e.kind === `glove`
+            ? this.drawGloveThumb(e.loadout, o, s)
+            : e.scene &&
+              (this.drawItemThumb(e.scene, e.spec), e.scene.dispose()));
+      let c = document.createElement(`canvas`);
+      ((c.width = o),
+        (c.height = s),
+        c.getContext(`2d`).drawImage(this.canvas, 0, i - s, o, s, 0, 0, o, s),
+        t.setScissorTest(!1),
+        t.setViewport(0, 0, r / n, i / n),
+        q.size >= de && q.delete(q.keys().next().value),
+        q.set(e.key, c));
+      let l = this.waiting.get(e.key) ?? [];
+      this.waiting.delete(e.key);
+      for (let e of l) e(c);
+    }
+    drawKnifeThumb(e, t) {
+      let n = this.thumbShow;
+      (n.setKnife(G(e)), n.setFinish(b(t)));
+      let r = Z().premultiply(
+        new v().setFromEuler(new x(0, 0.38, 0.56, `YXZ`)),
+      );
+      n.root.quaternion.copy(r);
+      let i = n.extentAt(r),
+        a = this.thumbCam,
+        o = Math.tan(p.degToRad(a.fov / 2)),
+        s = Math.max(i.y / o, i.x / (o * a.aspect)) * 1.1 + i.z;
+      (a.position.set(0, 0, s),
+        a.lookAt(0, 0, 0),
+        a.updateProjectionMatrix(),
+        this.renderer.render(this.thumbScene, a));
+    }
+    drawItemThumb(e, t) {
+      let n = T[t.kind];
+      (e.pivot.quaternion.setFromEuler(new x(n.tilt, n.yaw, 0, `XYZ`)),
+        e.pivot.scale.setScalar(1),
+        e.pivot.position.set(0, 0, 0));
+      let r = this.itemCam,
+        i = p.degToRad(r.fov / 2),
+        a =
+          t.kind === `bunny` || t.kind === `ghost`
+            ? 1.3
+            : t.kind === `trail`
+              ? 1.7
+              : n.fill;
+      (r.position.set(0, 0, (e.radius / Math.sin(i)) * (0.98 / a)),
+        r.lookAt(0, 0, 0),
+        (r.near = r.position.z * 0.05),
+        (r.far = r.position.z * 3),
+        r.updateProjectionMatrix(),
+        e.frame?.(1 / 60, r, 1),
+        this.renderer.render(e.scene, r));
+    }
+    drawGloveThumb(e, t, n) {
+      let r = this.probe;
+      (r.setKnife(K(G(e.knife))), r.setLoadout(e), r.update(0, W(0, 0), U));
+      let i = this.measure(r).hand;
+      if ((this.renderer.clear(), !i)) return;
+      let a = $(Q(i, 0.18, 0.18), 384 / 240, 0.2);
+      (this.crop(r, a, t, n), r.render(this.renderer, this.world));
+    }
+    measure(e) {
+      let t = this.renderer,
+        r = e.camera;
+      (r.clearViewOffset(),
+        (this.world.aspect = 16 / 9),
+        this.world.updateProjectionMatrix());
+      let i = t.getScissorTest(),
+        a = new n(),
+        o = new n();
+      (t.getScissor(a),
+        t.getViewport(o),
+        t.setScissorTest(!0),
+        t.setScissor(0, 0, 1, 1),
+        e.render(t, this.world),
+        t.setScissor(a),
+        t.setScissorTest(i),
+        t.setViewport(o));
+      let s = e.mesh,
+        l = s.geometry,
+        u = Y(l),
+        d = l.getAttribute(`position`),
+        f = l.getAttribute(`skinIndex`),
+        p = s.skeleton.boneMatrices,
+        m = new c(),
+        g = new h(),
+        _ = (e) => {
+          let t = 1 / 0,
+            n = 1 / 0,
+            i = -1 / 0,
+            a = -1 / 0;
+          for (let o of e) {
+            if (
+              (m.fromArray(p, f.getX(o) * 16),
+              g
+                .fromBufferAttribute(d, o)
+                .applyMatrix4(m)
+                .applyMatrix4(s.matrixWorld)
+                .project(r),
+              g.z > 1)
+            )
+              continue;
+            let e = (g.x + 1) / 2,
+              c = (1 - g.y) / 2;
+            ((t = Math.min(t, e)),
+              (i = Math.max(i, e)),
+              (n = Math.min(n, c)),
+              (a = Math.max(a, c)));
+          }
+          return Number.isFinite(t) ? [t, n, i, a] : null;
+        };
+      return { blade: _(u.blade), knife: _(u.knife), hand: _(u.hand) };
+    }
+    crop(e, t, n, r) {
+      let i = n / (t[2] - t[0]),
+        a = r / (t[3] - t[1]);
+      e.camera.setViewOffset(i, a, t[0] * i, t[1] * a, n, r);
+    }
+    targetRect() {
+      let e = te.get().viewmodel,
+        t = G(this.shown.knife),
+        n = `${t.id}|${e.hand}|${e.fov}|${e.x}|${e.y}|${e.z}|${this.probe.animSource}|${this.w}x${this.h}`,
+        r = this.boundsCache.get(n);
+      if (!r) {
+        (this.probe.setKnife(K(t)),
+          this.probe.setLoadout(this.shown),
+          this.probe.update(0, W(0, 0), U));
+        let e = this.measure(this.probe),
+          i = pe(fe(X(e.knife, e.hand)), X(e.knife, e.hand)),
+          a = X(e.blade, i) ?? [0.4, 0.3, 1, 1],
+          o = this.w / this.h < 1.15;
+        r = $(
+          Q(a, 0.16, 0.2),
+          this.w / this.h,
+          0.62,
+          o ? [0.5, 0.56] : [0.58, 0.54],
+        );
+        let s = Math.max(
+            1,
+            (e.blade?.[3] ?? 0) + 0.04,
+            (i?.[3] ?? 0) + (i && i[3] > 1 ? 0.02 : 0),
+          ),
+          c = Math.max(1, (e.blade?.[2] ?? 0) + 0.04),
+          l = r[3] - r[1],
+          u = r[2] - r[0],
+          d = Math.min(
+            r[3] - s,
+            Math.max(0, (0.66 - ((a[1] + a[3]) / 2 - r[1]) / l) * l),
+          ),
+          f = Math.min(
+            r[2] - c,
+            Math.max(0, (0.7 - ((a[0] + a[2]) / 2 - r[0]) / u) * u),
+          );
+        (d > 0 && ((r[1] -= d), (r[3] -= d)),
+          f > 0 && ((r[0] -= f), (r[2] -= f)),
+          this.boundsCache.set(n, r));
+      }
+      return (this.vm.inspects.active && (r = he(r, 1.22)), r);
+    }
+    resize() {
+      let e = Math.max(1, this.host.clientWidth),
+        t = Math.max(1, this.host.clientHeight),
+        n = Math.min(
+          Math.max(1, devicePixelRatio),
+          1.5,
+          Math.sqrt(25e5 / (e * t)),
+        );
+      (this.renderer.setPixelRatio(Math.max(1, n)),
+        this.renderer.setSize(e, t, !1),
+        (this.w = e),
+        (this.h = t),
+        (this.rect = null),
+        this.frame(0));
+    }
+    frame(e) {
+      if (!this.disposed) {
+        if (
+          ((this.t += e),
+          this.jobs.length &&
+            this.canvas.width >= 160 &&
+            this.canvas.height >= 100)
+        ) {
+          this.buildItems();
+          let e = performance.now();
+          for (
+            let t = this.nextJob();
+            t;
+            t = performance.now() - e < 6 ? this.nextJob() : null
+          )
+            this.runJob(t);
+        }
+        this.viewMode === `fp`
+          ? this.drawFirstPerson(e)
+          : this.viewMode === `close`
+            ? this.drawCloseUp(e)
+            : this.drawBunny(e);
+      }
+    }
+    drawBunny(e) {
+      let t = this.bunny;
+      (this.renderer.clear(),
+        t && (t.advance(e), t.render(this.renderer, this.w, this.h)));
+    }
+    drawFirstPerson(e) {
+      let t = 1 - Math.exp(-e * 2.5);
+      this.dragging ||
+        ((this.lookYaw -= this.lookYaw * t),
+        (this.lookPitch -= this.lookPitch * t));
+      let n = +!this.reduced,
+        r = Math.sin(this.t * 0.5) * 6 * n + this.lookYaw,
+        i = 2 + Math.sin(this.t * 0.33) * 3 * n + this.lookPitch;
+      this.vm.update(e, W(r, i), { ...U, inspect: this.inspectHeld });
+      let a = this.vm;
+      a.action === `idle` &&
+        a.actionT > ue &&
+        !this.vm.inspects.active &&
+        (this.vm.seek(`idle`, 0.4), (this.vm.timeScale = 1));
+      let o = this.targetRect();
+      if ((this.renderer.clear(), !this.rect)) this.rect = [...o];
+      else {
+        let t = 1 - Math.exp(-e * 7);
+        for (let e = 0; e < 4; e++) this.rect[e] += (o[e] - this.rect[e]) * t;
+      }
+      ((this.world.aspect = 16 / 9),
+        this.world.updateProjectionMatrix(),
+        this.world.position.set(0, 0, 0),
+        this.world.rotation.set(0, 0, 0),
+        this.crop(this.vm, this.rect, this.w, this.h),
+        this.vm.render(this.renderer, this.world));
+    }
+    drawCloseUp(e) {
+      if (!this.dragging) {
+        let t = Math.exp(-e * 2.2);
+        ((this.spinV *= t),
+          (this.tiltV *= t),
+          (this.idleSpin +=
+            ((this.reduced ? 0 : 0.42) - this.idleSpin) *
+            (1 - Math.exp(-e * 1.5))),
+          (this.spin += (this.spinV + this.idleSpin) * e),
+          (this.tilt += this.tiltV * e),
+          (this.tilt += (0.08 - this.tilt) * (1 - Math.exp(-e * 1.2))));
+      }
+      this.tilt = Math.max(-0.7, Math.min(0.7, this.tilt));
+      let t = this.reduced ? 0 : Math.sin(this.t * 0.9) * 0.025,
+        n = Z().premultiply(
+          new v().setFromEuler(new x(this.tilt + t, this.spin, 0.16, `XYZ`)),
+        );
+      this.show.root.quaternion.copy(n);
+      let r = this.closeCam;
+      r.aspect = this.w / this.h;
+      let i = Math.tan(p.degToRad(r.fov / 2)),
+        a = this.show.half,
+        o = Math.hypot(a.z, a.x) + a.y * 0.16,
+        s = a.y + Math.hypot(a.z, a.x) * 0.3,
+        c = Math.max(o / (i * r.aspect), s / i) * 1.12;
+      (r.position.set(0, 0, c),
+        r.lookAt(0, 0, 0),
+        r.updateProjectionMatrix(),
+        this.renderer.clear(),
+        this.renderer.render(this.closeScene, r));
+    }
+    kick() {
+      if (this.raf || !this.visible || this.disposed) return;
+      this.last = performance.now();
+      let e = (t) => {
+        if (((this.raf = 0), !this.canvas.isConnected)) return this.dispose();
+        this.visible &&
+          !document.hidden &&
+          (this.frame(Math.min(0.1, (t - this.last) / 1e3)),
+          (this.last = t),
+          (this.raf = requestAnimationFrame(e)));
+      };
+      this.raf = requestAnimationFrame(e);
+    }
+    onVis = () => {
+      document.hidden || this.kick();
+    };
+    bindDrag() {
+      let e = this.host;
+      (e.addEventListener(`pointerdown`, (t) => {
+        t.button !== 0 ||
+          t.target.closest(`button, a, input`) ||
+          ((this.dragging = { x: t.clientX, y: t.clientY, id: t.pointerId }),
+          this.bunny && (this.bunny.dragging = !0),
+          e.setPointerCapture(t.pointerId),
+          e.classList.add(`dragging`),
+          (this.spinV = this.tiltV = 0),
+          (this.idleSpin = 0));
+      }),
+        e.addEventListener(`pointermove`, (e) => {
+          let t = this.dragging;
+          if (!t || t.id !== e.pointerId) return;
+          let n = e.clientX - t.x,
+            r = e.clientY - t.y;
+          if (((t.x = e.clientX), (t.y = e.clientY), this.viewMode === `bunny`))
+            this.bunny?.drag(n, this.w);
+          else if (this.viewMode === `ghost`) return;
+          else if (this.viewMode === `close`) {
+            let e = 4.2 / Math.max(240, this.w);
+            ((this.spin += n * e), (this.tilt += r * e * 0.7));
+            let t = 1 / 60;
+            ((this.spinV = (n * e) / t), (this.tiltV = (r * e * 0.7) / t));
+          } else
+            ((this.lookYaw = Math.max(
+              -25,
+              Math.min(25, this.lookYaw - n * 0.12),
+            )),
+              (this.lookPitch = Math.max(
+                -14,
+                Math.min(14, this.lookPitch + r * 0.1),
+              )));
+        }));
+      let t = (t) => {
+        this.dragging?.id === t.pointerId &&
+          ((this.dragging = null),
+          this.bunny && ((this.bunny.dragging = !1), this.bunny.release()),
+          e.classList.remove(`dragging`),
+          (this.spinV = Math.max(-9, Math.min(9, this.spinV))),
+          (this.tiltV = Math.max(-3, Math.min(3, this.tiltV))));
+      };
+      (e.addEventListener(`pointerup`, t),
+        e.addEventListener(`pointercancel`, t));
+    }
+    warm() {
+      let e = (e) =>
+          `requestIdleCallback` in window
+            ? requestIdleCallback(e, { timeout: 400 })
+            : setTimeout(e, 30),
+        n = [...t],
+        r = [...w],
+        i = () => {
+          if (this.disposed) return;
+          let t = r.shift();
+          if (t) {
+            (Y(E(K(G(this.shown.knife)) ?? void 0, t)), e(i));
+            return;
+          }
+          let a = n.shift();
+          if (!a) {
+            this.show
+              .precompile(this.renderer, this.closeCam, le)
+              .catch(() => {});
+            return;
+          }
+          (Y(E(a)), ie(a), e(i));
+        };
+      e(i);
+    }
+    dispose() {
+      if (!this.disposed) {
+        ((this.disposed = !0),
+          cancelAnimationFrame(this.raf),
+          document.removeEventListener(`visibilitychange`, this.onVis),
+          this.offOutfit(),
+          this.ro.disconnect(),
+          this.io.disconnect(),
+          this.vm.dispose(),
+          this.probe.dispose(),
+          this.show.dispose(),
+          this.thumbShow.dispose(),
+          this.bunny?.dispose());
+        for (let e of this.waiting.values()) e.length = 0;
+        this.waiting.clear();
+        for (let e of this.jobs) e.kind === `item` && e.scene?.dispose();
+        ((this.jobs = []),
+          this.renderer.dispose(),
+          this.renderer.forceContextLoss(),
+          this.canvas.remove());
+      }
+    }
+  };
+function Z() {
+  let e = new c().makeBasis(new h(0, 0, 1), new h(0, -1, 0), new h(1, 0, 0));
+  return new v().setFromRotationMatrix(e);
+}
+function Q(e, t, n) {
+  let r = e[2] - e[0],
+    i = e[3] - e[1];
+  return [e[0] - r * t, e[1] - i * n, e[2] + r * t, e[3] + i * n];
+}
+function $(e, t, n, r = [0.5, 0.5]) {
+  let i = (e[0] + e[2]) / 2,
+    a = (e[1] + e[3]) / 2,
+    [o, s] = r,
+    c = Math.max((i - e[0]) / o, (e[2] - i) / (1 - o)) * 16,
+    l = Math.max((a - e[1]) / s, (e[3] - a) / (1 - s), n) * 9;
+  c / l > t ? (l = c / t) : (c = l * t);
+  let u = c / 16,
+    d = l / 9;
+  return [i - u * o, a - d * s, i - u * o + u, a - d * s + d];
+}
+function he(e, t) {
+  let n = (e[0] + e[2]) / 2,
+    r = (e[1] + e[3]) / 2,
+    i = ((e[2] - e[0]) / 2) * t,
+    a = ((e[3] - e[1]) / 2) * t;
+  return [n - i, r - a, n + i, r + a];
+}
+export { me as LoadoutStage };

@@ -1,0 +1,85 @@
+Bunnyhop.lol client capture and offline checks, 11 October 2026
+
+Source availability
+
+No public project source repository or project source license was identified
+in the checked website, About page, indexed GitHub references, and related
+public repository list. This is a negative search result, not proof that a
+repository cannot exist. source-check.json records the evidence and limitations.
+
+The public build includes 55 JavaScript modules, CSS, UI media and a compiled
+WebAssembly engine. Original bytes are preserved in upstream/ and recorded in
+client-manifest.json. analysis/pretty/ formats all 55 JS modules; it does not
+recover original C++/TypeScript sources or minified identifier names. No source
+map references were found in the captured JS.
+
+How the browser game works
+
+The original site describes Source SDK 2013 movement at 100 tick. The captured
+WASM wrapper's default tick interval is 0.01 seconds. It loads Source VBSP map
+data and exposes player simulation, collision/content loading and map data to
+the JavaScript client. Rendering uses Three.js r186. This is a custom browser
+client, not a complete CS:GO, CS 1.6 or original multiplayer server executable.
+
+The catalogue has 342 maps: 328 CSS-labelled and 14 CS:GO-labelled. A separately
+published bhop_lol_tutorial BSP has four lessons. The map catalogue pins byte
+sizes and SHA-256 hashes; content manifests map materials/models/sounds and
+collision resources to SHA-addressed blobs. All 343 map BSPs, zone files and
+content manifests were captured, including optional player and sound groups.
+
+Offline adaptation
+
+run.py copies original files to ignored offline/ and replaces exactly one API
+base initializer in api-B2Jj-kgC.js with null. The client's original offline
+behavior uses local content-manifests/ and content/ paths. The server binds to
+127.0.0.1, serves cached files only and disables hosted API operations. Its CSP
+limits automatic asset/connect requests to local/data/blob resources.
+
+The generated map catalogue redirects 767 available GameBanana screenshots to
+cached images. One published URL for bhop_bfur returns HTTP 200, image/webp and
+Content-Length: 0; two direct requests confirmed the empty body. It is recorded
+as unavailable in downloaded-assets.json and omitted from the generated gallery.
+The original catalogue and original client JS remain unchanged.
+
+Accounts, hosted leaderboards, cloud replay services, chat and multiplayer need
+the original backend and are unavailable locally. Local game preferences/runs
+use the original browser storage behavior.
+
+Verification performed
+
+HTTP checks on an unused localhost port covered HTML/JS/WASM serving, SPA map
+routes, correct MIME types, the API-base patch, CSP and disabled GET/POST APIs.
+Downloader fixtures verified a truncated HTTP 200 transfer retry and reuse of
+already validated files. Pack/restore fixtures rejected corrupt archives and
+unsafe parent paths.
+
+Safari checks covered Aztec's textured game view and HUD, start/pause controls,
+the 342-map catalogue, search and changing to Eazy. Eazy rendered its textured
+map, hands and carrot model. Fullscreen/pointer capture releases on focus loss
+and the client shows Click to resume. No complete course or every settings,
+replay, loadout or training-lesson flow was manually tested.
+
+The headless probe used the unchanged public WASM/JS wrapper and the browser's
+full-content initialization order: BSP load, hosted-content insertion, physics
+reload. All 343 maps loaded and moved under synthetic input, with finite state
+and identical per-tick state hashes under 30/60/144 FPS schedules: 600 ticks per
+schedule, 617,400 ticks in total. physics-verification.json records every map.
+This does not certify native CSS parity, full-course completion or server ranks.
+
+The original core reports 647 unresolved prop collision warnings on 96 maps,
+covering 558 distinct model names. 646 warnings have no hosted .phy in that map
+manifest; one, wood_crate001a_damaged.phy on bhop_exodus_fix, is published and
+hash-valid but remains unresolved after the original loading procedure. These
+warnings are preserved in the report and distinguished from download failures.
+
+Git LFS backup
+
+asset-backup.py packages each Bunnyhop BSP independently and other resources in
+deterministic gzip/tar archives, including the existing Surfd cache and its UI
+dependencies. assets/manifest.json records compressed and unpacked hashes.
+Working caches, partial files, logs and PID files remain ignored.
+
+Fresh temporary-cache restoration verifies every archive and unpacked-file
+SHA-256. Both games then start from restored files with offline serving. The
+structured result is in backup-verification.json. Git LFS is the backup transport;
+it does not change upstream code or asset licenses.

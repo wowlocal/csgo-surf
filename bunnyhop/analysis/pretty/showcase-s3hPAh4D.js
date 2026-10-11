@@ -1,0 +1,193 @@
+import {
+  A as e,
+  Dr as t,
+  F as n,
+  It as r,
+  J as i,
+  Or as a,
+  Sr as o,
+  U as s,
+  Z as c,
+  cn as l,
+  ht as u,
+  it as d,
+  j as f,
+  nt as p,
+  qr as m,
+  qt as h,
+  rt as g,
+  yt as _,
+} from "./model-CJn1vZL3.js";
+import { n as v, r as y } from "./palettes-YJRmTQgw.js";
+var b = new Map();
+function x(e) {
+  let t = b.get(e.id);
+  if (t) return t;
+  let n = c(),
+    r = n.bone(`Knife_Handle`),
+    a = new d(),
+    o = new i(
+      a,
+      `fp`,
+      (e) => [e[0], e[1], e[2]],
+      (e) => [[e ? n.bone(e) : r, 1]],
+    );
+  e.build(o);
+  let s = a.geometry();
+  s.computeBoundingBox();
+  let l = s.boundingBox,
+    u = l.getCenter(new m()),
+    f = l.getSize(new m()).multiplyScalar(0.5),
+    p = s.getAttribute(`position`),
+    h = Math.max(1, Math.floor(p.count / 1500)),
+    g = new Float32Array(Math.ceil(p.count / h) * 3);
+  for (let e = 0, t = 0; e < p.count; e += h, t += 3)
+    ((g[t] = p.getX(e) - u.x),
+      (g[t + 1] = p.getY(e) - u.y),
+      (g[t + 2] = p.getZ(e) - u.z));
+  return (
+    (t = { geo: s, center: u, radius: f.length(), half: f, pts: g }),
+    b.set(e.id, t),
+    t
+  );
+}
+function S(e) {
+  x(e);
+}
+var C = class {
+  root = new h();
+  uniforms = e();
+  mesh;
+  skeleton;
+  hold = null;
+  knife = null;
+  mats = new Map();
+  BLinv;
+  W;
+  S = new Float32Array(12);
+  cur = null;
+  constructor() {
+    let e = c(),
+      n = e.names.length,
+      i = Array.from({ length: n }, () => new u());
+    this.skeleton = new t(
+      i,
+      i.map(() => new l()),
+    );
+    let o = this.skeleton;
+    ((o.update = () => {
+      o.boneTexture && (o.boneTexture.needsUpdate = !0);
+    }),
+      (this.mesh = new a(new _(), this.material(0))),
+      (this.mesh.bindMode = r),
+      this.mesh.bind(o, new l()),
+      (this.mesh.frustumCulled = !1),
+      this.root.add(this.mesh));
+    let s = e.bone(`Knife_Handle`),
+      d = new Float32Array(12);
+    (g(e.bind, s * 12, d, 0),
+      (this.BLinv = new Float32Array(n * 12)),
+      (this.W = new Float32Array(n * 12)));
+    let f = new Float32Array(12);
+    for (let t = 0; t < n; t++)
+      (p(d, 0, e.bind, t * 12, f, 0), g(f, 0, this.BLinv, t * 12));
+  }
+  material(e) {
+    let t = this.mats.get(e);
+    return (
+      t || this.mats.set(e, (t = f(this.uniforms, { finish: e, glove: !1 }))),
+      t
+    );
+  }
+  get radius() {
+    return this.cur?.radius ?? 8;
+  }
+  get half() {
+    return this.cur?.half ?? new m(1, 1, 6);
+  }
+  extentAt(e) {
+    let t = new m(),
+      n = this.cur?.pts;
+    if (!n) return t.set(1, 1, 1);
+    let r = new m();
+    for (let i = 0; i < n.length; i += 3)
+      (r.set(n[i], n[i + 1], n[i + 2]).applyQuaternion(e),
+        t.set(
+          Math.max(t.x, Math.abs(r.x)),
+          Math.max(t.y, Math.abs(r.y)),
+          Math.max(t.z, Math.abs(r.z)),
+        ));
+    return t;
+  }
+  get current() {
+    return this.knife;
+  }
+  setKnife(e) {
+    e !== this.knife &&
+      ((this.knife = e),
+      (this.cur = x(e)),
+      (this.mesh.geometry = this.cur.geo),
+      this.mesh.position.copy(this.cur.center).multiplyScalar(-1),
+      (this.hold = new s(e, c())),
+      this.pose());
+  }
+  setColours(e) {
+    let t = v(e),
+      n = y(t);
+    (this.uniforms.uPalette.value.forEach((e, t) => e.set(n[t])),
+      this.uniforms.uAccent.value.set(t.accent));
+  }
+  setFinish(e) {
+    let t = e && e.kind !== `none` ? e : null;
+    (this.uniforms, (this.mesh.material = this.material(n(t, null).finish)));
+  }
+  precompile(e, t, n) {
+    let i = new o(),
+      s = n.map((e) => {
+        let t = new a(this.mesh.geometry, this.material(e));
+        return (
+          (t.bindMode = r),
+          t.bind(this.skeleton, new l()),
+          (t.frustumCulled = !1),
+          i.add(t),
+          t
+        );
+      });
+    return e.compileAsync(i, t).finally(() => s.forEach((e) => i.remove(e)));
+  }
+  pose() {
+    let e = c().names.length,
+      t = this.W;
+    for (let n = 0; n < e; n++)
+      t.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0], n * 12);
+    this.hold && (this.hold.state.angles.fill(0), this.hold.solve(t));
+    let n = this.skeleton.boneMatrices,
+      r = this.S;
+    for (let i = 0; i < e; i++) {
+      p(t, i * 12, this.BLinv, i * 12, r, 0);
+      let e = i * 16;
+      ((n[e] = r[0]),
+        (n[e + 1] = r[4]),
+        (n[e + 2] = r[8]),
+        (n[e + 3] = 0),
+        (n[e + 4] = r[1]),
+        (n[e + 5] = r[5]),
+        (n[e + 6] = r[9]),
+        (n[e + 7] = 0),
+        (n[e + 8] = r[2]),
+        (n[e + 9] = r[6]),
+        (n[e + 10] = r[10]),
+        (n[e + 11] = 0),
+        (n[e + 12] = r[3]),
+        (n[e + 13] = r[7]),
+        (n[e + 14] = r[11]),
+        (n[e + 15] = 1));
+    }
+    this.skeleton.update();
+  }
+  dispose() {
+    for (let e of this.mats.values()) e.dispose();
+    (this.mats.clear(), this.skeleton.dispose());
+  }
+};
+export { S as n, C as t };

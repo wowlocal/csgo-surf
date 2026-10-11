@@ -1,0 +1,829 @@
+var e = (function (e) {
+    return (
+      (e[(e.Textured = 0)] = `Textured`),
+      (e[(e.Missing = 1)] = `Missing`),
+      (e[(e.Water = 2)] = `Water`),
+      (e[(e.Glass = 3)] = `Glass`),
+      (e[(e.Flat = 4)] = `Flat`),
+      e
+    );
+  })({}),
+  t = (function (e) {
+    return (
+      (e[(e.RGBA8 = 0)] = `RGBA8`),
+      (e[(e.DXT1 = 1)] = `DXT1`),
+      (e[(e.DXT1A = 2)] = `DXT1A`),
+      (e[(e.DXT3 = 3)] = `DXT3`),
+      (e[(e.DXT5 = 4)] = `DXT5`),
+      e
+    );
+  })({}),
+  n = new Map();
+function r(e) {
+  for (let [t, r] of e) n.set(t.toLowerCase(), r);
+}
+function i() {
+  return [...n];
+}
+var a = 1 << 20,
+  o = {
+    tickInterval: 0.01,
+    airAccelerate: 1e3,
+    accelerate: 5,
+    friction: 4,
+    stopSpeed: 75,
+    gravity: 800,
+    maxSpeed: 260,
+    autohop: !0,
+    physics: 10,
+  },
+  s = new TextDecoder(),
+  c = WebAssembly,
+  l = class e {
+    x;
+    constructor(e) {
+      this.x = e;
+    }
+    static async create(t) {
+      let n;
+      return (
+        (n =
+          t instanceof WebAssembly.Module
+            ? await WebAssembly.instantiate(t, {})
+            : t instanceof Response || t instanceof Promise
+              ? (await c.instantiateStreaming(t, {})).instance
+              : (await c.instantiate(t, {})).instance),
+        new e(n.exports)
+      );
+    }
+    str(e, t) {
+      return s.decode(new Uint8Array(this.x.memory.buffer, e, t));
+    }
+    f32(e, t) {
+      return new Float32Array(this.x.memory.buffer, e, t);
+    }
+    u32(e, t) {
+      return new Uint32Array(this.x.memory.buffer, e, t);
+    }
+    loadMap(e) {
+      this.addPhysicsContent();
+      let t = this.x.alloc(e.length);
+      if (
+        (new Uint8Array(this.x.memory.buffer, t, e.length).set(e),
+        !this.x.load_map(t, e.length))
+      )
+        throw Error(this.lastError());
+    }
+    loadMapPhysics(e) {
+      this.addPhysicsContent();
+      let t = this.x.alloc(e.length);
+      (new Uint8Array(this.x.memory.buffer, t, e.length).set(e),
+        this.commitPhysics(t, e.length));
+    }
+    async loadMapPhysicsStream(e, t) {
+      this.addPhysicsContent();
+      let n = this.x.alloc(t),
+        r = 0,
+        i = e.getReader();
+      try {
+        for (;;) {
+          let { done: e, value: a } = await i.read();
+          if (e) break;
+          if (r + a.length > t)
+            throw Error(`map stream longer than ${t} bytes`);
+          (new Uint8Array(this.x.memory.buffer, n + r, a.length).set(a),
+            (r += a.length));
+        }
+        if (r !== t) throw Error(`map stream ended at ${r} of ${t} bytes`);
+      } catch (e) {
+        throw (this.x.dealloc(n, t), e);
+      } finally {
+        i.releaseLock();
+      }
+      this.commitPhysics(n, t);
+    }
+    commitPhysics(e, t) {
+      if (!this.x.load_map_physics)
+        throw Error(
+          `wasm build lacks load_map_physics export; rebuild with tools/scripts/build-wasm.sh`,
+        );
+      if (!this.x.load_map_physics(e, t)) throw Error(this.lastError());
+    }
+    physicsAdded = new Set();
+    addPhysicsContent() {
+      if (this.hasContentApi())
+        for (let [e, t] of n)
+          this.physicsAdded.has(e) ||
+            (this.contentAddFile(e, t), this.physicsAdded.add(e));
+    }
+    physicsFiles() {
+      if (!this.x.physics_files) return [];
+      let e = this.x.physics_files();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean);
+    }
+    physicsMissing() {
+      if (!this.x.physics_missing) return [];
+      let e = this.x.physics_missing();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean);
+    }
+    physicsReload() {
+      this.x.physics_reload &&
+        (this.addPhysicsContent(), this.x.physics_reload());
+    }
+    memoryBytes() {
+      return this.x.memory.buffer.byteLength;
+    }
+    lastError() {
+      return this.str(this.x.error_ptr(), this.x.error_len());
+    }
+    mesh() {
+      let e = this.f32(
+          this.x.mesh_vertices_ptr(),
+          this.x.mesh_vertices_len(),
+        ).slice(),
+        t = this.u32(
+          this.x.mesh_indices_ptr(),
+          this.x.mesh_indices_len(),
+        ).slice(),
+        n = this.x.mesh_groups(),
+        r = this.u32(this.x.scratch_u32_ptr(), n),
+        i = [];
+      for (let e = 0; e < r.length; e += 4)
+        i.push({
+          model: r[e],
+          material: r[e + 1],
+          firstIndex: r[e + 2],
+          indexCount: r[e + 3],
+        });
+      if (this.x.mesh_group_sky3d) {
+        let e = this.x.mesh_group_sky3d(),
+          t = this.u32(this.x.scratch_u32_ptr(), e);
+        e === i.length && i.forEach((e, n) => (e.sky3d = t[n] !== 0));
+      }
+      let a = this.x.mesh_materials(),
+        o = this.str(this.x.scratch_str_ptr(), a)
+          .split(
+            `
+`,
+          )
+          .filter(Boolean)
+          .map((e) => {
+            let t = e.split(` `),
+              n = Number(t.pop()),
+              r = Number(t.pop());
+            return { name: t.join(` `), width: r, height: n };
+          });
+      return {
+        vertices: e,
+        indices: t,
+        stride: this.x.mesh_vertex_floats(),
+        groups: i,
+        materials: o,
+      };
+    }
+    skyMesh() {
+      let e = this.x;
+      if (
+        !e.mesh_sky_vertices_ptr ||
+        !e.mesh_sky_vertices_len ||
+        !e.mesh_sky_indices_ptr ||
+        !e.mesh_sky_indices_len ||
+        !e.mesh_sky_groups
+      )
+        return null;
+      let t = this.f32(
+          e.mesh_sky_vertices_ptr(),
+          e.mesh_sky_vertices_len(),
+        ).slice(),
+        n = this.u32(
+          e.mesh_sky_indices_ptr(),
+          e.mesh_sky_indices_len(),
+        ).slice(),
+        r = this.u32(e.scratch_u32_ptr(), e.mesh_sky_groups()),
+        i = [];
+      for (let e = 0; e + 3 <= r.length; e += 3)
+        i.push({ model: r[e], firstIndex: r[e + 1], indexCount: r[e + 2] });
+      return { vertices: t, indices: n, groups: i };
+    }
+    skyCamera() {
+      if (!this.x.sky_camera) return null;
+      let e = this.x.sky_camera();
+      if (e < 19) return null;
+      let t = this.f32(this.x.scratch_f32_ptr(), e).slice();
+      return {
+        origin: [t[0], t[1], t[2]],
+        scale: t[3],
+        area: t[4],
+        fog: {
+          enable: t[5] !== 0,
+          blend: t[6] !== 0,
+          color: [t[7], t[8], t[9]],
+          color2: [t[10], t[11], t[12]],
+          dir: [t[13], t[14], t[15]],
+          start: t[16],
+          end: t[17],
+          maxDensity: t[18],
+        },
+      };
+    }
+    materials() {
+      let e = this.x.material_info();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean)
+        .map((e) => {
+          let t = e.split(` `);
+          return {
+            kind: Number(t[0]),
+            flags: Number(t[1]),
+            texture: Number(t[2]),
+            alpha: Number(t[3]),
+            alphaRef: Number(t[4]),
+            color: [Number(t[5]), Number(t[6]), Number(t[7])],
+            shader: t.slice(8).join(` `),
+          };
+        });
+    }
+    textureCount() {
+      return this.x.texture_count();
+    }
+    texture(e, t, n) {
+      let r = this.x.texture_payload(e, +!!t, +!!n);
+      if (!r) return null;
+      let i = this.u32(this.x.scratch_u32_ptr(), r).slice(),
+        a = this.x.tex_bytes_ptr(),
+        o = [];
+      for (let e = 0; e < i[1]; e++) {
+        let [t, n, r, s] = i.subarray(2 + e * 4, 6 + e * 4);
+        o.push({
+          width: t,
+          height: n,
+          data: new Uint8Array(this.x.memory.buffer, a + r, s).slice(),
+        });
+      }
+      return { format: i[0], levels: o };
+    }
+    lightmap() {
+      let e = this.x.lightmap_size(),
+        [t, n] = this.u32(this.x.scratch_u32_ptr(), e);
+      return {
+        width: t,
+        height: n,
+        data: new Uint8Array(
+          this.x.memory.buffer,
+          this.x.lightmap_ptr(),
+          t * n * 4,
+        ).slice(),
+        scale: this.x.lightmap_scale(),
+      };
+    }
+    entities() {
+      let e = this.x.entities_text();
+      return this.str(this.x.scratch_str_ptr(), e)
+        .split(
+          `
+`,
+        )
+        .filter(Boolean)
+        .map((e) =>
+          Object.fromEntries(
+            e.split(`	`).map((e) => {
+              let t = e.indexOf(`=`);
+              return [e.slice(0, t), e.slice(t + 1)];
+            }),
+          ),
+        );
+    }
+    pakfile() {
+      let e = this.x.pak_len();
+      return new Uint8Array(this.x.memory.buffer, this.x.pak_ptr(), e).slice();
+    }
+    setSettings(e) {
+      this.x.set_settings(
+        e.tickInterval,
+        e.airAccelerate,
+        e.accelerate,
+        e.friction,
+        e.stopSpeed,
+        e.gravity,
+        e.maxSpeed,
+        +!!e.autohop,
+      );
+      let t = e.physics ?? 1;
+      if (this.x.set_physics_version) {
+        if (this.x.set_physics_version(t) !== 1)
+          throw Error(`this wasm build can't simulate physics v${t}`);
+      } else if (t !== 1)
+        throw Error(
+          `wasm build lacks physics versions (set_physics_version), can't simulate physics v${t}; rebuild with tools/scripts/build-wasm.sh`,
+        );
+    }
+    reset() {
+      this.x.reset();
+    }
+    step(e, t, n, r, i) {
+      let a = this.x.step(e, t, n, r, i);
+      if (a === 4294967295) throw Error(this.lastError());
+      return a;
+    }
+    state() {
+      let e = this.x.player_state(),
+        t = this.f32(this.x.scratch_f32_ptr(), e);
+      return {
+        position: [t[0], t[1], t[2]],
+        velocity: [t[3], t[4], t[5]],
+        viewOffsetZ: t[6],
+        grounded: t[7] !== 0,
+        crouched: t[8] !== 0,
+        tick: t[9],
+        teleportAngles: [t[10], t[11], t[12]],
+        onLadder: e > 13 && t[13] === 6,
+        angleChange: e > 16 ? [t[14], t[15], t[16]] : [0, 0, 0],
+        ...(e > 20 && t[17] === t[17]
+          ? { touchPosition: [t[17], t[18], t[19]], touchCrouched: t[20] !== 0 }
+          : {}),
+        ...(e > 22 ? { weapons: t[21], activeWeapon: t[22] } : {}),
+      };
+    }
+    brushOrigins() {
+      let e = this.x.brush_origins(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = new Map();
+      for (let e = 0; e < t.length; e += 7)
+        n.set(t[e], [
+          t[e + 1],
+          t[e + 2],
+          t[e + 3],
+          t[e + 4],
+          t[e + 5],
+          t[e + 6],
+        ]);
+      if (this.x.brush_states) {
+        let e = this.x.brush_states(),
+          t = this.f32(this.x.scratch_f32_ptr(), e);
+        for (let e = 0; e + 3 <= t.length; e += 3) {
+          let r = n.get(t[e]);
+          r && r.length === 6 && n.set(t[e], [...r, t[e + 1]]);
+        }
+      }
+      let r = this.x.prop_transforms?.() ?? 0,
+        i = this.f32(this.x.scratch_f32_ptr(), r);
+      for (let e = 0; e < i.length; e += 7)
+        n.set(a + i[e], [
+          i[e + 1],
+          i[e + 2],
+          i[e + 3],
+          i[e + 4],
+          i[e + 5],
+          i[e + 6],
+        ]);
+      return n;
+    }
+    overlayVolumes() {
+      if (!this.x.overlay_volumes) return null;
+      let e = this.x.overlay_volumes(),
+        t = this.f32(this.x.scratch_f32_ptr(), e).slice(),
+        n = [];
+      for (let e = 0; e + 5 <= t.length; ) {
+        let r = t[e + 4];
+        (n.push({
+          kind: t[e],
+          entity: t[e + 1],
+          model: t[e + 2],
+          flags: t[e + 3],
+          planes: t.subarray(e + 5, e + 5 + r * 4),
+        }),
+          (e += 5 + r * 4));
+      }
+      return n;
+    }
+    overlayStates() {
+      if (!this.x.overlay_states) return null;
+      let e = this.x.overlay_states();
+      return this.u32(this.x.scratch_u32_ptr(), e);
+    }
+    get cx() {
+      return this.x;
+    }
+    give(e) {
+      let t = this.x.alloc(e.length);
+      return (
+        new Uint8Array(this.x.memory.buffer, t, e.length).set(e),
+        [t, e.length]
+      );
+    }
+    giveStr(e) {
+      return this.give(u.encode(e));
+    }
+    hasContentApi() {
+      return typeof this.cx.content_resolve == `function`;
+    }
+    contentMountVpk(e, t) {
+      let n = this.cx.content_mount_vpk(...this.giveStr(e), ...this.give(t));
+      if (!n) throw Error(this.lastError());
+      return n;
+    }
+    contentMountListing(e, t) {
+      return this.cx.content_mount_listing(
+        ...this.giveStr(e),
+        ...this.giveStr(
+          t.join(`
+`),
+        ),
+      );
+    }
+    contentUnmountAll() {
+      this.cx.content_unmount_all();
+    }
+    contentAddFile(e, t) {
+      this.cx.content_add_file(...this.giveStr(e), ...this.give(t));
+    }
+    contentFile(e) {
+      let t = this.cx.content_file(...this.giveStr(e));
+      return t
+        ? new Uint8Array(
+            this.x.memory.buffer,
+            this.x.tex_bytes_ptr(),
+            t,
+          ).slice()
+        : null;
+    }
+    contentProvide(e, t) {
+      return this.cx.content_provide(...this.giveStr(e), ...this.give(t)) === 1;
+    }
+    contentMaterialOverrides(e) {
+      if (typeof this.cx.content_material_overrides != `function`) return 0;
+      let t = Object.entries(e).map(([e, t]) => `${e}\t${t}`).join(`
+`);
+      return this.cx.content_material_overrides(...this.giveStr(t));
+    }
+    contentResolve(e = []) {
+      return this.requests(
+        this.cx.content_resolve(
+          ...this.giveStr(
+            e.join(`
+`),
+          ),
+        ),
+      );
+    }
+    requests(e) {
+      return e
+        ? this.str(this.x.scratch_str_ptr(), e)
+            .split(
+              `
+`,
+            )
+            .filter(Boolean)
+            .map((e) => {
+              let [t, n, r, i, a] = e.split(`	`);
+              return {
+                path: t,
+                mount: n,
+                archive: Number(r),
+                offset: Number(i),
+                length: Number(a),
+              };
+            })
+        : [];
+    }
+    lines(e) {
+      return e
+        ? this.str(this.x.scratch_str_ptr(), e)
+            .split(
+              `
+`,
+            )
+            .filter(Boolean)
+        : [];
+    }
+    contentRead(e) {
+      return this.cx.content_read(...this.giveStr(e))
+        ? new Uint8Array(
+            this.x.memory.buffer,
+            this.x.tex_bytes_ptr(),
+            this.cx.tex_bytes_len(),
+          ).slice()
+        : null;
+    }
+    contentPending() {
+      return this.requests(this.cx.content_pending());
+    }
+    contentList(e) {
+      return this.lines(this.cx.content_list(...this.giveStr(e)));
+    }
+    modelMaterials(e) {
+      return this.lines(this.cx.model_materials(...this.giveStr(e)));
+    }
+    propsLoad(e) {
+      return this.lines(this.cx.props_load(...this.give(e)));
+    }
+    propsBuild() {
+      return this.lines(this.cx.props_build());
+    }
+    propsMesh() {
+      let e = this.cx.props_info(),
+        [t, n, r, i, a] = this.u32(this.x.scratch_u32_ptr(), e).slice(),
+        o = this.f32(this.cx.props_vertices_ptr(), i).slice(),
+        s = this.u32(this.cx.props_indices_ptr(), a).slice(),
+        c = this.cx.props_groups(),
+        l = this.u32(this.x.scratch_u32_ptr(), c).slice(),
+        u = [];
+      for (let e = 0; e < l.length; e += 3)
+        u.push({ material: l[e], firstIndex: l[e + 1], indexCount: l[e + 2] });
+      if (typeof this.cx.props_group_sky3d == `function`) {
+        let e = this.cx.props_group_sky3d(),
+          t = this.u32(this.x.scratch_u32_ptr(), e);
+        e === u.length && u.forEach((e, n) => (e.sky3d = t[n] !== 0));
+      }
+      let d =
+          typeof this.cx.props_dynamic_groups == `function`
+            ? this.cx.props_dynamic_groups()
+            : 0,
+        f = this.u32(this.x.scratch_u32_ptr(), d).slice(),
+        p = [];
+      for (let e = 0; e < f.length; e += 4)
+        p.push({
+          entity: f[e],
+          material: f[e + 1],
+          firstIndex: f[e + 2],
+          indexCount: f[e + 3],
+        });
+      return {
+        vertices: o,
+        indices: s,
+        groups: u,
+        dynamicGroups: p,
+        instances: t,
+        models: n,
+        missingModels: r,
+      };
+    }
+    materialWater() {
+      if (typeof this.cx.material_water != `function`) return [];
+      let e = this.cx.material_water(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = [];
+      for (let e = 0; e < t.length; e += 4)
+        n.push({
+          fogStart: t[e],
+          fogEnd: t[e + 1],
+          aboveWater: t[e + 2] !== 0,
+        });
+      return n;
+    }
+    waterVolumes() {
+      if (typeof this.cx.water_volumes != `function`) return [];
+      let e = this.cx.water_volumes(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = [];
+      for (let e = 0; e + 6 <= t.length; e += 6)
+        n.push(Array.from(t.subarray(e, e + 6)));
+      return n;
+    }
+    texturePaths() {
+      let e = this.cx.texture_paths();
+      return e
+        ? this.str(this.x.scratch_str_ptr(), e).split(`
+`)
+        : [];
+    }
+    materialExtras() {
+      if (typeof this.cx.material_extras != `function`) return [];
+      let e = this.cx.material_extras(),
+        t = this.f32(this.x.scratch_f32_ptr(), e),
+        n = [];
+      for (let e = 0; e < t.length; e += 4)
+        n.push({
+          texture2: t[e],
+          detail: t[e + 1],
+          detailScale: t[e + 2],
+          detailBlend: t[e + 3],
+        });
+      return n;
+    }
+    meshBlend() {
+      return typeof this.cx.mesh_blend_ptr == `function`
+        ? this.f32(this.cx.mesh_blend_ptr(), this.cx.mesh_blend_len()).slice()
+        : null;
+    }
+    hasStudioApi() {
+      return typeof this.cx.studio_load == `function`;
+    }
+    studioLoad(e) {
+      return this.cx.studio_load(...this.giveStr(e));
+    }
+    studioInfo(e) {
+      let t = this.cx.studio_info(e);
+      return this.str(this.x.scratch_str_ptr(), t);
+    }
+    studioVertices(e) {
+      let t = this.cx.studio_vertices(e);
+      return this.f32(this.x.scratch_f32_ptr(), t).slice();
+    }
+    studioIndices(e) {
+      let t = this.cx.studio_indices(e);
+      return this.u32(this.x.scratch_u32_ptr(), t).slice();
+    }
+    studioAnim(e, t) {
+      let n = this.cx.studio_anim(e, t);
+      return this.f32(this.x.scratch_f32_ptr(), n).slice();
+    }
+    texturePath(e, t, n) {
+      let r = this.cx.texture_payload_path(...this.giveStr(e), +!!t, +!!n);
+      if (!r) return null;
+      let i = this.u32(this.x.scratch_u32_ptr(), r).slice(),
+        a = this.x.tex_bytes_ptr(),
+        o = [];
+      for (let e = 0; e < i[1]; e++) {
+        let [t, n, r, s] = i.subarray(2 + e * 4, 6 + e * 4);
+        o.push({
+          width: t,
+          height: n,
+          data: new Uint8Array(this.x.memory.buffer, a + r, s).slice(),
+        });
+      }
+      return { format: i[0], levels: o };
+    }
+  },
+  u = new TextEncoder(),
+  d = 4294967295,
+  f = (e) => e.x,
+  p = new WeakMap();
+function m(e, t, n, r, i) {
+  let a = f(e);
+  if (!a.set_position)
+    throw Error(
+      `wasm build lacks set_position export; rebuild with tools/scripts/build-wasm.sh`,
+    );
+  (a.set_position(t, n, r, i), p.delete(e));
+}
+function h(e, t, n) {
+  let r = f(e);
+  if (!r.set_restart_names || !r.alloc)
+    throw Error(
+      `wasm build lacks set_restart_names export; rebuild with tools/scripts/build-wasm.sh`,
+    );
+  let i = new TextEncoder().encode(t),
+    a = new TextEncoder().encode(n),
+    o = r.alloc(i.length + a.length),
+    s = new Uint8Array(r.memory.buffer, o, i.length + a.length);
+  (s.set(i, 0),
+    s.set(a, i.length),
+    r.set_restart_names(o, i.length, a.length),
+    p.set(e, { targetname: t, classname: n }));
+}
+function g(e, t) {
+  (m(e, t.position[0], t.position[1], t.position[2], t.yaw),
+    (t.targetname || t.classname) &&
+      h(e, t.targetname ?? ``, t.classname ?? ``));
+}
+function _(e) {
+  let t = f(e);
+  if (!t.restart_point) return null;
+  let n = t.restart_point();
+  if (n < 4) return null;
+  let r = new Float32Array(t.memory.buffer, t.scratch_f32_ptr(), n),
+    i = p.get(e),
+    a = { position: [r[0], r[1], r[2]], yaw: r[3] };
+  return (
+    i?.targetname && (a.targetname = i.targetname),
+    i?.classname && (a.classname = i.classname),
+    a
+  );
+}
+var v = (e) => e.x;
+function y(e) {
+  let t = v(e);
+  return (
+    typeof t.state_snapshot == `function` &&
+    typeof t.state_restore == `function`
+  );
+}
+function b(e) {
+  return v(e).state_snapshot?.() ?? 0;
+}
+function x(e, t) {
+  return v(e).state_restore?.(t) === 1;
+}
+function S(e, t) {
+  v(e).state_free?.(t);
+}
+function C(e, t) {
+  if (!y(e)) return null;
+  let n = b(e);
+  if (!n) return null;
+  let r = p.get(e);
+  try {
+    return t();
+  } finally {
+    (x(e, n), S(e, n), r ? p.set(e, r) : p.delete(e));
+  }
+}
+function w(e, t) {
+  return v(e).state_snapshot_bytes?.(t) ?? 0;
+}
+function T(e, t, n, r = 6) {
+  let i = v(e).trace_ray;
+  return i ? i(t[0], t[1], t[2], n[0], n[1], n[2], r) : 1;
+}
+function E(e) {
+  let t = e.x;
+  if (!t.attack_report) return null;
+  let n = t.attack_report();
+  if (n < 13) return null;
+  let r = new Float32Array(t.memory.buffer, t.scratch_f32_ptr(), n);
+  return {
+    weapon: r[0],
+    mode: r[1] === 2 ? 2 : 1,
+    hit: r[2] !== 0,
+    start: [r[3], r[4], r[5]],
+    end: [r[6], r[7], r[8]],
+    normal: [r[9], r[10], r[11]],
+    entity: r[12],
+  };
+}
+var D =
+    `.knife.glock.usp.p228.deagle.elite.fiveseven.m3.xm1014.mac10.tmp.mp5navy.ump45.p90.galil.famas.ak47.m4a1.sg552.aug.scout.awp.g3sg1.sg550.m249`.split(
+      `.`,
+    ),
+  O = 1024,
+  k = 114 / 37;
+function A(e) {
+  let t = e.x;
+  if (!t.weapon_report) return null;
+  let n = t.weapon_report();
+  if (n < 9) return null;
+  let r = new Float32Array(t.memory.buffer, t.scratch_f32_ptr(), n);
+  return {
+    flags: r[0],
+    active: r[1],
+    primary: r[2],
+    secondary: r[3],
+    knife: r[4] !== 0,
+    clip: r[5],
+    clipSize: r[6],
+    reloadTicks: r[7],
+    burst: r[8] !== 0,
+    floorChanged: n > 9 && r[9] !== 0,
+    silencer: n > 10 && r[10] !== 0,
+    silencerTicks: n > 11 ? r[11] : 0,
+  };
+}
+var j = new WeakMap();
+function M(e) {
+  let t = e.x,
+    n = t.floor_weapons ? t.floor_weapons() : 0;
+  if (n === 0) return N;
+  let r = t.scratch_f32_ptr(),
+    i = j.get(e);
+  return (
+    (!i ||
+      i.buffer !== t.memory.buffer ||
+      i.byteOffset !== r ||
+      i.length !== n) &&
+      j.set(e, (i = new Float32Array(t.memory.buffer, r, n))),
+    i
+  );
+}
+var N = new Float32Array();
+export {
+  T as C,
+  b as S,
+  C as T,
+  _,
+  a,
+  h as b,
+  O as c,
+  E as d,
+  M as f,
+  r as g,
+  i as h,
+  e as i,
+  D as l,
+  y as m,
+  l as n,
+  t as o,
+  S as p,
+  o as r,
+  k as s,
+  d as t,
+  g as u,
+  x as v,
+  A as w,
+  w as x,
+  m as y,
+};

@@ -1,0 +1,88 @@
+import { a as e } from "./dom-CUDFsJPS.js";
+import { S as t } from "./loadout-DopA3xcw.js";
+var n = (e) =>
+    `<path d="${e}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  r = (e, t = 9) =>
+    `<text x="12" y="15.5" text-anchor="middle" font-size="${t}" font-weight="800" fill="currentColor" font-family="ui-sans-serif, system-ui, sans-serif">${e}</text>`,
+  i = {
+    flag: n(`M6 21V4h11l-2.5 3.5L17 11H6`),
+    map: n(`M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14`),
+    pb: n(`M12 8v5l3 2M9 2h6M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16z`),
+    podium: n(`M3 20h18M5 20v-6h4v6M10 20V9h4v11M15 20v-8h4v8`),
+    crown: n(`M3 8l4.5 4L12 5l4.5 7L21 8l-2 10H5z`),
+    bonus: n(
+      `M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z`,
+    ),
+    scroll: n(`M12 3a6 6 0 0 1 6 6v6a6 6 0 0 1-12 0V9a6 6 0 0 1 6-6zM12 7v4`),
+    w: r(`W`, 11),
+    sw: r(`SW`, 9),
+    hsw: r(`HSW`, 7.5),
+    styles: n(`M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z`),
+    clock: n(`M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z`),
+    sync: n(
+      `M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4`,
+    ),
+    jump:
+      n(`M3 18q3-7 6 0q4-11 8 0`) +
+      `<circle cx="19.5" cy="18" r="1.8" fill="currentColor"/>`,
+    level: n(`M6 14l6-6 6 6M6 20l6-6 6 6`),
+    together: n(
+      `M8.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2.5 20a6 6 0 0 1 12 0M16 11a2.6 2.6 0 1 0 0-5.2M17.5 14.3A5.5 5.5 0 0 1 21.5 20`,
+    ),
+    link: n(
+      `M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2`,
+    ),
+    burrow: n(
+      `M2.5 20h19M4.5 20a7.5 7.5 0 0 1 15 0M9 20a3 3 0 0 1 6 0M10.6 17.2 9.8 12.6M13.4 17.2l.8-4.6`,
+    ),
+    spark: n(
+      `M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7zM18.5 16.5c.2 1.4.8 2 2.2 2.2-1.4.2-2 .8-2.2 2.2-.2-1.4-.8-2-2.2-2.2 1.4-.2 2-.8 2.2-2.2z`,
+    ),
+    heart: n(
+      `M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z`,
+    ),
+    crystal: n(
+      `M12 2.5 17 7.6 16.3 17.6 12 21.5 7.7 17.6 7 7.6zM7 7.6l3.4 1.3h3.2L17 7.6M10.4 8.9l.2 9.6L12 21.5M13.6 8.9l-.2 9.6L12 21.5M12 2.5l-1.6 6.4M12 2.5l1.6 6.4`,
+    ),
+    sprout: n(
+      `M12 21v-9M12 12c0-3.6-2.6-6-6.5-6 0 3.6 2.6 6 6.5 6zM12 10c0-3.4 2.4-5.6 6.2-5.6 0 3.4-2.4 5.6-6.2 5.6z`,
+    ),
+    wing: n(
+      `M5 18c1-6 5-10 14-12-2 3-4.5 4.4-7.5 5 3 .2 5 .9 6.5 2-3 2.3-6.6 3.2-10.5 2.6M5 18h4`,
+    ),
+  };
+for (let e = 1; e <= 6; e++) i[`t${e}`] = r(`T${e}`, 10);
+function a(t, n = {}) {
+  let a = n.got ?? !0,
+    o = !a && t.hidden ? r(`?`, 12) : (i[t.icon] ?? i.flag),
+    c = /^t[1-6]$/.test(t.icon) ? `.${t.icon}` : ``,
+    l = !a && !!t.hidden,
+    u = e(`span.tk.r${t.ring}${a ? `.got` : ``}${c}.tk-${n.size ?? `md`}`, {
+      role: `img`,
+      "aria-label": l ? `??? (locked)` : `${t.name}${a ? `` : ` (locked)`}`,
+      title: l
+        ? `???`
+        : `${t.name} — ${t.desc}${a ? `` : n.progress ? ` (${s(n.progress[0])}/${s(n.progress[1])})` : ` (locked)`}`,
+      html: `<svg viewBox="0 0 24 24" aria-hidden="true">${o}</svg>`,
+    });
+  if (!a && n.progress && n.progress[1] > 1) {
+    let t = Math.max(0, Math.min(1, n.progress[0] / n.progress[1]));
+    u.append(e(`span.tk-prog`, { style: `--f:${t}` }));
+  }
+  return u;
+}
+function o(n) {
+  let r = t(n);
+  return r
+    ? e(
+        `span.badge-chip`,
+        { title: r.desc },
+        a(r, { size: `sm` }),
+        e(`span`, null, r.name),
+      )
+    : null;
+}
+function s(e) {
+  return e >= 1e4 ? `${Math.round(e / 1e3)}k` : e.toLocaleString(`en-US`);
+}
+export { a as n, o as t };

@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-11T13:18:34.267722+00:00",
+  "origin": "https://bunnyhop.lol",
+  "projectRepository": null,
+  "openSourceConfirmed": false,
+  "finding": "No public repository or project source license was found. The public browser build contains JavaScript and compiled WebAssembly; this does not establish an open-source release.",
+  "checkedSources": [
+    {
+      "url": "https://bunnyhop.lol/",
+      "finding": "No project GitHub/source link in captured HTML."
+    },
+    {
+      "url": "https://bunnyhop.lol/about",
+      "finding": "Advertises Source SDK 2013 movement in WebAssembly, but provides no project source repository."
+    },
+    {
+      "url": "https://github.com/8tp",
+      "finding": "Related portfolio public repositories were checked; no Bunnyhop project was identified."
+    },
+    {
+      "query": "site:github.com \"bunnyhop.lol\"",
+      "finding": "Indexed references identified game lists, not a project repository."
+    }
+  ],
+  "sourceMapReferences": [],
+  "limitations": [
+    "Negative search results do not prove no repository exists.",
+    "Unrelated BunnyHop/OpenBHOP repositories are not treated as this site source."
+  ]
+}

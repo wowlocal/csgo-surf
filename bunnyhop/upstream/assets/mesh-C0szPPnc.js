@@ -1,0 +1,1 @@
+import{O as e,Y as t,it as n,kr as r,q as i,qr as a}from"./model-CJn1vZL3.js";function o(o=i,s=`knit`){let c=new n;e(c,s);let l=t(c);o.build(l),o.tris??=l.tris;let u=c.geometry();return u.boundingSphere=new r(new a(0,-10,0),40),u}var s=new Map;function c(e=i,t=`knit`){let n=`${e.id}|${t}`,r=s.get(n);return r||s.set(n,r=o(e,t)),r}export{c as t};

@@ -1,0 +1,1597 @@
+const __vite__mapDeps = (
+  i,
+  m = __vite__mapDeps,
+  d = m.f ||
+    (m.f = [
+      "assets/leaderboard-C6KfxKCG.js",
+      "assets/leaderboard-tX18nlp1.js",
+      "assets/preload-helper-DjzSQ1t3.js",
+      "assets/api-B2Jj-kgC.js",
+      "assets/dom-CUDFsJPS.js",
+      "assets/styles-DzitlxVO.js",
+      "assets/core-GuI4LXND.js",
+      "assets/avatar-kqcwn86P.js",
+      "assets/marks-Brbs1gDc.js",
+      "assets/creators-DkuwYE0A.js",
+      "assets/marks-D-D2P7Vg.css",
+      "assets/nav-IlBYMvil.js",
+      "assets/pb-CeYyg6BU.js",
+      "assets/leaderboard-Dyzw_0Hk.css",
+    ]),
+) => i.map((i) => d[i]);
+import { t as e } from "./preload-helper-DjzSQ1t3.js";
+import { i as t, n, r } from "./api-B2Jj-kgC.js";
+import { a as i } from "./account-state-BYMidhZ9.js";
+import { a, i as o } from "./dom-CUDFsJPS.js";
+import { E as s, w as c } from "./cosmetics-PGh_ZGfu.js";
+import {
+  a as l,
+  c as u,
+  m as d,
+  n as f,
+  o as p,
+  r as m,
+  t as h,
+  u as g,
+} from "./styles-DzitlxVO.js";
+import { B as _, R as v, V as y, z as ee } from "./loadout-DopA3xcw.js";
+import { p as te } from "./notify-CvHg_wVW.js";
+import { t as b } from "./nav-IlBYMvil.js";
+import {
+  O as ne,
+  _ as x,
+  a as S,
+  c as C,
+  d as w,
+  f as T,
+  l as re,
+  n as E,
+  u as D,
+  v as O,
+  w as ie,
+} from "./lessons-CcKVOcxG.js";
+import { c as ae, l as k, n as oe } from "./pb-CeYyg6BU.js";
+import { a as A, n as j, o as se, r as M } from "./leaderboard-tX18nlp1.js";
+var N = `bunnyhop:lqip:`,
+  P = 32,
+  F = 18,
+  I = new Map();
+function ce(e) {
+  for (let t of e)
+    I.set(t.name, {
+      thumbnail: t.thumbnail,
+      hero: t.hero,
+      lqip: t.lqip,
+      shots: t.shots,
+      screenshots: t.screenshots,
+    });
+}
+function le(e, t) {
+  let n = I.get(e);
+  return [
+    ...new Set(
+      [n?.hero, ...(n?.shots ?? []), ...(n?.screenshots ?? []), t].filter(
+        (e) => !!e,
+      ),
+    ),
+  ];
+}
+function L(e) {
+  return e
+    .replace(/^(bhop|kz|surf)_/i, ``)
+    .slice(0, 2)
+    .toUpperCase();
+}
+function ue(e) {
+  let t = 0;
+  for (let n = 0; n < e.length; n++) t = (t * 31 + e.charCodeAt(n)) >>> 0;
+  return t % 360;
+}
+function R(e) {
+  return N + e.replace(/^https?:\/\//, ``).slice(-120);
+}
+function de(e) {
+  try {
+    return localStorage.getItem(R(e));
+  } catch {
+    return null;
+  }
+}
+function z(e, t) {
+  try {
+    if (localStorage.getItem(R(t))) return;
+    let n = document.createElement(`canvas`);
+    ((n.width = P), (n.height = F));
+    let r = n.getContext(`2d`),
+      i = e.naturalWidth / e.naturalHeight,
+      a = e.naturalWidth,
+      o = e.naturalHeight;
+    (i > 16 / 9 ? (a = (16 / 9) * o) : (o = a / (16 / 9)),
+      r.drawImage(
+        e,
+        (e.naturalWidth - a) / 2,
+        (e.naturalHeight - o) / 2,
+        a,
+        o,
+        0,
+        0,
+        P,
+        F,
+      ),
+      localStorage.setItem(R(t), n.toDataURL(`image/jpeg`, 0.7)));
+  } catch {}
+}
+var B = null;
+function fe() {
+  return (
+    (B ??= new IntersectionObserver(
+      (e) => {
+        for (let t of e)
+          t.isIntersecting && (B.unobserve(t.target), t.target.__load?.());
+      },
+      { rootMargin: `300px` },
+    )),
+    B
+  );
+}
+function V(e, t, n, r = !1) {
+  let i = (o) => {
+    let s = a(`img.full`, {
+      alt: ``,
+      decoding: `async`,
+      referrerpolicy: `no-referrer`,
+    });
+    (r && (s.fetchPriority = `high`),
+      o && (s.crossOrigin = `anonymous`),
+      s.addEventListener(`load`, () => {
+        if (e.dataset.src !== t) return s.remove();
+        for (let t of e.querySelectorAll(`img.full`)) t !== s && t.remove();
+        (s.classList.add(`in`), e.classList.add(`loaded`), o && n && z(s, t));
+      }),
+      s.addEventListener(`error`, () => {
+        (s.remove(), o && i(!1));
+      }),
+      (s.src = t),
+      e.append(s));
+  };
+  ((e.dataset.src = t), i(!0));
+}
+function pe(e, t, n = {}) {
+  let r = a(
+      `div.card-art${n.className ? `.` + n.className : ``}`,
+      { style: `--h:${ue(e)}` },
+      a(`span.card-initials`, { "aria-hidden": `true` }, L(e)),
+    ),
+    i =
+      n.size ??
+      (n.className && /hero|feat|load/.test(n.className) ? `hero` : `card`),
+    o = I.get(e),
+    s =
+      (i === `hero` ? (o?.hero ?? o?.thumbnail) : (o?.thumbnail ?? o?.hero)) ??
+      t ??
+      null;
+  if (!s) return r;
+  let c = o?.lqip ?? de(s);
+  c &&
+    (r.append(
+      a(`img.lqip`, {
+        src: c,
+        alt: ``,
+        "aria-hidden": `true`,
+        decoding: `async`,
+      }),
+    ),
+    r.classList.add(`has-lqip`));
+  let l = !o?.lqip;
+  return (
+    n.eager
+      ? V(r, s, l, n.priority)
+      : ((r.dataset.lazy = ``), (r.__load = () => V(r, s, l))),
+    r
+  );
+}
+function me(e, t, n = {}) {
+  let r = pe(e, t, { eager: !0, size: `hero`, className: n.className }),
+    i = le(e, t);
+  if (i.length < 2) return r;
+  let o = new Set(I.get(e)?.shots ?? []),
+    s = Math.max(0, i.indexOf(r.dataset.src ?? ``)),
+    c = i.map((e, t) =>
+      a(`button.gal-dot${o.has(e) ? `` : `.gb`}`, {
+        type: `button`,
+        tabindex: `-1`,
+        title: o.has(e) ? `In-game view ${t + 1}` : `GameBanana screenshot`,
+        "aria-label": `Image ${t + 1} of ${i.length}`,
+        onclick: (e) => (e.stopPropagation(), u(t)),
+      }),
+    ),
+    l = a(`span.gal-src`, null),
+    u = (e) => {
+      ((s = (e + i.length) % i.length),
+        V(r, i[s], !1),
+        c.forEach((e, t) => e.classList.toggle(`on`, t === s)),
+        (l.textContent = o.has(i[s]) ? `` : `GameBanana`));
+    },
+    d = (e) =>
+      a(
+        `button.gal-nav.${e < 0 ? `prev` : `next`}`,
+        {
+          type: `button`,
+          tabindex: `-1`,
+          "aria-label": e < 0 ? `Previous image` : `Next image`,
+          onclick: (t) => (t.stopPropagation(), u(s + e)),
+        },
+        e < 0 ? `‹` : `›`,
+      );
+  return (
+    r.classList.add(`has-gallery`),
+    (r.tabIndex = 0),
+    r.setAttribute(`role`, `group`),
+    r.setAttribute(`aria-label`, `${e} images (left/right to browse)`),
+    r.addEventListener(`keydown`, (e) => {
+      (e.key === `ArrowLeft` || e.key === `ArrowRight`) &&
+        (e.preventDefault(),
+        e.stopPropagation(),
+        u(s + (e.key === `ArrowLeft` ? -1 : 1)));
+    }),
+    r.append(d(-1), d(1), a(`div.gal-dots`, null, ...c), l),
+    c[s]?.classList.add(`on`),
+    r
+  );
+}
+function he(e) {
+  for (let t of e.querySelectorAll(`.card-art[data-lazy]`))
+    (delete t.dataset.lazy, fe().observe(t));
+}
+var H = !1;
+function ge(e, t = 6) {
+  if (H) return;
+  H = !0;
+  let n = [...I.values()].map((e) => e.thumbnail),
+    r = [...new Set((I.size ? n : e).filter((e) => !!e))],
+    i = () => {
+      let e = r.shift();
+      if (!e) return;
+      let t = new Image();
+      ((t.crossOrigin = `anonymous`),
+        (t.decoding = `async`),
+        (t.referrerPolicy = `no-referrer`),
+        (t.onload = () => (I.size || z(t, e), i())),
+        (t.onerror = () => i()),
+        (t.src = e));
+    };
+  for (let e = 0; e < t; e++) i();
+}
+var _e = `bunnyhop:style`,
+  U = new Set();
+function ve() {
+  try {
+    let e = localStorage.getItem(_e);
+    return l(e) ? e : f;
+  } catch {
+    return f;
+  }
+}
+function ye(e) {
+  if (e !== ve()) {
+    try {
+      localStorage.setItem(_e, e);
+    } catch {}
+    for (let t of U) t(e);
+  }
+}
+function be(e) {
+  return (U.add(e), () => U.delete(e));
+}
+function xe(e) {
+  let t = a(`p.sw-rule`, { "aria-live": `polite` }),
+    n = m.map((e) =>
+      a(
+        `button.sw-opt`,
+        {
+          type: `button`,
+          role: `radio`,
+          "data-style": e.id,
+          onclick: () => o(e.id),
+        },
+        e.name,
+      ),
+    ),
+    r = a(`div.sw-opts`, {
+      role: `radiogroup`,
+      "aria-label": `Style`,
+      title: e.hint ? `${e.hint} switches style` : null,
+    });
+  (m.forEach((e, t) => {
+    (e.auto &&
+      t &&
+      !m[t - 1].auto &&
+      r.append(a(`span.sw-sep`, { "aria-hidden": `true` })),
+      r.append(n[t]));
+  }),
+    r.addEventListener(`keydown`, (e) => {
+      if (e.key !== `ArrowLeft` && e.key !== `ArrowRight`) return;
+      (e.preventDefault(), e.stopPropagation());
+      let t = n.findIndex((e) => e.dataset.style === i),
+        r = n[(t + (e.key === `ArrowRight` ? 1 : -1) + n.length) % n.length];
+      (r.focus(), o(r.dataset.style));
+    }));
+  let i = e.value;
+  function o(t) {
+    t !== i && (s(t), e.onPick(t));
+  }
+  function s(e) {
+    i = e;
+    for (let t of n) {
+      let n = t.dataset.style === e;
+      (t.setAttribute(`aria-checked`, String(n)),
+        (t.tabIndex = n ? 0 : -1),
+        t.classList.toggle(`on`, n));
+    }
+    t.textContent = u(e)?.rule ?? ``;
+  }
+  return (s(i), { root: a(`div.sw`, null, r, t), set: s });
+}
+function Se() {
+  try {
+    for (let e = 0; e < localStorage.length; e++)
+      if (localStorage.key(e)?.startsWith(`bunnyhop:pb:`)) return !0;
+  } catch {
+    return !0;
+  }
+  return !1;
+}
+var Ce = `bunnyhop:stats`,
+  W = `bunnyhop:pb:`;
+function G() {
+  try {
+    let e = localStorage.getItem(Ce);
+    if (e === null) return we();
+    let t = JSON.parse(e);
+    return {
+      maps: Array.isArray(t?.maps)
+        ? t.maps.filter((e) => typeof e == `string`)
+        : [],
+      jumps: Number(t?.jumps) || 0,
+    };
+  } catch {
+    return { maps: [], jumps: 0 };
+  }
+}
+function we() {
+  let e = { maps: [], jumps: 0 };
+  for (let t = 0; t < localStorage.length; t++) {
+    let n = localStorage.key(t);
+    if (n?.startsWith(W))
+      try {
+        let t = JSON.parse(localStorage.getItem(n));
+        (t.map && !e.maps.includes(t.map) && e.maps.push(t.map),
+          (e.jumps += Number(t.jumps) || 0));
+      } catch {}
+  }
+  return e;
+}
+function Te(e) {
+  try {
+    localStorage.setItem(Ce, JSON.stringify(e));
+  } catch {}
+}
+function K(e) {
+  let t = G();
+  t.maps.includes(e) || (t.maps.push(e), Te(t));
+}
+var q = 0,
+  J = 0;
+function Ee() {
+  if (!q) return;
+  let e = G();
+  ((e.jumps += q), (q = 0), Te(e));
+}
+addEventListener(`pagehide`, Ee);
+function Y() {
+  (q++, (J ||= window.setTimeout(() => ((J = 0), Ee()), 4e3)));
+}
+function De() {
+  let e = new Set(G().maps);
+  for (let t = 0; t < localStorage.length; t++) {
+    let n = localStorage.key(t);
+    n?.startsWith(W) && e.add(n.slice(12).split(`:`)[0]);
+  }
+  return (e.delete(O), e);
+}
+function Oe() {
+  return ke().pbs > 0;
+}
+function ke() {
+  let e = G(),
+    t = new Set(e.maps),
+    n = 0;
+  for (let e = 0; e < localStorage.length; e++) {
+    let r = localStorage.key(e);
+    if (!r?.startsWith(W)) continue;
+    let i = r.slice(12).split(`:`)[0];
+    i !== `bhop_lol_tutorial` && (n++, t.add(i));
+  }
+  return (t.delete(O), { mapsPlayed: t.size, pbs: n, jumps: e.jumps + q });
+}
+var Ae = 10,
+  je = 3e4,
+  Me = new Map(),
+  Ne = null;
+function Pe(e, n, r) {
+  let i = `${e}|${n}|${r}`,
+    a = Me.get(i);
+  if (a && performance.now() - a.at < je) return a.p;
+  Ne?.abort();
+  let o = (Ne = new AbortController()),
+    s = t.leaderboard(e, n, { limit: Ae, track: r }, { signal: o.signal });
+  return (
+    Me.set(i, { at: performance.now(), p: s }),
+    s.catch(() => Me.delete(i)),
+    s
+  );
+}
+function Fe(e) {
+  e?.fit?.();
+}
+var X = (e, t, n = ``) =>
+  a(
+    `div.mbd-state${n ? `.` + n : ``}`,
+    null,
+    a(`b`, null, e),
+    t ? a(`span`, null, t) : null,
+  );
+function Ie(e) {
+  let n = e.track ?? 0,
+    i = a(`span.mbd-count`),
+    o =
+      e.onFull && e.ranked !== !1 && t.available()
+        ? a(
+            `button.link-btn.mbd-full`,
+            { type: `button`, onclick: e.onFull },
+            `Full leaderboard`,
+            se(`chevronRight`),
+          )
+        : null,
+    s = a(`div.mbd-body`),
+    c = oe(e.map, e.style, n),
+    l = (e) => (c ? a(`p.mbd-local`, null, e, a(`b`, null, d(c.time))) : ``),
+    u = a(
+      `section.mbd-board`,
+      { "aria-label": e.title ?? `Leaderboard` },
+      a(`header.mbd-head`, null, a(`h4`, null, e.title ?? `Leaderboard`), i, o),
+      s,
+    );
+  if ((e.label && (i.textContent = e.label), e.ranked === !1))
+    return (
+      s.append(
+        X(
+          `Unranked`,
+          `Runs on this map aren't submitted, so it has no leaderboard. Your PBs are kept in this browser.`,
+          `unranked`,
+        ),
+        l(`Your PB `),
+      ),
+      u
+    );
+  if (!t.available())
+    return (
+      s.append(
+        X(
+          `Leaderboards are offline`,
+          `Your runs are saved in this browser until the server is back.`,
+          `offline`,
+        ),
+        l(`Your PB `),
+      ),
+      u
+    );
+  let f = a(`table.rb-table.mbd-table`, {
+      "aria-label": `${e.map} leaderboard`,
+    }),
+    p = a(`tbody`),
+    m = a(`tfoot`);
+  (f.append(p, m),
+    p.append(
+      ...Array.from({ length: 5 }, () =>
+        a(
+          `tr.rb-skel`,
+          { "aria-hidden": `true` },
+          a(`td`, null, a(`span.rb-sk`)),
+          a(`td`, null, a(`span.rb-sk`)),
+          a(`td`, null, a(`span.rb-sk`)),
+        ),
+      ),
+    ),
+    s.append(f));
+  let h = (e, t, n) => {
+    let r = t && e.runId !== t.runId ? M(e.time - t.time) : null;
+    return a(
+      `tr.rb-row`,
+      {
+        class:
+          [e.rank <= 3 ? `top${e.rank}` : ``, n ? `me` : ``]
+            .filter(Boolean)
+            .join(` `) || null,
+      },
+      a(`td.rb-rank`, null, String(e.rank)),
+      A(e.player, () => b({ screen: `profile`, id: e.player.id })),
+      a(
+        `td.num.mbd-time`,
+        {
+          title: r
+            ? `${r.slice(1)} behind the world record`
+            : e.rank === 1
+              ? `World record`
+              : null,
+        },
+        a(`b`, null, d(e.time)),
+        r ? a(`small`, null, r) : null,
+      ),
+    );
+  };
+  Pe(e.map, e.style, n).then(
+    (t) => {
+      if (
+        ((i.textContent = [
+          e.label,
+          t.total
+            ? `${t.total.toLocaleString(`en-US`)} ${t.total === 1 ? `runner` : `runners`}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(` · `)),
+        !t.entries.length)
+      ) {
+        s.replaceChildren(
+          X(
+            `No records yet`,
+            `Finish a run to set the first ${e.label ? e.label + ` ` : ``}record.`,
+            `empty`,
+          ),
+          l(`Your PB `),
+        );
+        return;
+      }
+      let n = t.wr ?? t.entries[0],
+        r = t.me?.player.id;
+      (p.replaceChildren(...t.entries.map((e) => h(e, n, e.player.id === r))),
+        t.me && !t.entries.some((e) => e.player.id === r)
+          ? m.replaceChildren(h(t.me, n, !0))
+          : m.replaceChildren());
+      let a = !t.me && c ? l(`Your PB in this browser `) : null;
+      (a && s.append(a), requestAnimationFrame(g));
+    },
+    (e) => {
+      u.isConnected &&
+        s.replaceChildren(
+          e instanceof r
+            ? X(
+                `Leaderboards are offline`,
+                `Your runs are saved in this browser until the server is back.`,
+                `offline`,
+              )
+            : X(`Couldn't load the leaderboard`, null, `error`),
+          l(`Your PB `),
+        );
+    },
+  );
+  function g() {
+    let e = [...p.rows];
+    for (let t of e) t.hidden = !1;
+    if (!s.isConnected || getComputedStyle(s).overflowY !== `hidden`) return;
+    let t =
+        s.clientHeight -
+        m.getBoundingClientRect().height -
+        (s.querySelector(`.mbd-local`)?.offsetHeight ?? 0),
+      n = (e[0]?.getBoundingClientRect().height ?? 0) + 2;
+    if (!n) return;
+    let r = Math.max(1, Math.floor(t / n));
+    e.forEach((e, t) => (e.hidden = t >= r));
+  }
+  return ((u.fit = g), u);
+}
+var Le = { tracks: [1], track: 1, trackNames: { 1: `Final course` } };
+function Re() {
+  return re() && !D();
+}
+function ze(e, t = Date.now()) {
+  return Re() && !w().finished && t - S(e, t) < 1728e5;
+}
+function Be(t) {
+  e(
+    () =>
+      import(`./leaderboard-C6KfxKCG.js`).then((e) =>
+        e.openLeaderboardDialog(O, h, {
+          ...Le,
+          subtitle: `Learn to bhop`,
+          onRace: (e, n) => {
+            (document.querySelector(`dialog.rb-dialog[open]`)?.close(),
+              ae({
+                kind: `run`,
+                runId: e.runId,
+                name: `#${e.rank} · ${e.player.name}`,
+                track: n,
+                time: e.time,
+              }),
+              Ve(t));
+          },
+        }),
+      ),
+    __vite__mapDeps([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]),
+  );
+}
+function Ve(e) {
+  e ? e(O) : (location.href = T());
+}
+function He() {
+  let e = w();
+  return x.filter((t) => e.lessons[t]).length;
+}
+function Ue() {
+  let e = w(),
+    t = He();
+  return e.finished
+    ? e.best === void 0
+      ? `Finished`
+      : `Finished, best ${e.best.toFixed(2)} s${e.gold ? ` (gold)` : ``}`
+    : t
+      ? `${t} of ${x.length} lessons done`
+      : `Four short lessons, about 2 minutes`;
+}
+var We = [`tutorial`, `learn to bhop`, `lessons`, `how to bhop`, O];
+function Ge(e) {
+  return e.length >= 3 && We.some((t) => t.includes(e));
+}
+function Ke(e) {
+  let t = a(`div.card-art.tut-art.${e}`, { "aria-hidden": `true` });
+  return (
+    (t.innerHTML = `<svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid meet"><path class="tut-trail" d="M8 70 Q22 56 36 70 Q55 46 74 70 Q99 36 124 70 Q140 44 156 58"/><circle class="tut-dot" cx="156" cy="58" r="3.4"/></svg>`),
+    t
+  );
+}
+function qe(e) {
+  let t = w(),
+    n = x.filter((e) => t.lessons[e]).length,
+    r = D(),
+    i = a(
+      `button.btn.primary.mbd-play`,
+      { type: `button`, onclick: () => Ve(e.pick) },
+      t.finished ? `Play it again` : n ? `Continue` : `Start the tutorial`,
+      a(`kbd`, null, `Enter`),
+    ),
+    o = a(
+      `ol.tut-lessons`,
+      null,
+      ...x.map((e) =>
+        a(
+          `li${t.lessons[e] ? `.done` : ``}`,
+          null,
+          a(`span`, null, E[e].title),
+          t.lessons[e] ? a(`small`, null, `Done`) : null,
+        ),
+      ),
+    ),
+    s =
+      !Se() && e.style !== `autostrafe`
+        ? a(
+            `p.tut-assist`,
+            null,
+            `If strafing with A and D is hard, the Auto-strafe style presses them for you. `,
+            a(
+              `button.link-btn`,
+              { type: `button`, onclick: () => e.onStyle(`autostrafe`) },
+              `Use Auto-strafe`,
+            ),
+          )
+        : null;
+  return a(
+    `div.mbd-inner.mbd-tut`,
+    { "data-name": O },
+    Ke(`mbd-art`),
+    a(
+      `div.mbd-main`,
+      null,
+      a(
+        `header.mbd-title`,
+        null,
+        a(`h3`, null, `Learn to bhop`),
+        a(
+          `p.mbd-meta`,
+          null,
+          `Four short lessons with a live strafe guide, then a final course. About two minutes.`,
+        ),
+      ),
+      o,
+      Ie({
+        map: O,
+        style: h,
+        track: 1,
+        ranked: null,
+        title: `Final course`,
+        onFull: () => Be(e.pick),
+      }),
+      s,
+      a(
+        `div.mbd-actions`,
+        null,
+        i,
+        a(
+          `button.link-btn.tut-hide`,
+          {
+            type: `button`,
+            title: r
+              ? null
+              : `Hides it from the top of this list and the pause menu. It stays under Tutorial on the home screen.`,
+            onclick: () => (C(!r), e.onHidden(!r)),
+          },
+          r ? `Show at the top of the list` : `Hide tutorial`,
+        ),
+      ),
+    ),
+  );
+}
+var Je = `bunnyhop:favorites`,
+  Ye = `bunnyhop:favorites`,
+  Xe = 600;
+function Ze() {
+  try {
+    let e = JSON.parse(localStorage.getItem(Je) ?? `null`);
+    return {
+      user: typeof e?.user == `string` ? e.user : null,
+      maps: Array.isArray(e?.maps)
+        ? e.maps.filter((e) => typeof e == `string`)
+        : [],
+      pending: Object.fromEntries(
+        Object.entries(
+          e?.pending && typeof e.pending == `object` ? e.pending : {},
+        ).filter(([, e]) => typeof e == `boolean`),
+      ),
+    };
+  } catch {
+    return { user: null, maps: [], pending: {} };
+  }
+}
+var Z = Ze(),
+  Qe = $e(Z);
+function $e(e) {
+  let t = new Set(e.maps);
+  for (let [n, r] of Object.entries(e.pending)) r ? t.add(n) : t.delete(n);
+  return t;
+}
+function et(e) {
+  Qe = $e(Z);
+  try {
+    localStorage.setItem(Je, JSON.stringify(Z));
+  } catch {}
+  window.dispatchEvent(new CustomEvent(Ye, { detail: { server: e } }));
+}
+function Q(e) {
+  return Qe.has(e);
+}
+function tt(e, t) {
+  return t === Qe.has(e)
+    ? !0
+    : t && Qe.size >= 500
+      ? (te(`You can star up to 500 maps.`), !1)
+      : (t === Z.maps.includes(e) ? delete Z.pending[e] : (Z.pending[e] = t),
+        et(!1),
+        ot(),
+        !0);
+}
+function nt(e, t) {
+  let n = (r) => {
+    if (!e.isConnected) return void window.removeEventListener(Ye, n);
+    t(!!r.detail?.server);
+  };
+  window.addEventListener(Ye, n);
+}
+var rt = 0,
+  it = Promise.resolve(),
+  at = !1;
+function ot() {
+  t.available() &&
+    (clearTimeout(rt),
+    (rt = window.setTimeout(() => void (it = it.then(ct)), Xe)));
+}
+function st() {
+  !at && t.available() && ((at = !0), (it = it.then(ct)));
+}
+async function ct() {
+  let e = await i();
+  if (!e || t.meStale()) return;
+  Z.user !== e.id &&
+    (Z.user && (Z = { user: e.id, maps: [], pending: {} }), (Z.user = e.id));
+  let r = { ...Z.pending },
+    a = Object.keys(r).filter((e) => r[e]),
+    o = Object.keys(r).filter((e) => !r[e]);
+  try {
+    Z.maps =
+      a.length || o.length
+        ? await t.saveFavorites(e.id, a, o)
+        : await t.favorites();
+    for (let [e, t] of Object.entries(r))
+      Z.pending[e] === t && delete Z.pending[e];
+  } catch (e) {
+    if (!(e instanceof n) || e.status === 401 || e.status === 429) return;
+    (e.code === `favorites_full` && te(`You can star up to 500 maps.`),
+      (Z.pending = {}),
+      e.code !== `wrong_account` &&
+        (Z.maps = await t.favorites().catch(() => Z.maps)));
+  }
+  (et(!0), Object.keys(Z.pending).length && ot());
+}
+var lt = `bhop_ambience`;
+function ut(e) {
+  let t = e.tracks;
+  return t == null
+    ? 0
+    : typeof t == `number`
+      ? Math.max(0, t - 1)
+      : (t.bonus ?? 0);
+}
+var dt = null;
+function ft() {
+  return (
+    (dt ||= (async () => {
+      try {
+        let e = await fetch(`/index.json`);
+        if (!e.ok || !(e.headers.get(`content-type`) ?? ``).includes(`json`))
+          return [];
+        let t = await e.json(),
+          n = Array.isArray(t.maps) ? t.maps : [];
+        return (ce(n), n);
+      } catch {
+        return [];
+      }
+    })()),
+    dt
+  );
+}
+var pt = new Map();
+function mt(e = `autohop`) {
+  let n = pt.get(e);
+  return (
+    n ||
+      ((n = t.available()
+        ? t.maps(e).then(
+            (e) => new Map(e.map((e) => [e.name, e])),
+            () => null,
+          )
+        : Promise.resolve(null)),
+      pt.set(e, n)),
+    n
+  );
+}
+function $(e, t) {
+  return ee(t?.tier ?? e.tier ?? null);
+}
+function ht(e, t = {}) {
+  let n = ee(e);
+  return a(
+    `span.badge.tier${n ? `.t${n}` : `.tx`}`,
+    {
+      title: n
+        ? `Tier ${n} of 6 · ${y(n)}`
+        : `Unrated: no tier yet, so no rank points`,
+    },
+    _(n),
+    t.long ? a(`span.tier-name`, null, ` · ${y(n)}`) : null,
+  );
+}
+async function gt(e) {
+  let [t, n] = await Promise.all([ft(), mt()]);
+  return ee(n?.get(e)?.tier ?? t.find((t) => t.name === e)?.tier ?? null);
+}
+var _t = [`all`, ...v.map((e) => String(e)), `x`],
+  vt = [
+    [`popular`, `Popular`],
+    [`tier`, `Easiest first`],
+    [`newest`, `Newest`],
+    [`name`, `Name`],
+    [`unplayed`, `Not played yet`],
+    [`unfinished`, `Unfinished`],
+  ],
+  yt = `bunnyhop:mapbrowser`,
+  bt = [
+    [`prestige`, `Prestige classics`],
+    [`iconic`, `Iconic`],
+    [`short`, `Short`],
+    [`modern`, `Modern`],
+  ],
+  xt = `favorites`,
+  St = 140,
+  Ct = (e) =>
+    e instanceof HTMLElement &&
+    (e.matches(`input, textarea, select`) || e.isContentEditable);
+function wt(e, t, n, r, i) {
+  j(e.name, t, {
+    tracks: [0, ...Array.from({ length: ut(e) }, (e, t) => t + 1)],
+    onStyle: i,
+    onRace: (t, i) => {
+      let a = {
+        kind: `run`,
+        runId: t.runId,
+        name: `#${t.rank} · ${t.player.name}`,
+        track: i,
+        time: t.time,
+      };
+      (document.querySelector(`dialog.rb-dialog[open]`)?.close(),
+        n && n !== e.name ? k(a) : ae(a),
+        r(e.name));
+    },
+  });
+}
+function Tt(e) {
+  return e.classList.contains(`show-detail`)
+    ? (e.classList.remove(`show-detail`),
+      e.querySelector(`.mb-row[aria-selected="true"]`)?.focus(),
+      !0)
+    : !1;
+}
+function Et(e) {
+  let t = {};
+  try {
+    t = JSON.parse(localStorage.getItem(yt) ?? `{}`) ?? {};
+  } catch {}
+  e.focus && Object.assign(t, { tier: `all`, collection: `all` });
+  let n = vt.some(([e]) => e === t.sort) ? t.sort : `tier`,
+    r = _t.includes(t.tier) ? t.tier : `all`,
+    u =
+      t.collection === xt || bt.some(([e]) => e === t.collection)
+        ? t.collection
+        : `all`,
+    f = ``,
+    m = l(e.style) ? e.style : ve(),
+    h = [],
+    _ = new Map(),
+    v = null,
+    b = De(),
+    x = null,
+    S = null,
+    C = new Map(),
+    T = [],
+    E = a(`input.mb-q`, {
+      type: `search`,
+      placeholder: `Search maps or authors`,
+      "aria-label": `Search maps`,
+      spellcheck: `false`,
+      autocomplete: `off`,
+    }),
+    D = a(`span.mb-q-count`, { "aria-live": `polite` }),
+    ae = a(
+      `label.mb-search`,
+      null,
+      a(`span.mb-q-icon`, { "aria-hidden": `true` }, `⌕`),
+      E,
+      D,
+      a(`kbd.mb-q-kbd`, { "aria-hidden": `true` }, `/`),
+    ),
+    k = a(`div.seg.mb-tiers`, { role: `radiogroup`, "aria-label": `Tier` }),
+    A = a(`select.mb-set`, { "aria-label": `Map set` }),
+    j = a(
+      `select.mb-sort`,
+      { "aria-label": `Sort` },
+      ...vt.map(([e, t]) => a(`option`, { value: e }, t)),
+    );
+  j.value = n;
+  let M = () => s.get().binds.cycleStyle?.[0] ?? null,
+    N = xe({ value: m, onPick: (e) => Y(e), hint: M() ? c(M()) : null }),
+    P = a(`div.mb-list`, {
+      role: `listbox`,
+      "aria-label": `Maps`,
+      tabindex: `-1`,
+    }),
+    F = a(`p.mb-empty`, { hidden: !0 }),
+    I = a(`aside.mb-detail`, {
+      "aria-live": `polite`,
+      "aria-label": `Selected map`,
+    }),
+    ce = a(
+      `div.mb-head`,
+      { "aria-hidden": `true` },
+      a(`span`, null, `Map`),
+      a(`span.mb-c-tier`, null, `Tier`),
+      a(`span.mb-c-pb`, null, `Your PB`),
+      a(`span.mb-c-wr`, null, `Record`),
+    ),
+    le = a(
+      `p.key-hints.mb-keys`,
+      { "aria-hidden": `true` },
+      a(`kbd`, null, `↑`),
+      a(`kbd`, null, `↓`),
+      ` choose `,
+      a(`kbd`, null, `Enter`),
+      ` play `,
+      M() ? a(`span`, null, a(`kbd`, null, c(M())), ` style`) : null,
+    ),
+    L = a(
+      `div.map-browser`,
+      null,
+      a(
+        `div.mb-bar`,
+        null,
+        ae,
+        a(
+          `div.mb-field`,
+          null,
+          a(`span`, { "aria-hidden": `true` }, `Tier`),
+          k,
+        ),
+        A,
+        a(`label.mb-field`, null, a(`span`, null, `Sort`), j),
+      ),
+      a(`div.mb-style`, null, a(`span.mb-style-label`, null, `Style`), N.root),
+      a(
+        `div.mb-body`,
+        null,
+        a(`div.mb-col`, null, ce, P, F, le),
+        a(`div.mb-detail-wrap`, null, I),
+      ),
+    ),
+    ue = () => {
+      try {
+        localStorage.setItem(
+          yt,
+          JSON.stringify({ sort: n, tier: r, collection: u }),
+        );
+      } catch {}
+    },
+    R = (e) => String($(e, v?.get(e.name)) ?? `x`),
+    de = (e) => (v ? (v.get(e)?.ranked ?? !1) : null);
+  function z(e, t, n, r, i = !1) {
+    let o = a(
+      `div.mb-row`,
+      {
+        role: `option`,
+        "data-name": e,
+        tabindex: `-1`,
+        "aria-selected": `false`,
+      },
+      t,
+      a(
+        `span.mb-name`,
+        null,
+        a(
+          `span.mb-title`,
+          null,
+          a(`b`, null, n),
+          i
+            ? a(
+                `button.mb-star`,
+                { type: `button`, tabindex: `-1` },
+                se(`star`),
+              )
+            : null,
+        ),
+        a(`small`, null, r),
+      ),
+      a(`span.mb-c-tier`),
+      a(`span.mb-c-pb`),
+      a(`span.mb-c-wr`),
+    );
+    return (C.set(e, o), o);
+  }
+  function B(e) {
+    let t = ut(e),
+      n =
+        e.author?.trim() && !/^(unknown|none)$/i.test(e.author.trim())
+          ? `by ${e.author.trim()}`
+          : `Unknown author`,
+      r = z(
+        e.name,
+        pe(e.name, e.thumbnail ?? v?.get(e.name)?.thumbnailUrl ?? null, {
+          className: `mb-thumb`,
+        }),
+        e.name,
+        t ? `${n}, ${t} bonus${t > 1 ? `es` : ``}` : n,
+        !0,
+      );
+    return (
+      t &&
+        r
+          .querySelector(`.mb-name small`)
+          .setAttribute(
+            `title`,
+            `Bonus tracks are timed and ranked separately, always in Normal style`,
+          ),
+      r
+    );
+  }
+  function fe() {
+    return (
+      C.get(`bhop_lol_tutorial`) ??
+      z(`bhop_lol_tutorial`, Ke(`mb-thumb`), `Tutorial`, `Learn to bhop`)
+    );
+  }
+  function V(e) {
+    let t = C.get(e);
+    if (!t) return;
+    let [n, r, i] = [
+      t.querySelector(`.mb-c-tier`),
+      t.querySelector(`.mb-c-pb`),
+      t.querySelector(`.mb-c-wr`),
+    ];
+    if (e === `bhop_lol_tutorial`) {
+      let e = w();
+      ((t.querySelector(`.mb-name small`).textContent = e.finished
+        ? `Learn to bhop`
+        : Ue()),
+        r.replaceChildren(
+          e.finished && e.best !== void 0
+            ? a(
+                `b`,
+                { title: `Your best on the final course` },
+                `${e.best.toFixed(2)} s`,
+              )
+            : ``,
+        ));
+      return;
+    }
+    H(t.querySelector(`.mb-star`), e);
+    let o = _.get(e),
+      s = v?.get(e),
+      c = o ? ee($(o, s)) : null;
+    ((n.className = `mb-c-tier ${c ? `t${c}` : `tx`}`),
+      (n.textContent = c ? `T${c}` : `T?`),
+      (n.title = c ? `Tier ${c}, ${y(c)}` : `Unrated: no rank points`));
+    let l = oe(e, m),
+      u = !!(x && s?.wr?.id === x),
+      f = l?.time ?? (u ? s.wr.time : null);
+    (r.replaceChildren(
+      f === null
+        ? b.has(e)
+          ? a(`small`, { title: `Played, no ${g(m)} finish yet` }, `Played`)
+          : ``
+        : a(
+            `b`,
+            { title: `Your ${g(m)} PB${u ? `, the world record` : ``}` },
+            u ? a(`span.mb-wr-mark`, null, `WR`) : null,
+            d(f),
+          ),
+    ),
+      v
+        ? s?.ranked
+          ? i.replaceChildren(
+              s.wr
+                ? a(
+                    `span`,
+                    { title: `World record by ${s.wr.player}` },
+                    d(s.wr.time),
+                  )
+                : a(`small`, { title: `No record yet` }, `—`),
+            )
+          : i.replaceChildren(
+              a(
+                `small`,
+                { title: `Runs on this map aren't submitted` },
+                `Unranked`,
+              ),
+            )
+        : i.replaceChildren());
+  }
+  function H(e, t) {
+    if (!e) return;
+    let n = Q(t);
+    (e.classList.toggle(`on`, n),
+      e.setAttribute(`aria-pressed`, String(n)),
+      (e.title = n ? `Remove from favorites` : `Add to favorites`),
+      e.setAttribute(`aria-label`, e.title));
+  }
+  function ge(e) {
+    tt(e, !Q(e));
+  }
+  function _e() {
+    let e = k.contains(document.activeElement),
+      t = new Map();
+    for (let e of h) t.set(R(e), (t.get(R(e)) ?? 0) + 1);
+    (k.replaceChildren(
+      ..._t
+        .filter((e) => e === `all` || t.get(e))
+        .map((e) => {
+          let n = e === r;
+          return a(
+            `button.mb-tier${e === `all` ? `` : `.t${e}`}${n ? `.on` : ``}`,
+            {
+              type: `button`,
+              role: `radio`,
+              "aria-checked": String(n),
+              title:
+                e === `all`
+                  ? `Every tier`
+                  : e === `x`
+                    ? `Unrated (${t.get(e)} maps)`
+                    : `Tier ${e}, ${y(Number(e))} (${t.get(e)} maps)`,
+              onclick: () => ((r = e), W()),
+            },
+            e === `all` ? `All` : e === `x` ? `?` : e,
+          );
+        }),
+    ),
+      e && k.querySelector(`.on`)?.focus());
+  }
+  function U() {
+    let e = bt.filter(([e]) => h.some((t) => t.collections?.includes(e))),
+      t = (e, t) =>
+        `${e}, ${t.filter((e) => oe(e.name, m)).length} of ${t.length} done`,
+      n = h.filter((e) => Q(e.name));
+    (A.replaceChildren(
+      a(`option`, { value: `all` }, `All maps`),
+      a(`option`, { value: xt }, n.length ? t(`Favorites`, n) : `Favorites`),
+      ...e.map(([e, n]) =>
+        a(
+          `option`,
+          { value: e },
+          t(
+            n,
+            h.filter((t) => t.collections?.includes(e)),
+          ),
+        ),
+      ),
+    ),
+      (A.value = u));
+  }
+  let be = (e) => v?.get(e.name)?.runners ?? 0,
+    Se = (e, t) =>
+      ($(e, v?.get(e.name)) ?? 99) - ($(t, v?.get(t.name)) ?? 99) ||
+      e.name.localeCompare(t.name),
+    Ce = (e) => b.has(e.name) && !oe(e.name, m);
+  function W() {
+    (ue(), _e(), U());
+    let e = f.toLowerCase().trim(),
+      t = h.filter(
+        (t) =>
+          !(
+            (e &&
+              !`${t.name} ${t.title ?? ``} ${t.author ?? ``}`
+                .toLowerCase()
+                .includes(e)) ||
+            (r !== `all` && R(t) !== r) ||
+            (u === xt ? !Q(t.name) : u !== `all` && !t.collections?.includes(u))
+          ),
+      );
+    t.sort((e, t) =>
+      n === `popular`
+        ? be(t) - be(e) || Se(e, t)
+        : n === `newest`
+          ? (t.added ?? ``).localeCompare(e.added ?? ``) ||
+            e.name.localeCompare(t.name)
+          : n === `name`
+            ? e.name.localeCompare(t.name)
+            : n === `unplayed`
+              ? Number(b.has(e.name)) - Number(b.has(t.name)) || Se(e, t)
+              : (n === `unfinished` && Number(Ce(t)) - Number(Ce(e))) ||
+                Se(e, t),
+    );
+    let i = re() && (e ? Ge(e) : Re() || S === `bhop_lol_tutorial`);
+    T = [...(i ? [O] : []), ...t.map((e) => e.name)];
+    let a = T.map(
+      (e) => C.get(e) ?? (e === `bhop_lol_tutorial` ? fe() : B(_.get(e))),
+    );
+    for (let e of T) V(e);
+    (P.replaceChildren(...a),
+      C.get(O)?.classList.toggle(`pinned`, i && !e),
+      he(P),
+      (D.textContent =
+        e || r !== `all` || u !== `all` ? `${t.length} of ${h.length}` : ``),
+      (E.placeholder = h.length
+        ? `Search ${h.length} maps or authors`
+        : `Search maps or authors`));
+    let o = h.length > 0 && u === xt && !h.some((e) => Q(e.name));
+    ((F.hidden = T.length > 0 && !o),
+      (F.textContent = h.length
+        ? o
+          ? `No favorites yet. Star a map to add it.`
+          : `No maps match. Try another search, tier or set.`
+        : `No maps found. Run tools/scripts/gen-map-index.ts to build maps/index.json.`),
+      !S || !T.includes(S)
+        ? K(T.find((e) => e !== `bhop_lol_tutorial`) ?? T[0] ?? null, {
+            scroll: !1,
+          })
+        : Te());
+  }
+  let G = 0,
+    we = null;
+  function Te() {
+    for (let e of P.children) {
+      let t = e.dataset.name === S;
+      (e.setAttribute(`aria-selected`, String(t)), (e.tabIndex = t ? 0 : -1));
+    }
+  }
+  function K(e, t = {}) {
+    ((S = e), Te());
+    let n = e ? C.get(e) : null;
+    (n && t.focus && n.focus({ preventScroll: !0 }),
+      n && t.scroll !== !1 && n.scrollIntoView({ block: `nearest` }),
+      clearTimeout(G),
+      t.now ? J() : (G = window.setTimeout(J, St)));
+  }
+  function q(t) {
+    t && (t === `bhop_lol_tutorial` ? Ve(e.onPick) : e.onPick(t));
+  }
+  function J(t = !1) {
+    if (!S || (S === we && !t)) return;
+    we = S;
+    let n = I.contains(document.activeElement)
+      ? document.activeElement.className
+      : null;
+    if (S === `bhop_lol_tutorial`)
+      I.replaceChildren(
+        qe({
+          pick: e.onPick,
+          style: m,
+          onStyle: (e) => (Y(e), N.set(e)),
+          onHidden: (e) => {
+            if (!e)
+              return (
+                W(),
+                J(!0),
+                I.querySelector(`.tut-hide`)?.focus({ preventScroll: !0 })
+              );
+            (te(`Tutorial hidden. It's under Tutorial on the home screen.`),
+              (S = null),
+              W(),
+              J(),
+              (S ? C.get(S) : null)?.focus({ preventScroll: !0 }));
+          },
+        }),
+      );
+    else {
+      let e = _.get(S);
+      if (!e) return;
+      I.replaceChildren(Ee(e));
+    }
+    n && I.querySelector(`.${n.split(` `)[0]}`)?.focus({ preventScroll: !0 });
+  }
+  function Ee(t) {
+    let n = v?.get(t.name),
+      r = $(t, n),
+      i = ut(t),
+      s = de(t.name),
+      c = t.name === e.current,
+      l = a(
+        `p.mbd-meta`,
+        null,
+        a(
+          `span.mbd-tier.${r ? `t${r}` : `tx`}`,
+          { title: r ? `Tier ${r} of 6` : `Unrated: no rank points` },
+          r ? `Tier ${r}, ${y(r)}` : `Unrated`,
+        ),
+        a(
+          `span`,
+          null,
+          t.author?.trim() ? `by ${t.author.trim()}` : `Unknown author`,
+        ),
+        i
+          ? a(
+              `span`,
+              {
+                title: `Bonus tracks are timed and ranked separately, always in Normal style`,
+              },
+              `${i} bonus track${i > 1 ? `s` : ``}`,
+            )
+          : null,
+        t.size && t.size > 48 << 20
+          ? a(`span`, { title: `Download size` }, o(t.size))
+          : null,
+      ),
+      u = a(
+        `button.btn.primary.mbd-play`,
+        { type: `button`, onclick: () => q(t.name) },
+        c ? `Resume` : `Play`,
+        a(`kbd`, null, `Enter`),
+      ),
+      d = a(
+        `button.btn.mbd-star`,
+        { type: `button`, onclick: () => ge(t.name) },
+        se(`star`),
+      );
+    H(d, t.name);
+    let f = ne(
+      `btn mbd-share`,
+      () => ({
+        url: ie(t.name),
+        title: `${t.name} · bunnyhop.lol`,
+        text: `${t.name} on bunnyhop.lol`,
+      }),
+      `Link to ${t.name} copied`,
+    );
+    return a(
+      `div.mbd-inner`,
+      { "data-name": t.name },
+      me(t.name, t.hero ?? t.thumbnail ?? n?.thumbnailUrl ?? null, {
+        className: `mbd-art`,
+      }),
+      a(
+        `div.mbd-main`,
+        null,
+        a(`header.mbd-title`, null, a(`h3`, { title: t.name }, t.name), l),
+        Ie({
+          map: t.name,
+          style: m,
+          ranked: s,
+          label: g(m),
+          onFull: () => wt(t, m, e.current, e.onPick, (e) => (Y(e), N.set(e))),
+        }),
+        a(`div.mbd-actions`, null, u, d, f),
+      ),
+    );
+  }
+  function Y(e) {
+    e !== m &&
+      ((m = e),
+      ye(e),
+      mt(e).then((e) => {
+        ((v = e), W(), J(!0));
+      }));
+  }
+  (P.addEventListener(`click`, (e) => {
+    let t = e.target.closest(`.mb-row`);
+    if (t) {
+      if (e.target.closest(`.mb-star`)) return ge(t.dataset.name);
+      (K(t.dataset.name, { focus: !0, now: !0 }),
+        matchMedia(`(max-width: 52rem)`).matches &&
+          L.classList.add(`show-detail`));
+    }
+  }),
+    P.addEventListener(`dblclick`, (e) => {
+      let t = e.target.closest(`.mb-row`);
+      t &&
+        !e.target.closest(`.mb-star`) &&
+        !matchMedia(`(max-width: 52rem)`).matches &&
+        q(t.dataset.name);
+    }),
+    P.addEventListener(`keydown`, (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      let t = S ? T.indexOf(S) : -1,
+        n = (t) => (
+          e.preventDefault(),
+          K(T[Math.max(0, Math.min(T.length - 1, t))] ?? null, { focus: !0 })
+        );
+      if (e.key === `ArrowDown`) n(t + 1);
+      else if (e.key === `ArrowUp`)
+        t <= 0 ? (e.preventDefault(), E.focus()) : n(t - 1);
+      else if (e.key === `PageDown`) n(t + 8);
+      else if (e.key === `PageUp`) n(t - 8);
+      else if (e.key === `Home`) n(0);
+      else if (e.key === `End`) n(T.length - 1);
+      else if (e.key === `Enter`)
+        (e.preventDefault(),
+          matchMedia(`(max-width: 52rem)`).matches
+            ? L.classList.add(`show-detail`)
+            : q(S));
+      else if (e.key === `ArrowRight`) {
+        let t = I.querySelector(`.mbd-play`);
+        t && (e.preventDefault(), t.focus());
+      } else
+        e.key.length === 1 && e.key !== `/` && /\S/.test(e.key) && E.focus();
+    }),
+    I.addEventListener(`keydown`, (e) => {
+      e.key === `ArrowLeft` &&
+        !Ct(e.target) &&
+        !e.target.closest(`.card-art, .sw-opts`) &&
+        (e.preventDefault(), (S ? C.get(S) : null)?.focus());
+    }),
+    E.addEventListener(`input`, () => {
+      ((f = E.value), W());
+    }),
+    E.addEventListener(`keydown`, (e) => {
+      e.key === `ArrowDown`
+        ? (e.preventDefault(),
+          K(S && T.includes(S) ? S : (T[0] ?? null), { focus: !0 }))
+        : e.key === `Enter`
+          ? (e.preventDefault(), q(S && T.includes(S) ? S : (T[0] ?? null)))
+          : e.key === `Escape` &&
+            E.value &&
+            (e.stopPropagation(), e.preventDefault(), (E.value = f = ``), W());
+    }),
+    j.addEventListener(`change`, () => {
+      ((n = j.value), W(), (P.scrollTop = 0));
+    }),
+    A.addEventListener(`change`, () => {
+      ((u = A.value), W(), (P.scrollTop = 0));
+    }),
+    L.addEventListener(`keydown`, (e) => {
+      if (e.key === `/` && !Ct(e.target))
+        (e.preventDefault(), E.focus(), E.select());
+      else if (e.key === `Escape` && Tt(L))
+        (e.preventDefault(), e.stopPropagation());
+      else if (!Ct(e.target) && !e.repeat && M() && e.code === M()) {
+        e.preventDefault();
+        let t = p(m, e.shiftKey ? -1 : 1);
+        (N.set(t), Y(t));
+      }
+    }),
+    nt(L, (e) => {
+      if (e) return void (h.length && W());
+      for (let e of T) H(C.get(e)?.querySelector(`.mb-star`) ?? null, e);
+      (H(I.querySelector(`.mbd-star`), we ?? ``), U());
+    }),
+    st());
+  let Oe = new ResizeObserver(() =>
+    L.isConnected ? Fe(I.querySelector(`.mbd-board`)) : Oe.disconnect(),
+  );
+  return (
+    Oe.observe(I),
+    P.append(
+      ...Array.from({ length: 8 }, () =>
+        a(
+          `div.mb-row.skeleton`,
+          { "aria-hidden": `true` },
+          a(`span.mb-thumb`),
+          a(`span.mb-name`),
+        ),
+      ),
+    ),
+    I.append(
+      a(
+        `div.mbd-inner.skeleton`,
+        { "aria-hidden": `true` },
+        a(`div.card-art.mbd-art`),
+        a(`div.mbd-main`),
+      ),
+    ),
+    (async () => {
+      [h, v] = await Promise.all([ft(), mt(m)]);
+      for (let e of h) _.set(e.name, e);
+      b = De();
+      let t = localStorage.getItem(`bunnyhop:last-map`),
+        n = !b.size && !t,
+        r =
+          [
+            e.focus,
+            n && Re() ? `bhop_lol_tutorial` : null,
+            e.current,
+            t,
+            `bhop_ambience`,
+          ].find(
+            (e) =>
+              e &&
+              (e === `bhop_lol_tutorial` ? re() : h.some((t) => t.name === e)),
+          ) ?? null;
+      ((S = r), W(), r && K(r, { now: !0, scroll: !1 }));
+      let a = S ? C.get(S) : null,
+        o = (e) => {
+          if (!L.isConnected)
+            return void (e && requestAnimationFrame(() => o(e - 1)));
+          ((a ?? E).focus({ preventScroll: !0 }),
+            a &&
+              (P.scrollTop = Math.max(
+                0,
+                a.offsetTop -
+                  P.offsetTop -
+                  P.clientHeight / 2 +
+                  a.offsetHeight / 2,
+              )));
+        };
+      (o(60),
+        i().then((e) => {
+          if (((x = e?.id ?? null), x)) for (let e of T) V(e);
+        }));
+    })(),
+    L
+  );
+}
+export {
+  be as _,
+  gt as a,
+  pe as b,
+  $ as c,
+  ze as d,
+  Re as f,
+  K as g,
+  Oe as h,
+  Et as i,
+  Le as l,
+  Y as m,
+  Tt as n,
+  mt as o,
+  Ue as p,
+  ft as r,
+  ht as s,
+  lt as t,
+  Ve as u,
+  ve as v,
+  ge as x,
+  ye as y,
+};

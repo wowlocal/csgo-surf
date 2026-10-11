@@ -1,12 +1,50 @@
 # Project context
 
-This repository runs a saved Surfd browser client locally. Its surf mechanics
-target Counter-Strike: Source. The repository name does not mean this is a
-CS:GO or CS 1.6 engine port. The original TypeScript project and server are
-not present.
+This repository is a collection of local browser-game snapshots: Surfd and
+bunnyhop.lol. Their movement targets Counter-Strike: Source; the Bunnyhop
+catalogue also contains some CS:GO-authored maps. The repository name does
+not mean these are complete CS:GO or CS 1.6 engine ports. The original game
+projects' TypeScript/C++ repositories and online backends are not present.
 
 Read `README.txt` for setup and `analysis/report.txt` for the client analysis.
 The upstream snapshot was captured from `https://surfd.net/` on 10 October 2026.
+Bunnyhop was captured from `https://bunnyhop.lol/` on 11 October 2026.
+
+# Bunnyhop offline snapshot
+
+Read `bunnyhop/README.txt` and `bunnyhop/SOURCES.txt`. The original client is
+preserved in `bunnyhop/upstream/`; generated served files and large assets are
+in ignored `bunnyhop/offline/` and `bunnyhop/cache/` directories.
+
+```sh
+python3 bunnyhop/download.py
+python3 bunnyhop/status.py
+python3 bunnyhop/run.py
+```
+
+Open `http://127.0.0.1:4180/?map=bh_aztec`. The Bunnyhop server serves local
+files only. The download utility is its separate online setup step. Avoid
+running multiple Bunnyhop downloaders concurrently.
+
+The API module is patched reproducibly in the generated copy to use its
+existing offline behavior; map content is served from local content manifests
+and SHA-addressed blobs. Preserve original JS/WASM in `upstream/`, and update
+the setup patch rather than editing generated files. Keep online services
+disabled unless the user's task explicitly changes that requirement.
+
+For engine or asset-loading changes, use cached maps and run:
+
+```sh
+node --expose-gc bunnyhop/verify-physics.mjs bh_aztec bhop_eazy
+```
+
+The probe checks physics loading, finite states and per-tick determinism;
+it does not certify full-course completion or native game parity. Require
+local startup/render/input checks for changes to the served client. Document
+which browser flows were actually checked. Optional resources absent upstream
+must be recorded explicitly rather than represented as successful downloads.
+
+The sections below describe the existing Surfd snapshot and shared backup rules.
 
 # Repository layout
 
@@ -120,6 +158,15 @@ archives, Python caches, and downloaded collision/visual fixtures stay local.
 Commit the helpers, client snapshot, documentation, and asset inventories.
 
 Use normal commits and pushes when requested, preserving unrelated user changes.
-Do not force-push. Report that the map binaries are excluded from Git and can
-be restored with the downloaders. A push confirmation or matching remote commit
-is sufficient evidence; network failures must not be reported as successful pushes.
+Do not force-push. The user also requested asset backups through Git LFS.
+Working caches remain ignored; compressed map/resource backups under `assets/`
+are tracked by `.gitattributes`. Use `python3 asset-backup.py pack` to regenerate
+them from verified complete caches, and `python3 asset-backup.py restore` after
+`git lfs pull` to recover both games without upstream access. Preserve the LFS
+manifest's archive and unpacked-file hashes. Do not commit partial archives,
+logs or PID files. Avoid repacking unchanged archives and uploading duplicate
+versions, which consume additional LFS storage.
+
+A successful Git push must include its LFS upload, not just the pointer files.
+A push confirmation or matching remote commit is sufficient evidence for the
+Git commit; network or LFS failures must not be reported as successful backups.

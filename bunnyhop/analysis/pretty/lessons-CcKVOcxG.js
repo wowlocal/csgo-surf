@@ -1,0 +1,267 @@
+import "./styles-DzitlxVO.js";
+import { p as e } from "./notify-CvHg_wVW.js";
+import { n as t } from "./pb-CeYyg6BU.js";
+var n = (e) => `${location.origin}/maps/${encodeURIComponent(e)}`,
+  r = (e) => `${location.origin}/replay/${encodeURIComponent(e)}`;
+async function i(e) {
+  if (
+    typeof navigator.share == `function` &&
+    matchMedia(`(pointer: coarse)`).matches
+  )
+    try {
+      return (
+        await navigator.share({ url: e.url, title: e.title, text: e.text }),
+        null
+      );
+    } catch (e) {
+      if (e?.name === `AbortError`) return null;
+    }
+  try {
+    return (await navigator.clipboard.writeText(e.url), `Link copied`);
+  } catch {
+    return e.url;
+  }
+}
+var a = null,
+  o = (e) => void (a = e || null),
+  s = () => a;
+async function c(t, n = `Link copied`) {
+  let r = await i(t);
+  if (!r) return;
+  let a = r === `Link copied`;
+  e(a ? n : r, {
+    key: a ? `share-copied` : void 0,
+    tone: a ? `good` : `info`,
+    ms: a ? void 0 : 6e3,
+  });
+}
+function l(e, t, n) {
+  let r = document.createElement(`button`);
+  return (
+    (r.type = `button`),
+    (r.className = e),
+    (r.title = `Copy a link to share`),
+    (r.textContent = `Share`),
+    r.addEventListener(`click`, (e) => {
+      (e.stopPropagation(), c(t(), n));
+    }),
+    r
+  );
+}
+var u = `bhop_lol_tutorial`,
+  d = [`jump`, `strafe`, `speed`, `final`];
+function f(e, t, n = 0) {
+  return (
+    e[0] >= t.min[0] - n &&
+    e[0] <= t.max[0] + n &&
+    e[1] >= t.min[1] - n &&
+    e[1] <= t.max[1] + n &&
+    e[2] >= t.min[2] - n &&
+    e[2] <= t.max[2] + n
+  );
+}
+function p(e, t) {
+  return e.lessons.findIndex((e) =>
+    f(
+      t,
+      {
+        min: [e.room.min[0], e.room.min[1], e.room.min[2] - 64],
+        max: e.room.max,
+      },
+      2,
+    ),
+  );
+}
+var m = null;
+function h() {
+  return (
+    (m ??= fetch(`/${u}.tutorial.json`).then(async (e) => {
+      if (!e.ok) throw Error(`tutorial data: HTTP ${e.status}`);
+      return await e.json();
+    })),
+    m.catch(() => (m = null)),
+    m
+  );
+}
+function g(e) {
+  let t = atob(e),
+    n = new Uint8Array(t.length);
+  for (let e = 0; e < t.length; e++) n[e] = t.charCodeAt(e);
+  return n;
+}
+var _ = (e) => e !== `final`;
+function v(e, t, n) {
+  return e === `final` && t !== `final` && !n;
+}
+function y(e, t) {
+  if (!t) return null;
+  let n = null;
+  for (let r of e) r.time < t.time && (n = r);
+  return n;
+}
+function b(e, t, n, r) {
+  let i = e.findIndex((e) => e.time > t);
+  return i >= 0 ? i : e.length < n || r <= e.length ? e.length : null;
+}
+var x = `bunnyhop:tutorial`,
+  S = `bunnyhop:tutorial-progress`;
+function C() {
+  try {
+    let e = new URLSearchParams(location.search).get(`tutorial`);
+    return (
+      e === `1` && localStorage.removeItem(x),
+      e === `0` && localStorage.setItem(x, `0`),
+      localStorage.getItem(x) !== `0`
+    );
+  } catch {
+    return !0;
+  }
+}
+var w = `bunnyhop:first-seen`,
+  T = 1728e5;
+function E(e, t = Date.now()) {
+  try {
+    let n = Number(localStorage.getItem(w));
+    if (localStorage.getItem(w) !== null && Number.isFinite(n)) return n;
+    let r = e ? 0 : t;
+    return (localStorage.setItem(w, String(r)), r);
+  } catch {
+    return t;
+  }
+}
+var D = `bunnyhop:tutorial-hidden`,
+  O = new Set();
+function k() {
+  try {
+    return localStorage.getItem(D) === `1`;
+  } catch {
+    return !1;
+  }
+}
+function A(e) {
+  if (e !== k()) {
+    try {
+      e ? localStorage.setItem(D, `1`) : localStorage.removeItem(D);
+    } catch {}
+    for (let t of O) t(e);
+  }
+}
+function j() {
+  let e;
+  try {
+    let t = JSON.parse(localStorage.getItem(S) ?? `null`);
+    e = t && typeof t == `object` && t.lessons ? t : { lessons: {} };
+  } catch {
+    return { lessons: {} };
+  }
+  return (N(e, t(`bhop_lol_tutorial`, `autohop`, 1)) && P(e), e);
+}
+function M(e, t) {
+  let n = !e.finished;
+  return (
+    (e.lessons.final ??= t.at),
+    (e.finished ??= t.at),
+    t.track === 1 &&
+      ((e.best = Math.min(e.best ?? 1 / 0, t.seconds)), (e.gold ||= t.gold)),
+    n
+  );
+}
+function N(e, t) {
+  return !t || (e.finished && e.best !== void 0 && e.best <= t.time)
+    ? !1
+    : ((e.lessons.final ??= t.date),
+      (e.finished ??= t.date),
+      (e.best = Math.min(e.best ?? 1 / 0, t.time)),
+      !0);
+}
+function P(e) {
+  try {
+    localStorage.setItem(S, JSON.stringify(e));
+  } catch {}
+}
+function F(e) {
+  let t = j();
+  return (e(t), P(t), t);
+}
+function I(e) {
+  let t = new URL(location.origin + `/`);
+  return (
+    t.searchParams.set(`map`, u),
+    e && t.searchParams.set(`lesson`, e),
+    t.toString()
+  );
+}
+var L = {
+    jump: {
+      title: `Jump`,
+      steps: [`Hold {jump} to keep jumping`],
+      legit: [`Scroll to jump each time you land`],
+      guide: !1,
+      landing: !1,
+    },
+    strafe: {
+      title: `Strafe in the air`,
+      steps: [
+        `In the air: hold {left}, move the mouse left`,
+        `Now {right}, mouse right`,
+      ],
+      guide: !0,
+      landing: !1,
+    },
+    speed: {
+      title: `Build speed`,
+      steps: [`Switch sides each jump to build speed`],
+      guide: !0,
+      landing: !1,
+    },
+    final: {
+      title: `Put it together`,
+      steps: [`Jump at the orange edges`],
+      guide: !1,
+      landing: !0,
+    },
+  },
+  R = `The exit is open, hop through`,
+  z = {
+    forward: `Let go of {forward} in the air`,
+    opposite: `Mouse and key the same way`,
+    "mouse-left": `Move the mouse left too`,
+    "mouse-right": `Move the mouse right too`,
+    "key-left": `Hold {left} while you turn left`,
+    "key-right": `Hold {right} while you turn right`,
+    slower: `Turn a little slower and smoother`,
+    "keep-holding": `Keep holding it, no need to tap`,
+    "scroll-on-land": `Scroll right as you touch down`,
+    edge: `Jump at the edge, not before`,
+  };
+export {
+  s as C,
+  i as D,
+  r as E,
+  l as O,
+  h as S,
+  o as T,
+  d as _,
+  E as a,
+  f as b,
+  A as c,
+  j as d,
+  I as f,
+  y as g,
+  v as h,
+  T as i,
+  c as k,
+  C as l,
+  _ as m,
+  L as n,
+  M as o,
+  b as p,
+  z as r,
+  F as s,
+  R as t,
+  k as u,
+  u as v,
+  n as w,
+  p as x,
+  g as y,
+};

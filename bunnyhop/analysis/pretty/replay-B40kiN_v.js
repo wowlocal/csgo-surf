@@ -1,0 +1,743 @@
+import "./core-GuI4LXND.js";
+import { C as e, S as t } from "./styles-DzitlxVO.js";
+import { l as n, s as r } from "./loadout-DopA3xcw.js";
+var i = 2166136261,
+  a = new Float32Array(1),
+  o = new Uint32Array(a.buffer);
+function s(e, t) {
+  for (let n = 0; n < 4; n++)
+    ((e ^= t & 255), (e = Math.imul(e, 16777619) >>> 0), (t >>>= 8));
+  return e;
+}
+function c(e, t, n, r, i, c) {
+  return (
+    (e = s(e, (t & 65535) | ((n & 65535) << 16))),
+    (e = s(e, r >>> 0)),
+    (a[0] = i),
+    (e = s(e, o[0])),
+    (a[0] = c),
+    s(e, o[0]) >>> 0
+  );
+}
+function l(e, t, n, r) {
+  for (let i = n; i < r; i++)
+    e = c(e, t.forward[i], t.side[i], t.buttons[i], t.yaw[i], t.pitch[i]);
+  return e >>> 0;
+}
+var u = (e) => (e >>> 0).toString(16).padStart(8, `0`),
+  d = 1347569730,
+  f = (e) => !!(e.spawn && (e.spawn.targetname || e.spawn.classname)),
+  p = (e) => e.settings.physics ?? 1,
+  m = (e) => e.timerRules ?? 1,
+  h = (e) => ((e % 360) + 360) % 360,
+  g = (e, t, n) => h(e - t * n),
+  _ = (e) => (m(e) === 1 ? (p(e) === 1 ? (f(e) ? 5 : 4) : 6) : 7),
+  v = [`start`, `end`, `stage`, `checkpoint`],
+  y = 1480804418,
+  b = 1330399298,
+  x = 1229146178,
+  S = 2e4;
+function C(e) {
+  return e.autohop ? `autohop` : `legit`;
+}
+function w(e) {
+  return e.style ?? C(e.settings);
+}
+var T = class {
+  checkpointInterval;
+  n = 0;
+  forward = new Int16Array(4096);
+  side = new Int16Array(4096);
+  buttons = new Uint32Array(4096);
+  yaw = new Float32Array(4096);
+  pitch = new Float32Array(4096);
+  looks = [];
+  checkpoints = [];
+  cosmetic = [];
+  inspect = [];
+  constructor(e = 100) {
+    this.checkpointInterval = e;
+  }
+  get length() {
+    return this.n;
+  }
+  clear() {
+    ((this.n = 0),
+      (this.looks = []),
+      (this.checkpoints = []),
+      (this.cosmetic = []),
+      (this.inspect = []));
+  }
+  event(e) {
+    this.cosmetic.length < 2e4 &&
+      this.cosmetic.push({ tick: this.n, kind: e & 255 });
+  }
+  inspectEvent(e) {
+    this.inspect.length < 2e4 &&
+      this.inspect.push({ tick: this.n, kind: e & 255 });
+  }
+  grow() {
+    let e = (e) => {
+      let t = new e.constructor(e.length * 2);
+      return (t.set(e), t);
+    };
+    ((this.forward = e(this.forward)),
+      (this.side = e(this.side)),
+      (this.buttons = e(this.buttons)),
+      (this.yaw = e(this.yaw)),
+      (this.pitch = e(this.pitch)));
+  }
+  push(e, t, n, r, i, a = null) {
+    this.n === this.forward.length && this.grow();
+    let o = this.n++;
+    if (
+      ((this.looks[o] = a),
+      (this.forward[o] = e),
+      (this.side[o] = t),
+      (this.buttons[o] = i),
+      (this.yaw[o] = n),
+      (this.pitch[o] = r),
+      this.forward[o] !== e ||
+        this.side[o] !== t ||
+        this.buttons[o] !== i ||
+        this.yaw[o] !== n ||
+        this.pitch[o] !== r)
+    )
+      throw Error(
+        `replay: command at tick ${o} not representable (forward/side must be i16, yaw/pitch f32, buttons u32)`,
+      );
+  }
+  fold(e, t, n) {
+    return l(
+      e,
+      {
+        forward: this.forward,
+        side: this.side,
+        buttons: this.buttons,
+        yaw: this.yaw,
+        pitch: this.pitch,
+      },
+      Math.max(0, t),
+      Math.min(n, this.n),
+    );
+  }
+  maybeCheckpoint(e, t, n) {
+    e % this.checkpointInterval === 0 && this.addCheckpoint(e, t, n);
+  }
+  addCheckpoint(e, t, n) {
+    let r = this.checkpoints[this.checkpoints.length - 1];
+    (r && r.tick === e) ||
+      this.checkpoints.push({
+        tick: e,
+        position: [t[0], t[1], t[2]],
+        velocity: [n[0], n[1], n[2]],
+      });
+  }
+  build(e) {
+    let t = this.n;
+    return {
+      header: {
+        ...e,
+        version: _(e),
+        totalTicks: t,
+        checkpointInterval: this.checkpointInterval,
+      },
+      forward: this.forward.slice(0, t),
+      side: this.side.slice(0, t),
+      buttons: this.buttons.slice(0, t),
+      yaw: this.yaw.slice(0, t),
+      pitch: this.pitch.slice(0, t),
+      checkpoints: this.checkpoints.map((e) => ({
+        ...e,
+        position: [...e.position],
+        velocity: [...e.velocity],
+      })),
+      cosmetic: this.cosmetic.map((e) => ({ ...e })),
+      inspect: this.inspect.map((e) => ({ ...e })),
+      ...E(this.looks, this.yaw, t),
+    };
+  }
+};
+function E(e, t, n) {
+  if (n === 0) return {};
+  let r = new Int32Array(n),
+    i = new Uint16Array(n),
+    a = new Uint16Array(n),
+    o = new Uint16Array(n),
+    s = [],
+    c = -1,
+    l = { base: 0, k: 0, offset: 0 },
+    u = (e) => Math.max(0, Math.min(65535, Math.round(e) || 0)),
+    d = (e, t, n, r) => Object.is(Math.fround(g(e, t, n)), r);
+  for (let f = 0; f < n; f++) {
+    let n = e[f];
+    if (
+      !n ||
+      !Number.isInteger(n.count) ||
+      Math.abs(n.count) > 1073741823 ||
+      !Number.isFinite(n.base) ||
+      !Number.isFinite(n.k)
+    )
+      return {};
+    ((i[f] = u(n.frames)),
+      (a[f] = u(n.events)),
+      (o[f] = u(n.reports)),
+      (n.epoch !== c || f === 0) &&
+        ((c = n.epoch),
+        (l = { base: n.base, k: n.k, offset: 0 }),
+        s.push({ tick: f, kind: n.kind, base: n.base, k: n.k })));
+    let p = n.count - l.offset;
+    if (d(l.base, p, l.k, t[f])) {
+      r[f] = p;
+      continue;
+    }
+    if (
+      (l.offset !== 0 || l.base !== n.base || l.k !== n.k) &&
+      d(n.base, n.count, n.k, t[f])
+    ) {
+      ((l = { base: n.base, k: n.k, offset: 0 }),
+        (r[f] = n.count),
+        s.push({ tick: f, kind: 5, base: n.base, k: n.k }));
+      continue;
+    }
+    if (
+      ((l = { base: t[f], k: n.k, offset: n.count }),
+      (r[f] = 0),
+      s.push({ tick: f, kind: 5, base: t[f], k: n.k }),
+      !d(t[f], 0, n.k, t[f]))
+    )
+      return {};
+  }
+  return {
+    counted: { count: r, rebases: s, frames: i, events: a, reports: o },
+  };
+}
+var D = class {
+    buf = new Uint8Array(65536);
+    dv = new DataView(this.buf.buffer);
+    len = 0;
+    ensure(e) {
+      if (this.len + e <= this.buf.length) return;
+      let t = this.buf.length * 2;
+      for (; t < this.len + e; ) t *= 2;
+      let n = new Uint8Array(t);
+      (n.set(this.buf.subarray(0, this.len)),
+        (this.buf = n),
+        (this.dv = new DataView(n.buffer)));
+    }
+    u8(e) {
+      (this.ensure(1), (this.buf[this.len++] = e));
+    }
+    u16(e) {
+      (this.ensure(2), this.dv.setUint16(this.len, e, !0), (this.len += 2));
+    }
+    u32(e) {
+      (this.ensure(4), this.dv.setUint32(this.len, e, !0), (this.len += 4));
+    }
+    f32(e) {
+      (this.ensure(4), this.dv.setFloat32(this.len, e, !0), (this.len += 4));
+    }
+    f64(e) {
+      (this.ensure(8), this.dv.setFloat64(this.len, e, !0), (this.len += 8));
+    }
+    bytes(e) {
+      (this.ensure(e.length),
+        this.buf.set(e, this.len),
+        (this.len += e.length));
+    }
+    str8(e) {
+      let t = new TextEncoder().encode(e);
+      (t.length > 255 && (t = t.subarray(0, 255)),
+        this.u8(t.length),
+        this.bytes(t));
+    }
+    varint(e) {
+      for (e >>>= 0, this.ensure(5); e >= 128; )
+        ((this.buf[this.len++] = (e & 127) | 128), (e >>>= 7));
+      this.buf[this.len++] = e;
+    }
+    svarint(e) {
+      this.varint(((e << 1) ^ (e >> 31)) >>> 0);
+    }
+    result() {
+      return this.buf.slice(0, this.len);
+    }
+  },
+  O = class {
+    buf;
+    dv;
+    pos = 0;
+    constructor(e) {
+      ((this.buf = e),
+        (this.dv = new DataView(e.buffer, e.byteOffset, e.byteLength)));
+    }
+    get remaining() {
+      return this.buf.length - this.pos;
+    }
+    need(e) {
+      if (this.pos + e > this.buf.length) throw Error(`replay: truncated`);
+    }
+    u8() {
+      return (this.need(1), this.buf[this.pos++]);
+    }
+    u16() {
+      this.need(2);
+      let e = this.dv.getUint16(this.pos, !0);
+      return ((this.pos += 2), e);
+    }
+    u32() {
+      this.need(4);
+      let e = this.dv.getUint32(this.pos, !0);
+      return ((this.pos += 4), e);
+    }
+    f32() {
+      this.need(4);
+      let e = this.dv.getFloat32(this.pos, !0);
+      return ((this.pos += 4), e);
+    }
+    f64() {
+      this.need(8);
+      let e = this.dv.getFloat64(this.pos, !0);
+      return ((this.pos += 8), e);
+    }
+    bytes(e) {
+      this.need(e);
+      let t = this.buf.subarray(this.pos, this.pos + e);
+      return ((this.pos += e), t);
+    }
+    str8() {
+      return new TextDecoder().decode(this.bytes(this.u8()));
+    }
+    varint() {
+      let e = 0,
+        t = 0;
+      for (;;) {
+        let n = this.u8();
+        if (((e |= (n & 127) << t), !(n & 128))) break;
+        if (((t += 7), t > 28)) throw Error(`replay: bad varint`);
+      }
+      return e >>> 0;
+    }
+    svarint() {
+      let e = this.varint();
+      return (e >>> 1) ^ -(e & 1);
+    }
+  },
+  k = (e) => {
+    let t = new Uint8Array(32);
+    for (let n = 0; n < 32; n++)
+      t[n] = parseInt(e.slice(n * 2, n * 2 + 2), 16) || 0;
+    return t;
+  },
+  A = (e) => Array.from(e, (e) => e.toString(16).padStart(2, `0`)).join(``);
+function j(e) {
+  let n = e.header,
+    i = n.totalTicks,
+    a = new D();
+  a.u32(d);
+  let o = e.counted && m(n) !== 1 ? e.counted : null,
+    s = o ? 8 : _(n);
+  (a.u16(s),
+    a.u16(+!!n.settings.autohop),
+    a.str8(n.map),
+    a.bytes(k(n.mapSha256)));
+  let c = n.settings;
+  for (let e of [
+    c.tickInterval,
+    c.airAccelerate,
+    c.accelerate,
+    c.friction,
+    c.stopSpeed,
+    c.gravity,
+    c.maxSpeed,
+  ])
+    a.f32(e);
+  if (
+    (a.f32(n.prespeedCap ?? 0),
+    a.u32(n.startTick),
+    a.u32(n.endTick),
+    a.u32(i),
+    a.u8(n.track ?? 0),
+    n.spawn)
+  ) {
+    a.u8(1);
+    for (let e of [...n.spawn.position, n.spawn.yaw]) a.f32(e);
+    s >= 5 &&
+      (a.str8(n.spawn.targetname ?? ``), a.str8(n.spawn.classname ?? ``));
+  } else a.u8(0);
+  if ((a.str8(w(n)), s >= 6)) {
+    let e = p(n);
+    if (!Number.isInteger(e) || e < 1 || e > 255)
+      throw Error(`replay: physics version ${e} not representable`);
+    a.u8(e);
+  }
+  if (s >= 7) {
+    let e = m(n);
+    if (!Number.isInteger(e) || e < 1 || e > 255)
+      throw Error(`replay: timer rules ${e} not representable`);
+    a.u8(e);
+  }
+  a.varint(n.zones.length);
+  for (let e of n.zones) {
+    (a.u8(v.indexOf(e.kind)), a.u8(t(e)), a.u8(e.index ?? 0));
+    for (let t of [...e.mins, ...e.maxs]) a.f32(t);
+  }
+  (a.str8(n.clientBuild),
+    a.str8(n.player),
+    a.f64(n.recordedAt),
+    a.varint(n.checkpointInterval),
+    a.varint(e.checkpoints.length));
+  let l = 0;
+  for (let t = 0; t < i; t++) (a.svarint(e.forward[t] - l), (l = e.forward[t]));
+  l = 0;
+  for (let t = 0; t < i; t++) (a.svarint(e.side[t] - l), (l = e.side[t]));
+  l = 0;
+  for (let t = 0; t < i; t++) (a.varint(e.buttons[t] ^ l), (l = e.buttons[t]));
+  for (let t of o ? [e.pitch] : [e.yaw, e.pitch]) {
+    let e = new Int32Array(t.buffer, t.byteOffset, i);
+    l = 0;
+    for (let t = 0; t < i; t++) (a.svarint((e[t] - l) | 0), (l = e[t]));
+  }
+  if (o) {
+    let e = 0;
+    l = 0;
+    for (let t = 0; t < i; t++) {
+      let n = e < o.rebases.length && o.rebases[e].tick === t;
+      for (; e < o.rebases.length && o.rebases[e].tick === t; ) e++;
+      (a.svarint(n ? o.count[t] : (o.count[t] - l) | 0), (l = o.count[t]));
+    }
+    (a.varint(o.rebases.length), (l = 0));
+    for (let e of o.rebases)
+      (a.varint(e.tick - l),
+        (l = e.tick),
+        a.u8(e.kind & 255),
+        a.f64(e.base),
+        a.f64(e.k));
+    for (let e of [o.frames, o.events, o.reports])
+      for (let t = 0; t < i; t++) a.varint(e[t]);
+  }
+  l = 0;
+  for (let t of e.checkpoints) {
+    (a.varint(t.tick - l), (l = t.tick));
+    for (let e of [...t.position, ...t.velocity]) a.f32(e);
+  }
+  let u = e.cosmetic ?? [];
+  if (u.length) {
+    a.u32(y);
+    let e = Math.min(u.length, S);
+    (a.varint(e), (l = 0));
+    for (let t = 0; t < e; t++) {
+      let e = Math.max(l, u[t].tick);
+      (a.varint(e - l), a.u8(u[t].kind & 255), (l = e));
+    }
+  }
+  e.loadout && (a.u32(b), a.str8(r(e.loadout)));
+  let f = e.inspect ?? [];
+  if (f.length) {
+    a.u32(x);
+    let e = Math.min(f.length, S);
+    (a.varint(e), (l = 0));
+    for (let t = 0; t < e; t++) {
+      let e = Math.max(l, f[t].tick);
+      (a.varint(e - l), a.u8(f[t].kind & 255), (l = e));
+    }
+  }
+  return a.result();
+}
+function M(e, t = {}) {
+  let n = new O(e);
+  if (n.u32() !== 1347569730) throw Error(`replay: bad magic`);
+  let r = n.u16();
+  if (r < 1 || r > 8) throw Error(`replay: unsupported version ${r}`);
+  let i = n.u16(),
+    a = n.str8(),
+    o = A(n.bytes(32)),
+    s = Array.from({ length: 7 }, () => n.f32()),
+    c = {
+      tickInterval: s[0],
+      airAccelerate: s[1],
+      accelerate: s[2],
+      friction: s[3],
+      stopSpeed: s[4],
+      gravity: s[5],
+      maxSpeed: s[6],
+      autohop: !!(i & 1),
+      physics: 1,
+    },
+    l = n.f32(),
+    u = n.u32(),
+    d = n.u32(),
+    f = n.u32(),
+    p = [],
+    m = 0,
+    h = null,
+    g = C(c),
+    _ = 1;
+  if (r === 1)
+    for (let e = n.u8(); e > 0; e--) {
+      let e = n.u8() === 0 ? `start` : `end`,
+        t = Array.from({ length: 6 }, () => n.f32());
+      p.push({ kind: e, mins: [t[0], t[1], t[2]], maxs: [t[3], t[4], t[5]] });
+    }
+  else {
+    if (((m = n.u8()), r >= 3 && n.u8() === 1)) {
+      let e = Array.from({ length: 4 }, () => n.f32());
+      if (((h = { position: [e[0], e[1], e[2]], yaw: e[3] }), r >= 5)) {
+        let e = n.str8(),
+          t = n.str8();
+        (e && (h.targetname = e), t && (h.classname = t));
+      }
+    }
+    (r >= 4 && (g = n.str8()),
+      r >= 6 && (c.physics = n.u8()),
+      r >= 7 && (_ = n.u8()));
+    for (let e = n.varint(); e > 0; e--) {
+      let e = v[n.u8()];
+      if (!e) throw Error(`replay: bad zone kind`);
+      let t = n.u8(),
+        r = n.u8(),
+        i = Array.from({ length: 6 }, () => n.f32()),
+        a = { kind: e, mins: [i[0], i[1], i[2]], maxs: [i[3], i[4], i[5]] };
+      (t && (a.track = t),
+        (e === `stage` || e === `checkpoint`) && (a.index = r),
+        p.push(a));
+    }
+  }
+  let y = n.str8(),
+    b = n.str8(),
+    x = n.f64(),
+    S = n.varint(),
+    w = n.varint(),
+    T = t.commands ?? !0,
+    E = T ? f : 0,
+    D = new Int16Array(E),
+    k = new Int16Array(E),
+    j = (c.physics ?? 1) >= 7 ? 4294967295 : 65535,
+    M = new Uint32Array(E),
+    P = new Float32Array(E),
+    F = new Float32Array(E),
+    z = r >= 8,
+    B,
+    V = 0;
+  if (T) {
+    for (let e = 0; e < f; e++) D[e] = V += n.svarint();
+    V = 0;
+    for (let e = 0; e < f; e++) k[e] = V += n.svarint();
+    V = 0;
+    for (let e = 0; e < f; e++) M[e] = (V ^= n.varint()) & j;
+    for (let e of z ? [F] : [P, F]) {
+      let t = new Int32Array(e.buffer);
+      V = 0;
+      for (let e = 0; e < f; e++) t[e] = V = (V + n.svarint()) | 0;
+    }
+    z && (B = N(n, f, P));
+  } else {
+    for (let e = 0; e < 5 * f; e++) n.varint();
+    if (z) {
+      for (let e = n.varint(); e > 0; e--)
+        (n.varint(), n.u8(), n.f64(), n.f64());
+      for (let e = 0; e < 3 * f; e++) n.varint();
+    }
+  }
+  let H = [];
+  V = 0;
+  for (let e = 0; e < w; e++) {
+    let e = (V += n.varint()),
+      t = Array.from({ length: 6 }, () => n.f32());
+    H.push({
+      tick: e,
+      position: [t[0], t[1], t[2]],
+      velocity: [t[3], t[4], t[5]],
+    });
+  }
+  let U = I(n),
+    W = R(n),
+    G = L(n);
+  return {
+    header: {
+      version: r,
+      map: a,
+      mapSha256: o,
+      settings: c,
+      prespeedCap: l > 0 ? l : null,
+      startTick: u,
+      endTick: d,
+      totalTicks: f,
+      track: m,
+      spawn: h,
+      style: g,
+      timerRules: _,
+      zones: p,
+      clientBuild: y,
+      player: b,
+      recordedAt: x,
+      checkpointInterval: S,
+    },
+    forward: D,
+    side: k,
+    buttons: M,
+    yaw: P,
+    pitch: F,
+    checkpoints: H,
+    ...(U.length ? { cosmetic: U } : {}),
+    ...(W ? { loadout: W } : {}),
+    ...(G.length ? { inspect: G } : {}),
+    ...(B ? { counted: B } : {}),
+  };
+}
+function N(e, t, n) {
+  let r = new Int32Array(t);
+  for (let n = 0; n < t; n++) r[n] = e.svarint();
+  let i = [],
+    a = 0;
+  for (let n = e.varint(); n > 0; n--) {
+    a += e.varint();
+    let n = e.u8(),
+      r = e.f64(),
+      o = e.f64();
+    if (a >= t || (i.length && a < i[i.length - 1].tick))
+      throw Error(`replay: bad rebase tick`);
+    i.push({ tick: a, kind: n, base: r, k: o });
+  }
+  if (t > 0 && (!i.length || i[0].tick !== 0))
+    throw Error(`replay: counted yaw without a base at tick 0`);
+  let o = new Int32Array(t),
+    s = 0,
+    c = 0,
+    l = 0;
+  for (let e = 0; e < t; e++) {
+    let t = !1;
+    for (; s < i.length && i[s].tick === e; )
+      (({ base: c, k: l } = i[s++]), (t = !0));
+    ((o[e] = t ? r[e] : (o[e - 1] + r[e]) | 0), (n[e] = g(c, o[e], l)));
+  }
+  let u = () => {
+    let n = new Uint16Array(t);
+    for (let r = 0; r < t; r++) n[r] = Math.min(65535, e.varint());
+    return n;
+  };
+  return { count: o, rebases: i, frames: u(), events: u(), reports: u() };
+}
+function P(e, t, n) {
+  if (!e || !e.length) return { sig: 0, held: !1 };
+  let r = 0,
+    i = e.length;
+  for (; r < i; ) {
+    let t = (r + i) >> 1;
+    e[t].tick > n ? (i = t) : (r = t + 1);
+  }
+  let a = 0,
+    o = null;
+  for (let n = r - 1; n >= 0; n--) {
+    let r = e[n];
+    if (
+      (o === null && (r.kind === 3 || r.kind === 4) && (o = r.kind === 3),
+      !a && r.tick > t && (r.kind === 1 || r.kind === 2) && (a = r.kind),
+      o !== null && (a || r.tick <= t))
+    )
+      break;
+  }
+  return { sig: n > t ? a : 0, held: !!o };
+}
+function F(e, t, n) {
+  if (!e || !e.length || n <= t) return 0;
+  let r = 0,
+    i = e.length;
+  for (; r < i; ) {
+    let n = (r + i) >> 1;
+    e[n].tick > t ? (i = n) : (r = n + 1);
+  }
+  let a = 0;
+  for (let t = r; t < e.length && e[t].tick <= n; t++) a = e[t].kind;
+  return a;
+}
+function I(e) {
+  if (e.remaining < 4) return [];
+  let t = e.pos;
+  try {
+    if (e.u32() !== 1480804418) return ((e.pos = t), []);
+    let n = e.varint();
+    if (n > 2e4 || n * 2 > e.remaining) return [];
+    let r = [],
+      i = 0;
+    for (let t = 0; t < n; t++)
+      ((i += e.varint()), r.push({ tick: i, kind: e.u8() }));
+    return r;
+  } catch {
+    return ((e.pos = t), []);
+  }
+}
+function L(e) {
+  if (e.remaining < 4) return [];
+  let t = e.pos;
+  try {
+    if (e.u32() !== 1229146178) return ((e.pos = t), []);
+    let n = e.varint();
+    if (n > 2e4 || n * 2 > e.remaining) return ((e.pos = t), []);
+    let r = [],
+      i = 0;
+    for (let t = 0; t < n; t++)
+      ((i += e.varint()), r.push({ tick: i, kind: e.u8() }));
+    return r;
+  } catch {
+    return ((e.pos = t), []);
+  }
+}
+function R(e) {
+  if (e.remaining < 5) return null;
+  let t = e.pos;
+  try {
+    return e.u32() === 1330399298 ? n(e.str8()) : ((e.pos = t), null);
+  } catch {
+    return ((e.pos = t), null);
+  }
+}
+async function z(e, t) {
+  let n = new Response(new Blob([e]).stream().pipeThrough(t));
+  return new Uint8Array(await n.arrayBuffer());
+}
+async function B(e) {
+  return z(j(e), new CompressionStream(`gzip`));
+}
+async function V(e) {
+  return M(
+    e[0] === 31 && e[1] === 139
+      ? await z(e, new DecompressionStream(`gzip`))
+      : e,
+  );
+}
+async function H(e) {
+  return A(new Uint8Array(await crypto.subtle.digest(`SHA-256`, e)));
+}
+function U(t) {
+  let n = t.endTick
+      ? ((t.endTick - t.startTick) * t.settings.tickInterval).toFixed(3)
+      : `dnf`,
+    r = e(t.track ?? 0);
+  return `${t.map}${r ? `_` + r : ``}_${w(t)}_${n}s_${new Date(t.recordedAt).toISOString().replace(/[:.]/g, `-`)}.bhr`;
+}
+export {
+  u as C,
+  i as S,
+  w as _,
+  d as a,
+  H as b,
+  g as c,
+  j as d,
+  B as f,
+  p as g,
+  U as h,
+  S as i,
+  M as l,
+  h as m,
+  x as n,
+  T as o,
+  P as p,
+  b as r,
+  F as s,
+  y as t,
+  V as u,
+  m as v,
+  C as x,
+  _ as y,
+};
